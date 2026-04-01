@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>CURATOR</title>
+  <style>
+    :root{
+      --bg:#f4f1eb;
+      --card:#fbf9f6;
+      --text:#111;
+      --muted:#6b665f;
+      --line:#d9d1c5;
+      --accent:#111;
+      --soft:#ece5db;
+      --danger:#8f3b2f;
+    }
+    *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+    body{
+      margin:0;
+      font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","PingFang SC","Helvetica Neue",sans-serif;
+      background:linear-gradient(180deg,#f5f1eb 0%,#efe7dc 100%);
+      color:var(--text);
+      height:100vh;
+      overflow:hidden;
+    }
+    .phone{
+      width:100%;
+      height:100vh;
+      position:relative;
+      overflow:hidden;
+    }
+    .screen{
+      position:absolute;
+      inset:0;
+      padding:18px 18px 26px;
+      display:flex;
+      flex-direction:column;
+      gap:14px;
+      opacity:0;
+      transform:translateX(28px);
+      pointer-events:none;
+      transition:all .42s ease;
+      overflow:auto;
+    }
+    .screen.active{
+      opacity:1;
+      transform:translateX(0);
+      pointer-events:auto;
+    }
+    .top{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      font-size:12px;
+      color:var(--muted);
+      letter-spacing:.06em;
+      margin-top:4px;
+    }
+    .brand{font-size:13px;font-weight:700;letter-spacing:.18em}
+    h1,h2,h3,p{margin:0}
+    .hero{
+      margin-top:8px;
+      padding:18px;
+      background:rgba(255,255,255,.42);
+      border:1px solid rgba(17,17,17,.08);
+      border-radius:24px;
+      backdrop-filter: blur(10px);
+    }
+    .hero h1{font-size:34px;line-height:1.02;letter-spacing:-0.04em}
+    .sub{font-size:14px;line-height:1.55;color:var(--muted);margin-top:10px}
+    .quote{
+      font-size:20px;
+      line-height:1.25;
+      letter-spacing:-0.03em;
+      padding:18px;
+      border-radius:24px;
+      background:var(--card);
+      border:1px solid var(--line);
+    }
+    .mini{font-size:12px;color:var(--muted);line-height:1.45}
+    .btn,.ghost,.chip{
+      border:none;
+      border-radius:999px;
+      padding:14px 18px;
+      font-size:15px;
+      font-weight:600;
+    }
+    .btn{background:var(--accent);color:#fff}
+    .ghost{background:transparent;border:1px solid var(--line);color:var(--text)}
+    .stack{display:flex;flex-direction:column;gap:10px}
+    .row{display:flex;gap:10px}
+    .row > *{flex:1}
+    .card{
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:22px;
+      padding:16px;
+    }
+    .label{font-size:11px;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);margin-bottom:8px}
+    .input{
+      padding:14px 14px;
+      border:1px solid var(--line);
+      border-radius:16px;
+      background:#fff;
+      font-size:15px;
+      color:var(--text);
+    }
+    .option{
+      padding:14px 15px;
+      border:1px solid var(--line);
+      border-radius:16px;
+      background:#fff;
+      font-size:15px;
+    }
+    .option.selected{border-color:#111;background:#f7f3ed}
+    .progress{height:6px;background:#e2d9cd;border-radius:999px;overflow:hidden}
+    .bar{height:100%;background:#111;width:20%;transition:width .3s ease}
+    .badge{
+      display:inline-flex;
+      padding:8px 12px;
+      border-radius:999px;
+      background:var(--soft);
+      font-size:12px;
+      color:#403a33;
+      gap:6px;
+      align-items:center;
+      width:fit-content;
+    }
+    .profile{
+      border-radius:28px;
+      aspect-ratio:2/3;
+      background-size:cover;
+      background-position:center;
+      background-repeat:no-repeat;
+      padding:20px;
+      display:flex;
+      flex-direction:column;
+      justify-content:flex-end;
+      position:relative;
+      overflow:hidden;
+    }
+    .profile::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:linear-gradient(180deg,rgba(0,0,0,.1),rgba(0,0,0,.35));
+      pointer-events:none;
+    }
+    .profile-image-text{
+      display:none;
+    }
+    .profile-overlay{
+      position:relative;
+      z-index:2;
+      background:rgba(255,255,255,.72);
+      border-radius:20px;
+      padding:16px;
+      backdrop-filter: blur(6px);
+    }
+    .profile-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px}
+    .profile-head{display:flex;flex-direction:column;gap:4px}
+    .pill{background:rgba(17,17,17,.08);padding:6px 9px;border-radius:999px;font-size:11px;color:var(--muted)}
+    .name{font-size:28px;font-weight:700;letter-spacing:-0.04em;line-height:1.1}
+    .age{font-size:18px;color:var(--muted);font-weight:400}
+    .gender{font-size:14px;color:var(--muted);margin-top:2px}
+    .role{font-size:15px;line-height:1.5;color:var(--text);margin-top:8px;font-weight:500}
+    .satire{font-size:14px;line-height:1.55;color:var(--muted);margin-top:6px}
+    .taglist{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+    .tag{padding:8px 10px;border-radius:999px;background:rgba(17,17,17,.08);font-size:12px;color:var(--text)}
+    .actions{display:flex;justify-content:center;gap:14px}
+    .tinycaps{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
+    .carousel-top{display:flex;justify-content:space-between;align-items:center;gap:12px}
+    .action{
+      width:64px;height:64px;border-radius:50%;border:none;font-size:22px;
+      background:#fff;box-shadow:0 10px 30px rgba(0,0,0,.08)
+    }
+    .action.primary{background:#111;color:#fff}
+    .result{
+      text-align:center;
+      padding:28px 18px;
+      border-radius:28px;
+      background:var(--card);
+      border:1px solid var(--line);
+    }
+    .score{font-size:54px;font-weight:800;letter-spacing:-0.06em}
+    .muted{color:var(--muted)}
+    .bigline{font-size:26px;line-height:1.15;letter-spacing:-0.04em}
+    .footnote{font-size:11px;color:var(--muted);line-height:1.45;text-align:center}
+    .sheet{
+      background:#fff;border:1px solid var(--line);border-radius:20px;padding:14px 14px;display:flex;flex-direction:column;gap:10px
+    }
+    .sheetrow{display:flex;justify-content:space-between;gap:12px;font-size:14px;line-height:1.45}
+    .dot{width:8px;height:8px;border-radius:50%;background:#111;display:inline-block}
+    .center{display:flex;justify-content:center}
+  </style>
+</head>
+<body>
+  <div class="phone">
+
+    <section class="screen active" id="s1">
+      <div class="top"><div>9:41</div><div class="brand">CURATOR</div><div>CN</div></div>
+      <div class="hero">
+        <div class="badge">Private Access · Beta</div>
+        <h1>进入更高密度的<br>艺术与文化网络。</h1>
+        <p class="sub">面向当代艺术、数字媒体、Web3 与跨界文化从业者的社交匹配平台。连接更匹配的合作对象、活动关系与文化现场。</p>
+      </div>
+      <div class="quote">连接与你的实践方向、社交密度与未来路径更接近的人。</div>
+      <div class="stack" style="margin-top:auto">
+        <button class="btn" onclick="go(2)">开始</button>
+        
+      </div>
+    </section>
+
+    <section class="screen" id="s2">
+      <div class="top"><div>注册流程</div><div class="brand">STEP 1/5</div><div>跳过</div></div>
+      <div class="progress"><div class="bar" style="width:20%"></div></div>
+      <div class="card">
+        <div class="label">身份验证</div>
+        <h2 style="font-size:28px;line-height:1.15;letter-spacing:-.04em">你属于哪一类<br>当代艺术用户？</h2>
+        <p class="sub">我们会根据你的实践阶段、社交偏好与合作目标，推荐更匹配的连接路径。</p>
+      </div>
+      <div class="stack">
+        <button class="option" onclick="pick(this)">作品一般，但会说“研究”</button>
+        <button class="option" onclick="pick(this)">展览不多，但合影很多</button>
+        <button class="option" onclick="pick(this)">不会做作品，但很会出现在现场</button>
+        <button class="option" onclick="pick(this)">擅长转发术语，假装在场</button>
+      </div>
+      <div class="row" style="margin-top:auto">
+        <button class="ghost" onclick="go(1)">返回</button>
+        <button class="btn" onclick="go(3)">下一步</button>
+      </div>
+    </section>
+
+    <section class="screen" id="s3">
+      <div class="top"><div>注册流程</div><div class="brand">STEP 2/5</div><div>保存草稿</div></div>
+      <div class="progress"><div class="bar" style="width:40%"></div></div>
+      <div class="card">
+        <div class="label">目标设定</div>
+        <h2 style="font-size:28px;line-height:1.15;letter-spacing:-.04em">你希望通过 CURATOR 获得什么？</h2>
+      </div>
+      <div class="stack">
+        <button class="option" onclick="pick(this)">被邀请去更多开幕酒会</button>
+        <button class="option" onclick="pick(this)">让别人误以为我很重要</button>
+        <button class="option" onclick="pick(this)">匹配到一个能带我进入圈层的人</button>
+        <button class="option" onclick="pick(this)">共同制造一种“我们很高级”的幻觉</button>
+      </div>
+      <div class="mini">选择越清晰，推荐越精准。</div>
+      <div class="row" style="margin-top:auto">
+        <button class="ghost" onclick="go(2)">返回</button>
+        <button class="btn" onclick="go(4)">继续</button>
+      </div>
+    </section>
+
+    <section class="screen" id="s4">
+      <div class="top"><div>注册流程</div><div class="brand">STEP 3/5</div><div>自动生成</div></div>
+      <div class="progress"><div class="bar" style="width:60%"></div></div>
+      <div class="card">
+        <div class="label">个人简介</div>
+        <h2 style="font-size:28px;line-height:1.15;letter-spacing:-.04em">你的简介已生成</h2>
+        <p class="sub">系统会根据你的选择，生成适合公开展示与社交场景使用的个人简介。</p>
+      </div>
+      <div class="sheet">
+        <div class="mini">生成结果</div>
+        <div style="font-size:15px;line-height:1.7">游走于图像、关系与在场性边缘的青年创作者，持续关注亲密网络、观看机制与自我价值在文化现场中的流动方式。近期通过跨场域协作，探索低完成度实践如何在高密度社交中被重新命名。</div>
+      </div>
+      <div class="stack">
+        <button class="option selected">关键词：关系美学 / 在场性 / 流动身份 / 青年实践</button>
+      </div>
+      <div class="row" style="margin-top:auto">
+        <button class="ghost" onclick="go(3)">返回</button>
+        <button class="btn" onclick="go(5)">继续</button>
+      </div>
+    </section>
+
+    <section class="screen" id="s5">
+      <div class="top"><div>注册流程</div><div class="brand">STEP 4/5</div><div>智能评分</div></div>
+      <div class="progress"><div class="bar" style="width:80%"></div></div>
+      <div class="card">
+        <div class="label">网络画像分析</div>
+        <h2 style="font-size:28px;line-height:1.15;letter-spacing:-.04em">系统正在生成你的匹配画像</h2>
+      </div>
+      <div class="sheet">
+        <div class="sheetrow"><span>项目成熟度</span><strong>38 / 100</strong></div>
+        <div class="sheetrow"><span>语境表达能力</span><strong>91 / 100</strong></div>
+        <div class="sheetrow"><span>现场活跃度</span><strong>84 / 100</strong></div>
+        <div class="sheetrow"><span>公开表达意愿</span><strong>72 / 100</strong></div>
+        <div class="sheetrow"><span>跨圈层可见度</span><strong>96 / 100</strong></div>
+      </div>
+      <div class="result">
+        <div class="mini">画像结论</div>
+        <div class="bigline" style="margin-top:8px">你适合通过高密度连接，<br>快速进入更活跃的文化网络。</div>
+      </div>
+      <div class="row" style="margin-top:auto">
+        <button class="ghost" onclick="go(4)">返回</button>
+        <button class="btn" onclick="go(6)">查看推荐对象</button>
+      </div>
+    </section>
+
+    <section class="screen" id="s6">
+      <div class="top"><div>推荐匹配</div><div class="brand">STEP 5/5</div><div>筛选</div></div>
+      <div class="carousel-top">
+        <div>
+          <div class="tinycaps">Curated Pool</div>
+          <div style="font-size:22px;font-weight:700;letter-spacing:-.04em;margin-top:3px">为你精选的匹配对象</div>
+        </div>
+        <div class="badge"><span id="profileIndex">1 / 12</span></div>
+      </div>
+      <div class="profile" id="profileCard">
+        <div class="profile-image-text" id="profileImageText">肖像生成中<br>等待替换</div>
+        <div class="profile-overlay">
+          <div class="profile-top">
+            <div class="pill" id="fitPill">机构适配度 94%</div>
+            <div class="pill" id="boostPill">可提升你 2.5 档</div>
+          </div>
+          <div class="profile-head">
+            <div class="name" id="profileName">Eva Lin <span class="age">29</span></div>
+            <div class="gender" id="profileGender">女</div>
+          </div>
+          <div class="role" id="profileRole">策展助理 / 驻留爱好者 / 新媒体酒会常驻</div>
+          <div class="satire" id="profileSatire">很少真正看作品，但总能出现在最重要的合影里。擅长把普通社交误写成长期合作。</div>
+          <div class="taglist" id="profileTags"></div>
+        </div>
+      </div>
+      <div class="actions" style="margin-top:14px">
+        <button class="action" onclick="prevProfile()">‹</button>
+        <button class="action" onclick="go(7)">×</button>
+        <button class="action primary" onclick="go(8)">♡</button>
+        <button class="action" onclick="nextProfile()">›</button>
+      </div>
+      
+    </section>
+
+    <section class="screen" id="s7">
+      <div class="top"><div>重新推荐</div><div class="brand">系统提醒</div><div>关闭</div></div>
+      <div class="result" style="margin-top:60px">
+        <div class="bigline">你刚刚跳过了一个<br>高匹配度对象。</div>
+        <p class="sub" style="margin-top:12px">根据你的画像，这位对象与您的活动路径、协作场景和社交网络高度接近。</p>
+      </div>
+      <div class="stack" style="margin-top:auto">
+        <button class="btn" onclick="go(6)">我再想想</button>
+      </div>
+    </section>
+
+    <section class="screen" id="s8">
+      <div class="top"><div>匹配成功</div><div class="brand">CONGRATS</div><div>分享</div></div>
+      <div class="center">
+        <div class="result" style="margin-top:60px">
+          <div class="score">匹配成功</div>
+          <p class="sub" style="margin-top:12px">你已经连接了一位高净值文化对象。现在可以互相交换背景，讨论近期开幕，以及计划一次关于“话语生产”的对谈。</p>
+          <div class="footnote" style="margin-top:18px">这是一个玩笑项目 · 原型设计 &copy; 2024</div>
+        </div>
+      </div>
+      <div class="stack" style="margin-top:auto">
+        <button class="btn" onclick="go(6)">继续滑动</button>
+      </div>
+    </section>
+
+  </div>
+
+<script>
+const base64Images = [
+`data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAA0JCgsKCA0LCgsODg0PEyAVExISEyccHhcgLikxMC4pLSwzOko+MzZGNywtQFdBRkxOUlNSMj5aYVpQYEpRUk//2wBDAQ4ODhMREyYVFSZPNS01T09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0//wAARCAFAANUDASIAAhEBAxEB/8QAGwAAAQUBAQAAAAAAAAAAAAAAAgABAwQGBQf/xAA6EAABAwMDAgUDAQYGAQUAAAABAAIDBBEhBRIxQVEGEyJhcRQygZEVI0JSobEHM8HR4fAkQ0RyovH/xAAZAQEBAQEBAQAAAAAAAAAAAAAAAQIDBAX/xAAgEQEBAAICAgMBAQAAAAAAAAAAAQIRITEDEhNBUQRh/9oADAMBAAIRAxEAPwAwE9kvpbZjcW+yRbK3lu4dwiiARAIGyNJscH3UgsUQrJ7J7J7IGATpAFEGoGAThqOyVkEL4GPyRY9whDJo/tO9vY8qzZIBUQNnaTZwLT2KlAB4ROja4WcAVD5JZmJ5HsUVLZJRh8gw9lj3RAPd1AUQSEvaOv6IhCP4iSjDAOAqILvP2t/JS8t7vud+inslZQRCFgza/wAo7I9qfaqqOyVlJZLaiI7J7KTYn2oItqSk2pIquAnsnsnsogDG13ICE0w5YSFMAjAQVNkjeRuCdrhwRYq3ZOY2kZCCuLFFZH5A/hNk3lvb7qhgE9kh7iyIeyAbJWR7U9kA7Qn2jsisnDUEEjS5wHCLyRb3U21PtQQbXt9wnDgfZT2QlgPIQBtT7U/lOH2n8JhJ6trm2RS2pw1Hdo6oS8n7WkoFtThqCQS7b2sijgfI25efwoHJaOSEBkZ0ufhTCkZ1z8qYRNaMAKilukP2xGySv7UkHMTgJJwohWRBNZEAgeycBKyIBA1kQCVk6obaDyEJhaeMKSyIBBB5bgcZSyOQrACfaD0QVxlGGqXyh2S8sjgoI9qcNR2I5CWEA7QnAHZGErIBsbYUtPpU87fNLmBp4B5KBSRzyxN2xyEA9EEboGxvLHNFwbFOGgcBK9zcm5PVLeB1RUdXGXwnbz7IaLcI7OHCN07ByQo3VcY+3PwoizhK4VM1L3fawoSah/sqL1x3SVHyJXZMp/CSCMBPZPZPZQIBEAmCIIFZPZIBEgScJJwECCcBOAnCoVk4SsiAQOE9kgESAbISwFSJWQQlpHBUb5fLF3BWCFDK0ObkIK31rT9oJTfUSO+1hTtiaDgKUNCggvO7rZOIXO+55VgNRBqCAUzeov8AKkbC0cBTbU4CoAMHZFtR7U4agDakpdqSDm2STpWUCRBMEYQMEQCayIKhAIrJAIrIGThPZOgVkQCYIggdIBOE4CBWSsismkACFG8YUxCBwwgrWyiAT2yiAUDAIgEgEQCqEAisnARgIoQE4CMNRBqALJKQNSQceyeyQTqBAIgmCKyBJ7JWTgIHCJME6ocJ7JgiCBBEEyIIHCdMESB0rJwE9kAWQOGFMQgcMIK9spwntlOAgQCMBMAjaECAUgak1qka1AIajDUQajDVAG1JSWSQZ8J0wThAQT2TBOqHCIJgnCBJEhouSAO5XA8ReKKbR7wRAT1dvsBwz5P+iwOoa3qWpvJqal+zoxp2tH4U2r1WTUaKL/Mq4W/LwpoqmGUAxSteDwQb3XjLGgNLjfCsxarVws2xSSMaDgh3CbHsgTheX6f4q1Gmc0/UCVo5Y8c/lbjQ/EVJq37tv7qcDMbuvx3TZp2giCYIlUEESEIwgYhA4KRC4YRFe2U4CcjKcBAgFI0JgFK0Ip2tUrWpmhSAKBBqeyIBPZUDtSR2SUGYThEdK1Fv2yxO+WkIPo9TZzFG74ct+lY94MIgoTHXN+6kJ+HBISTN++llH4unpV9osBcPxVrf7IoQ2Ej6qYEMH8o6uXVNWxjS6Rr2BouSW</data:image/jpeg;base64>,
+`data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAA0JCgsKCA0LCgsODg0PEyAVExISEyccHhcgLikxMC4pLSwzOko+MzZGNywtQFdBRkxOUlNSMj5aYVpQYEpRUk//2wBDAQ4ODhMREyYVFSZPNS01T09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0//wAARCAFAANUDASIAAhEBAxEB/8QAGwAAAQUBAQAAAAAAAAAAAAAAAgADBAUGAQf/xABDEAABBAECBAMFBgMECgIDAAABAAIDEQQSIQUxQVEGEyIyYXGBkRQjQqGxwRVS0TNicoIkNDVEY3OS4fDxFiVVk7L/xAAYAQEBAQEBAQEAAAAAAAAAAAAAAAAAQIDBP/EAB8RAQEAAwEAAwEBAQAAAAAAAAABAhExIQMSQVEEE//aAAwDAQACEQMRAD8AwendHp6e5K90QA6LKhA3RtAAS0og0Vug41tgIi0UEbG+gItNqgGtR6UTW0u0oBDV1zdkdULXHcjfJUIDZIN3RNApEgardBKN7UgbWmpt+YUANZqPLZF5IqrIF3QRMTlIGg0UkR7k7p2XNIpAyBvdIwNkbQLRUgarZc07p2hS5SBtrTRNo2t62utbsja2+qAQ2lwjcp6gNrXA0ajaCOQeiSkloSRVQL50EW5OwCPTdBda3bkqjga
