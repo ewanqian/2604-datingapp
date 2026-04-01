@@ -144,41 +144,51 @@
       background-size:cover;
       background-position:center;
       background-repeat:no-repeat;
-      padding:20px;
-      display:flex;
-      flex-direction:column;
-      justify-content:flex-end;
       position:relative;
       overflow:hidden;
+    }
+    .profile::before{
+      content:"";
+      position:absolute;
+      top:0;
+      left:0;
+      right:0;
+      height:40%;
+      background:linear-gradient(180deg, rgba(0,0,0,0.4), transparent);
+      pointer-events:none;
+      z-index:2;
     }
     .profile::after{
       content:"";
       position:absolute;
-      inset:0;
-      background:linear-gradient(180deg,rgba(0,0,0,.1),rgba(0,0,0,.35));
+      bottom:0;
+      left:0;
+      right:0;
+      height:55%;
+      background:linear-gradient(0deg, rgba(0,0,0,0.5), transparent);
       pointer-events:none;
+      z-index:2;
     }
     .profile-image-text{
       display:none;
     }
     .profile-overlay{
       position:relative;
-      z-index:2;
-      background:rgba(255,255,255,.55);
-      border-radius:20px;
-      padding:12px;
-      backdrop-filter: blur(6px);
+      z-index:3;
+      background:transparent;
+      backdrop-filter:none;
+      padding:16px 14px;
     }
     .profile-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px}
     .profile-head{display:flex;flex-direction:column;gap:4px}
-    .pill{background:rgba(17,17,17,.08);padding:6px 9px;border-radius:999px;font-size:11px;color:var(--muted)}
-    .name{font-size:24px;font-weight:700;letter-spacing:-0.04em;line-height:1.1}
-    .age{font-size:16px;color:var(--muted);font-weight:400}
-    .gender{font-size:13px;color:var(--muted);margin-top:2px}
-    .role{font-size:13px;line-height:1.5;color:var(--text);margin-top:6px;font-weight:500}
-    .satire{font-size:12px;line-height:1.55;color:var(--muted);margin-top:4px}
+    .pill{background:rgba(255,255,255,.28);padding:6px 9px;border-radius:999px;font-size:11px;color:rgba(255,255,255,.9)}
+    .name{font-size:28px;font-weight:700;letter-spacing:-0.04em;line-height:1.1;color:#fff}
+    .age{font-size:16px;color:rgba(255,255,255,.85);font-weight:400}
+    .gender{font-size:13px;color:rgba(255,255,255,.8);margin-top:2px}
+    .role{font-size:14px;line-height:1.5;color:rgba(255,255,255,.95);margin-top:6px;font-weight:500}
+    .satire{font-size:13px;line-height:1.55;color:rgba(255,255,255,.8);margin-top:4px}
     .taglist{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
-    .tag{padding:8px 10px;border-radius:999px;background:rgba(17,17,17,.08);font-size:12px;color:var(--text)}
+    .tag{padding:6px 10px;border-radius:999px;background:rgba(255,255,255,.25);font-size:12px;color:rgba(255,255,255,.95)}
     .actions{display:flex;justify-content:center;gap:14px}
     .tinycaps{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
     .carousel-top{display:flex;justify-content:space-between;align-items:center;gap:12px}
