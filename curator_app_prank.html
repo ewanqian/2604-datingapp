@@ -343,6 +343,84 @@
       color:var(--muted);
       margin-top:8px;
     }
+    /* Onboarding carousel */
+    .onboarding-container{
+      position:relative;
+      width:100%;
+      overflow:hidden;
+      border-radius:24px;
+      margin-bottom:16px;
+    }
+    .onboarding-track{
+      display:flex;
+      transition:transform .3s ease;
+    }
+    .onboarding-slide{
+      min-width:100%;
+      padding:24px 18px;
+      background:var(--card);
+      border:1px solid var(--line);
+    }
+    .onboarding-title{
+      font-size:26px;
+      font-weight:700;
+      letter-spacing:-.04em;
+      margin-bottom:12px;
+    }
+    .onboarding-text{
+      font-size:15px;
+      line-height:1.8;
+      color:var(--muted);
+    }
+    .onboarding-dots{
+      display:flex;
+      justify-content:center;
+      gap:8px;
+      margin-top:12px;
+    }
+    .dot{
+      width:8px;
+      height:8px;
+      border-radius:50%;
+      background:#e2d9cd;
+      transition:all .3s ease;
+    }
+    .dot.active{
+      width:24px;
+      background:#111;
+      border-radius:4px;
+    }
+    .onboarding-buttons{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      margin-top:16px;
+    }
+    .onboarding-buttons .btn-skip{
+      background:transparent;
+      border:none;
+      font-size:14px;
+      color:var(--muted);
+      padding:8px 0;
+    }
+    .onboarding-buttons .btn-next{
+      background:#111;
+      color:#fff;
+      border:none;
+      padding:10px 20px;
+      border-radius:999px;
+      font-size:14px;
+      font-weight:600;
+    }
+    .onboarding-buttons .btn-start{
+      background:#111;
+      color:#fff;
+      border:none;
+      padding:12px 28px;
+      border-radius:999px;
+      font-size:15px;
+      font-weight:600;
+    }
   </style>
 </head>
 <body>
@@ -358,32 +436,49 @@
     <section class="screen active" id="s1">
       <div class="top"><div>9:41</div><div class="brand">CURATED</div><div>CN</div></div>
       
-      <div class="intro-card" style="animation-delay:0s">
-        <div class="intro-title">CURATED</div>
-        <div class="intro-text">最近悄悄做了一个 app<br>它是一个面向当代艺术、数字媒体、新媒体影像、web3、空间创作及相关文化行业的匹配平台。</div>
-      </div>
-
-      <div class="intro-card" style="animation-delay:0.2s">
-        <div class="intro-title">不是普通社交</div>
-        <div class="intro-text">不是普通社交软件那种逻辑，也不只是为了“认识人”。<br><br>更准确一点说，它在测试一种新的匹配方式：除了兴趣、审美和聊天氛围之外，人与人之间是否也可以基于语境相容度、合作潜力、行业路径、可见性和长期价值来建立连接。</div>
-      </div>
-
-      <div class="intro-card" style="animation-delay:0.4s">
-        <div class="intro-title">关于匹配</div>
-        <div class="intro-text">这两年越来越觉得，很多关系表面上是偶遇，本质上其实是一种更复杂的相互选择。<br><br>你选择的未必只是一个对象，也可能是一种方法、一种圈层位置、一种新的自我叙述，甚至是一条通往别的场域的路径。</div>
-      </div>
-
-      <div class="intro-card" style="animation-delay:0.6s">
-        <div class="intro-title">一个小型实验</div>
-        <div class="intro-text">所以这更像是一个小型实验：看看当关系、合作、身份与行业流动混在一起的时候，一个匹配系统会长成什么样。<br><br>目前先小范围开放测试，有兴趣的朋友可以进来体验。</div>
+      <div class="onboarding-container">
+        <div class="onboarding-track" id="onboardingTrack">
+          <div class="onboarding-slide">
+            <div class="onboarding-title">CURATED</div>
+            <div class="onboarding-text">
+              面向当代艺术、数字媒体、新媒体影像、Web3、空间创作及相关文化行业的<br><strong>语境匹配实验</strong>。<br><br>
+              这是一个小型社交实验，测试一种新的匹配方式：<br>
+              除了兴趣和审美，人与人之间是否也可以基于<strong>语境相容度、合作潜力、行业路径、可见性和长期价值</strong>来建立连接。
+            </div>
+          </div>
+          <div class="onboarding-slide">
+            <div class="onboarding-title">匹配什么</div>
+            <div class="onboarding-text">
+              这两年越来越觉得，很多关系表面上是偶遇，<br>
+              本质上其实是一种更复杂的相互选择。<br><br>
+              你选择的未必只是一个对象，<br>
+              也可能是一种方法、一种圈层位置、一种新的自我叙述，<br>
+              甚至是一条通往别的场域的路径。
+            </div>
+          </div>
+          <div class="onboarding-slide">
+            <div class="onboarding-title">开始体验</div>
+            <div class="onboarding-text">
+              滑动卡片，找到你的匹配对象。<br>
+              如果你也想加入，可以提交自己的资料，审核通过后会加入推荐池。<br><br>
+              <em>这是一个玩笑项目，请勿当真。</em>
+            </div>
+          </div>
+        </div>
+        <div class="onboarding-dots" id="onboardingDots">
+          <span class="dot active" data-index="0"></span>
+          <span class="dot" data-index="1"></span>
+          <span class="dot" data-index="2"></span>
+        </div>
+        <div class="onboarding-buttons">
+          <button class="btn-skip" id="btnSkip" onclick="skipOnboarding()">跳过</button>
+          <button class="btn-next" id="btnNext" onclick="nextOnboarding()">下一步</button>
+        </div>
       </div>
 
       <div class="stack" style="margin-top:auto;margin-bottom:8px">
         <button class="btn" onclick="go(2)">开始体验</button>
         <button class="ghost" onclick="go(9)">提交我自己</button>
-        <div class="mini" style="text-align:center;margin-top:12px">
-          <em>这是一个玩笑项目，请勿当真。</em>
-        </div>
       </div>
     </section>
 
@@ -872,8 +967,50 @@ setTimeout(() => {
   splash.classList.remove('active');
 }, 2100);
 
+let currentOnboarding = 0;
+const totalOnboarding = 3;
+
+function updateOnboarding(){
+  const track = document.getElementById('onboardingTrack');
+  track.style.transform = `translateX(-${currentOnboarding * 100}%)`;
+  
+  const dots = document.querySelectorAll('#onboardingDots .dot');
+  dots.forEach((dot, index) => {
+    if(index === currentOnboarding){
+      dot.classList.add('active');
+    } else {
+      dot.classList.remove('active');
+    }
+  });
+  
+  const btnSkip = document.getElementById('btnSkip');
+  const btnNext = document.getElementById('btnNext');
+  
+  if(currentOnboarding === totalOnboarding - 1){
+    btnNext.innerHTML = '开始体验';
+    btnNext.className = 'btn-start';
+    btnNext.onclick = () => go(2);
+  } else {
+    btnNext.innerHTML = '下一步';
+    btnNext.className = 'btn-next';
+    btnNext.onclick = nextOnboarding;
+  }
+}
+
+function nextOnboarding(){
+  if(currentOnboarding < totalOnboarding - 1){
+    currentOnboarding++;
+    updateOnboarding();
+  }
+}
+
+function skipOnboarding(){
+  go(2);
+}
+
 go(1);
 renderProfile();
+updateOnboarding();
 </script>
 </body>
 </html>
