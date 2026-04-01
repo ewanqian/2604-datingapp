@@ -350,10 +350,15 @@
       overflow:hidden;
       border-radius:24px;
       margin-bottom:16px;
+      touch-action:pan-y;
     }
     .onboarding-track{
       display:flex;
       transition:transform .3s ease;
+      cursor:grab;
+    }
+    .onboarding-track:active{
+      cursor:grabbing;
     }
     .onboarding-slide{
       min-width:100%;
@@ -969,6 +974,8 @@ setTimeout(() => {
 
 let currentOnboarding = 0;
 const totalOnboarding = 3;
+let startX = 0;
+let isDragging = false;
 
 function updateOnboarding(){
   const track = document.getElementById('onboardingTrack');
@@ -1004,8 +1011,56 @@ function nextOnboarding(){
   }
 }
 
+function prevOnboarding(){
+  if(currentOnboarding > 0){
+    currentOnboarding--;
+    updateOnboarding();
+  }
+}
+
 function skipOnboarding(){
   go(2);
+}
+
+// Touch/mouse swipe handling
+const container = document.getElementById('onboardingTrack').parentElement;
+
+container.addEventListener('touchstart', handleStart, {passive:true});
+container.addEventListener('touchmove', handleMove, {passive:true});
+container.addEventListener('touchend', handleEnd, {passive:true});
+
+container.addEventListener('mousedown', handleStart);
+container.addEventListener('mousemove', handleMove);
+container.addEventListener('mouseup', handleEnd);
+container.addEventListener('mouseleave', handleEnd);
+
+function handleStart(e){
+  isDragging = true;
+  startX = e.type === 'mousedown' ? e.clientX : e.touches[0].clientX;
+}
+
+function handleMove(e){
+  if(!isDragging) return;
+  // just track, we handle in end
+}
+
+function handleEnd(e){
+  if(!isDragging){
+    return;
+  }
+  isDragging = false;
+  const endX = e.type === 'mouseup' ? e.clientX : e.changedTouches[0].clientX;
+  const diffX = startX - endX;
+  
+  if(Math.abs(diffX) < 30){
+    return;
+  }
+  
+  if(diffX > 50){
+    nextOnboarding();
+  } else if(diffX < -50){
+    prevOnboarding();
+  }
 }
 
 go(1);
