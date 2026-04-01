@@ -343,6 +343,31 @@
       color:var(--muted);
       margin-top:8px;
     }
+    .gender-options{
+      display:flex;
+      flex-wrap:wrap;
+      gap:6px;
+    }
+    .gender-option{
+      padding:6px 12px;
+      border:1px solid var(--line);
+      border-radius:999px;
+      background:#fff;
+      font-size:13px;
+      color:var(--muted);
+      cursor:pointer;
+      transition:all .2s ease;
+    }
+    .gender-option:hover{
+      background:var(--soft);
+      border-color:#111;
+      color:#111;
+    }
+    .gender-option.selected{
+      background:#111;
+      border-color:#111;
+      color:#fff;
+    }
     /* Onboarding carousel */
     .onboarding-container{
       position:relative;
@@ -502,7 +527,7 @@
 
       <div class="onboarding-hint">
         <div class="mini" style="text-align:center;color:var(--muted)">
-          👈 向左滑动浏览下一页 👉
+          👈 向左滑动浏览下一页
         </div>
       </div>
       <div class="stack" style="margin-top:auto;margin-bottom:8px">
@@ -676,7 +701,14 @@
         </div>
         <div class="sheet" style="flex:1">
           <div class="label">性别</div>
-          <input class="input" id="formGender" placeholder="女 / 男 / 非二元" />
+          <input type="hidden" id="formGender" />
+          <div class="gender-options" style="display:flex;gap:6px;margin-top:8px;flex-wrap:wrap">
+            <button class="gender-option" onclick="selectGender(this, '女')">女</button>
+            <button class="gender-option" onclick="selectGender(this, '男')">男</button>
+            <button class="gender-option" onclick="selectGender(this, '非二元')">非二元</button>
+            <button class="gender-option" onclick="selectGender(this, '非二元偏女性气质')">非二元偏女</button>
+            <button class="gender-option" onclick="selectGender(this, '非二元偏男性气质')">非二元偏男</button>
+          </div>
         </div>
       </div>
       <div class="sheet">
@@ -712,29 +744,18 @@
           <span class="tag-suggestion" onclick="addSuggestedTag(this)">社交在场</span>
           <span class="tag-suggestion" onclick="addSuggestedTag(this)">github</span>
         </div>
-        <div id="tagList">
-          <div class="tag-input-item">
-            <input class="input tag-input" placeholder="标签 1" />
-            <button class="remove-tag-btn" onclick="removeTag(this)">−</button>
-          </div>
-          <div class="tag-input-item">
-            <input class="input tag-input" placeholder="标签 2" />
-            <button class="remove-tag-btn" onclick="removeTag(this)">−</button>
-          </div>
-          <div class="tag-input-item">
-            <input class="input tag-input" placeholder="标签 3" />
-            <button class="remove-tag-btn" onclick="removeTag(this)">−</button>
-          </div>
-        </div>
+        <div id="tagList"></div>
         <button class="add-tag-btn" onclick="addTag()">+ 添加标签</button>
       </div>
-      <div class="sheet">
-        <div class="label">适配度评分（85-98）</div>
-        <input class="input" id="formFit" value="92" placeholder="92" />
-      </div>
-      <div class="sheet">
-        <div class="label">可提升档位（2.0-3.5）</div>
-        <input class="input" id="formBoost" value="2.6" placeholder="2.6" />
+      <div class="row">
+        <div class="sheet" style="flex:1">
+          <div class="label">适配度评分</div>
+          <div class="mini" style="margin-bottom:8px;color:var(--muted)">系统自动随机生成（85-98）</div>
+        </div>
+        <div class="sheet" style="flex:1">
+          <div class="label">可提升档位</div>
+          <div class="mini" style="margin-bottom:8px;color:var(--muted)">系统自动随机生成（2.0-3.5）</div>
+        </div>
       </div>
       <div class="sheet">
         <div class="label">肖像图片</div>
@@ -934,6 +955,12 @@ function removeSuggestedTag(btn, text){
   });
 }
 
+function selectGender(el, gender){
+  document.querySelectorAll('.gender-option').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+  document.getElementById('formGender').value = gender;
+}
+
 function showStatus(msg, type){
   const box = document.getElementById('statusBox');
   box.className = 'status-box show ' + (type || '');
@@ -951,8 +978,10 @@ function submitForm(){
   const gender = document.getElementById('formGender').value.trim();
   const role = document.getElementById('formRole').value.trim();
   const satire = document.getElementById('formSatire').value.trim();
-  const fit = document.getElementById('formFit').value.trim();
-  const boost = document.getElementById('formBoost').value.trim();
+  // Random generate fit (85-98)
+  const fit = Math.floor(Math.random() * (98 - 85 + 1)) + 85;
+  // Random generate boost (2.0-3.5)
+  const boost = (Math.random() * (3.5 - 2.0) + 2.0).toFixed(1);
   const tags = getTags();
 
   if(!name || !age || !gender || !role || !satire || tags.length === 0){
