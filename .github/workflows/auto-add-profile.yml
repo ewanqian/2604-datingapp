@@ -1,0 +1,142 @@
+name: Auto Add Profile from Issue
+
+on:
+  issues:
+    types: [opened]
+
+jobs:
+  add-profile:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Extract info from issue body
+        id: extract
+        run: |
+          BODY=$(cat << 'EOF'
+          ${{ github.event.issue.body }}
+          EOF
+          )
+          
+          echo "Extracting information from issue..."
+          
+          NAME=$(echo "$BODY" | grep -oP '\*\*姓名:\*\*\s*\K.*' | head -1 | xargs)
+          AGE=$(echo "$BODY" | grep -oP '\*\*年龄:\*\*\s*\K.*' | head -1 | xargs)
+          GENDER=$(echo "$BODY" | grep -oP '\*\*性别:\*\*\s*\K.*' | head -1 | xargs)
+          ROLE=$(echo "$BODY" | grep -oP '\*\*身份:\*\*\s*\K.*' | head -1 | xargs)
+          SATIRE=$(echo "$BODY" | grep -oP '\*\*讽刺点:\*\*\s*\K.*' | head -1 | xargs)
+          FIT=$(echo "$BODY" | grep -oP '\*\*fit:\*\*\s*\K.*' | head -1 | xargs)
+          BOOST=$(echo "$BODY" | grep -oP '\*\*boost:\*\*\s*\K.*' | head -1 | xargs)
+          TAGS=$(echo "$BODY" | grep -oP '\*\*标签:\*\*\s*\K.*' | head -1 | xargs)
+          
+          echo "name=$NAME" >> $GITHUB_OUTPUT
+          echo "age=$AGE" >> $GITHUB_OUTPUT
+          echo "gender=$GENDER" >> $GITHUB_OUTPUT
+          echo "role=$ROLE" >> $GITHUB_OUTPUT
+          echo "satire=$SATIRE" >> $GITHUB_OUTPUT
+          echo "fit=$fit"
+          FIT_NUM=$(echo "$FIT" | sed 's/%//g')
+          echo "fit=$FIT_NUM" >> $GITHUB_OUTPUT
+          echo "boost=$BOOST" >> $GITHUB_OUTPUT
+          echo "tags=$TAGS" >> $GITHUB_OUTPUT
+          
+          echo "Extracted:"
+          echo "  Name: $NAME"
+          echo "  Age: $AGE"
+          echo "  Gender: $GENDER"
+          echo "  Role: $ROLE"
+          echo "  Satire: $SATIRE"
+          echo "  Fit: $FIT_NUM"
+          echo "  Boost: $BOOST"
+          echo "  Tags: $TAGS"
+
+      - name: Check for image attachment
+        id: image
+        run: |
+          echo "Looking for image attachment in issue..."
+          echo "has_image=false" >> $GITHUB_OUTPUT
+          
+          # Get issue number and API token
+          ISSUE_NUMBER=${{ github.event.issue.number }}
+          
+          # Use GitHub API to get issue details including attachments
+          RESPONSE=$(curl -s -H "Authorization: token ${{ github.token }}" "https://api.github.com/repos/${{ github.repository }}/issues/$ISSUE_NUMBER")
+          
+          # Check if there are any images attached
+          IMAGE_URL=$(echo "$RESPONSE" | python3 -c "
+          import json
+          import sys
+          data = json.load(sys.stdin)
+          for img in data.get('assets', []):
+              if img['name'].lower().endswith(('.jpg', '.jpeg', '.png')):
+                  print(img['browser_download_url'])
+                  exit()
+          "
+          )
+          
+          if [ -n "$IMAGE_URL" ]; then
+              echo "Found image: $IMAGE_URL"
+              echo "image_url=$IMAGE_URL" >> $GITHUB_OUTPUT
+              echo "has_image=true" >> $GITHUB_OUTPUT
+          else
+              echo "No image found. Please attach an image to the issue."
+          fi
+
+      - name: Download and process image
+        if: steps.image.outputs.has_image == 'true'
+        run: |
+          NAME_SLUG=$(echo "${{ steps.extract.outputs.name }}" | tr ' ' '_' | tr -cd 'a-zA-Z0-9_-' | tr 'A-Z' 'a-z')
+          NEXT_INDEX=$(($(ls pics/*.jpeg | wc -l) + 1))
+          IMAGE_FILENAME="pics/${NEXT_INDEX}_${NAME_SLUG}小.jpeg"
+          
+          echo "Downloading image to $IMAGE_FILENAME..."
+          curl -L -o "$IMAGE_FILENAME" "${{ steps.image.outputs.image_url }}"
+          
+          echo "image_filename=$IMAGE_FILENAME" >> $GITHUB_OUTPUT
+          echo "next_index=$NEXT_INDEX" >> $GITHUB_OUTPUT
+
+      - name: Add profile to HTML
+        run: |
+          NAME="${{ steps.extract.outputs.name }}"
+          AGE="${{ steps.extract.outputs.age }}"
+          GENDER="${{ steps.extract.outputs.gender }}"
+          ROLE="${{ steps.extract.outputs.role }}"
+          SATIRE="${{ steps.extract.outputs.satire }}"
+          FIT="${{ steps.extract.outputs.fit }}"
+          BOOST="${{ steps.extract.outputs.boost }}"
+          TAGS="${{ steps.extract.outputs.tags }}"
+          IMAGE_FILENAME="${{ steps.image.outputs.image_filename }}"
+          
+          echo "Adding profile to curator_app_prank.html..."
+          
+          # Convert tags to JavaScript array
+          TAGS_ARR=$(echo "$TAGS" | awk -F'/' '{for(i=1;i<=NF;i++) printf "\x27%s\x27,", $i}' | sed 's/,$//')
+          
+          # Get the raw.githubusercontent.com URL
+          REPO="${{ github.repository }}"
+          IMAGE_URL="https://raw.githubusercontent.com/$REPO/main/$IMAGE_FILENAME"
+          
+          # Create the new profile entry
+          PROFILE_ENTRY="  {
+    name:'$NAME', age:$AGE, gender:'$GENDER', fit:'$fit\%', boost:'$boost',
+    role:'$ROLE',
+    satire:'$SATIRE',
+    tags:[$TAGS_ARR],
+    image:'$IMAGE_URL'
+  },"
+          
+          # Insert before the closing ];
+          sed -i "/^\];/i $PROFILE_ENTRY" curator_app_prank.html
+          
+          echo "Profile added successfully"
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ github.token }}
+          commit-message: "Automatically add new profile: ${{ steps.extract.outputs.name }}"
+          title: "[Auto] Add profile: ${{ steps.extract.outputs.name }}"
+          body: "Automatically added new profile from Issue #${{ github.event.issue.number }}. Please review and merge."
+          branch: "auto-add-profile-${{ github.event.issue.number }}"
+          delete-branch: true
