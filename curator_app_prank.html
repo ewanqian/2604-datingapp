@@ -362,9 +362,20 @@
     }
     .onboarding-slide{
       min-width:100%;
-      padding:24px 18px;
+      height:calc(100vh - 220px);
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      align-items:center;
+      text-align:center;
       background:var(--card);
       border:1px solid var(--line);
+      padding:20px;
+    }
+    .onboarding-emoji{
+      font-size:80px;
+      margin-bottom:24px;
+      line-height:1;
     }
     .onboarding-title{
       font-size:26px;
@@ -444,29 +455,37 @@
       <div class="onboarding-container">
         <div class="onboarding-track" id="onboardingTrack">
           <div class="onboarding-slide">
+            <div class="onboarding-emoji">🎭</div>
             <div class="onboarding-title">CURATED</div>
-            <div class="onboarding-text">
-              面向当代艺术、数字媒体、新媒体影像、Web3、空间创作及相关文化行业的<br><strong>语境匹配实验</strong>。<br><br>
-              这是一个小型社交实验，测试一种新的匹配方式：<br>
-              除了兴趣和审美，人与人之间是否也可以基于<strong>语境相容度、合作潜力、行业路径、可见性和长期价值</strong>来建立连接。
+            <div class="onboarding-text" style="max-width: 280px;">
+              面向当代艺术、数字媒体、新媒体影像、Web3、空间创作及相关文化行业的<br><strong>语境匹配实验</strong>
+              <br><br>
+              测试一种新的匹配方式<br>
+              基于<strong>语境相容度、合作潜力、行业路径、可见性和长期价值</strong>建立连接
             </div>
           </div>
           <div class="onboarding-slide">
+            <div class="onboarding-emoji">🤝</div>
             <div class="onboarding-title">匹配什么</div>
-            <div class="onboarding-text">
-              这两年越来越觉得，很多关系表面上是偶遇，<br>
-              本质上其实是一种更复杂的相互选择。<br><br>
-              你选择的未必只是一个对象，<br>
-              也可能是一种方法、一种圈层位置、一种新的自我叙述，<br>
-              甚至是一条通往别的场域的路径。
+            <div class="onboarding-text" style="max-width: 280px;">
+              很多关系表面上是偶遇<br>
+              本质上其实是一种更复杂的相互选择
+              <br><br>
+              你选择的未必只是一个对象<br>
+              也可能是一种方法、一种圈层位置<br>
+              一种新的自我叙述<br>
+              甚至是一条通往别的场域的路径
             </div>
           </div>
           <div class="onboarding-slide">
+            <div class="onboarding-emoji">👉</div>
             <div class="onboarding-title">开始体验</div>
-            <div class="onboarding-text">
-              滑动卡片，找到你的匹配对象。<br>
-              如果你也想加入，可以提交自己的资料，审核通过后会加入推荐池。<br><br>
-              <em>这是一个玩笑项目，请勿当真。</em>
+            <div class="onboarding-text" style="max-width: 280px;">
+              滑动卡片，找到你的匹配对象<br>
+              如果你也想加入，可以提交自己的资料<br>
+              审核通过后会加入推荐池
+              <br><br>
+              <em>这是一个玩笑项目，请勿当真</em>
             </div>
           </div>
         </div>
