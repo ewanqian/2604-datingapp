@@ -211,6 +211,99 @@
     .status-box{
       padding:12px;border-radius:16px;background:var(--soft);display:none;font-size:14px;line-height:1.5
     }
+    /* Splash screen styles */
+    .splash{
+      position:absolute;
+      inset:0;
+      background:linear-gradient(180deg,#f5f1eb 0%,#efe7dc 100%);
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      opacity:0;
+      pointer-events:none;
+      transition:opacity .6s ease;
+      z-index:100;
+    }
+    .splash.active{
+      opacity:1;
+      pointer-events:auto;
+    }
+    .splash-logo{
+      width:120px;
+      height:120px;
+      border-radius:30px;
+      background:#111;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      color:#fff;
+      font-size:42px;
+      font-weight:800;
+      letter-spacing:-.04em;
+      box-shadow:0 20px 60px rgba(0,0,0,.15);
+      animation:pulse 1.6s ease-in-out infinite;
+    }
+    @keyframes pulse{
+      0%,100%{transform:scale(1)}
+      50%{transform:scale(1.05)}
+    }
+    .splash-text{
+      margin-top:24px;
+      font-size:24px;
+      font-weight:700;
+      letter-spacing:.12em;
+      color:#111;
+    }
+    .splash-sub{
+      margin-top:8px;
+      font-size:14px;
+      color:var(--muted);
+    }
+    .loading-bar{
+      width:180px;
+      height:6px;
+      background:#e2d9cd;
+      border-radius:999px;
+      margin-top:32px;
+      overflow:hidden;
+    }
+    .loading-fill{
+      width:0%;
+      height:100%;
+      background:#111;
+      border-radius:999px;
+      animation:loading 2s ease-out forwards;
+    }
+    @keyframes loading{
+      0%{width:0%}
+      100%{width:100%}
+    }
+    /* Intro card styles */
+    .intro-card{
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:24px;
+      padding:20px 18px;
+      margin-bottom:12px;
+      opacity:0;
+      transform:translateY(20px);
+      animation:fadeInUp .6s ease forwards;
+    }
+    @keyframes fadeInUp{
+      to{opacity:1;transform:translateY(0)}
+    }
+    .intro-title{
+      font-size:22px;
+      font-weight:700;
+      letter-spacing:-.04em;
+      margin-bottom:10px;
+    }
+    .intro-text{
+      font-size:14px;
+      line-height:1.7;
+      color:var(--muted);
+    }
     .status-box.show{display:block}
     .status-box.success{background:#e8f5e9;color:#2e7d32}
     .status-box.error{background:#ffebee;color:#c62828}
@@ -219,32 +312,37 @@
 <body>
   <div class="phone">
 
+    <div class="splash active" id="splash">
+      <div class="splash-logo">C</div>
+      <div class="splash-text">CURATED</div>
+      <div class="splash-sub">语境匹配实验</div>
+      <div class="loading-bar"><div class="loading-fill"></div></div>
+    </div>
+
     <section class="screen active" id="s1">
       <div class="top"><div>9:41</div><div class="brand">CURATED</div><div>CN</div></div>
-      <div class="hero">
-        <div class="badge">Private Access · Beta 测试</div>
-        <h1>CURATED<br>语境匹配实验</h1>
-        <p class="sub" style="margin-top:16px;line-height:1.7">
-          最近悄悄做了一个 app<br>
-          它是一个面向当代艺术、数字媒体、新媒体影像、web3、空间创作及相关文化行业的匹配平台。<br><br>
-          不是普通社交软件那种逻辑，也不只是为了“认识人”。<br><br>
-          更准确一点说，它在测试一种新的匹配方式：<br>
-          除了兴趣、审美和聊天氛围之外，<br>
-          人与人之间是否也可以基于语境相容度、合作潜力、行业路径、可见性和长期价值来建立连接。<br><br>
-          这两年越来越觉得，很多关系表面上是偶遇，<br>
-          本质上其实是一种更复杂的相互选择。<br>
-          你选择的未必只是一个对象，<br>
-          也可能是一种方法、一种圈层位置、一种新的自我叙述，<br>
-          甚至是一条通往别的场域的路径。<br><br>
-          所以这更像是一个小型实验：<br>
-          看看当关系、合作、身份与行业流动混在一起的时候，<br>
-          一个匹配系统会长成什么样。<br><br>
-          目前先小范围开放测试。<br>
-          有兴趣的朋友可以进来体验。
-        </p>
+      
+      <div class="intro-card" style="animation-delay:0s">
+        <div class="intro-title">CURATED</div>
+        <div class="intro-text">最近悄悄做了一个 app<br>它是一个面向当代艺术、数字媒体、新媒体影像、web3、空间创作及相关文化行业的匹配平台。</div>
       </div>
-      <div class="stack" style="margin-top:auto">
-        <div class="mini" style="text-align:center;margin-bottom:8px;color:var(--muted)"></div>
+
+      <div class="intro-card" style="animation-delay:0.2s">
+        <div class="intro-title">不是普通社交</div>
+        <div class="intro-text">不是普通社交软件那种逻辑，也不只是为了“认识人”。<br><br>更准确一点说，它在测试一种新的匹配方式：除了兴趣、审美和聊天氛围之外，人与人之间是否也可以基于语境相容度、合作潜力、行业路径、可见性和长期价值来建立连接。</div>
+      </div>
+
+      <div class="intro-card" style="animation-delay:0.4s">
+        <div class="intro-title">关于匹配</div>
+        <div class="intro-text">这两年越来越觉得，很多关系表面上是偶遇，本质上其实是一种更复杂的相互选择。<br><br>你选择的未必只是一个对象，也可能是一种方法、一种圈层位置、一种新的自我叙述，甚至是一条通往别的场域的路径。</div>
+      </div>
+
+      <div class="intro-card" style="animation-delay:0.6s">
+        <div class="intro-title">一个小型实验</div>
+        <div class="intro-text">所以这更像是一个小型实验：看看当关系、合作、身份与行业流动混在一起的时候，一个匹配系统会长成什么样。<br><br>目前先小范围开放测试，有兴趣的朋友可以进来体验。</div>
+      </div>
+
+      <div class="stack" style="margin-top:auto;margin-bottom:8px">
         <button class="btn" onclick="go(2)">开始体验</button>
         <button class="ghost" onclick="go(9)">提交我自己</button>
         <div class="mini" style="text-align:center;margin-top:12px">
@@ -676,6 +774,11 @@ function submitForm(){
     window.open(url, '_blank');
   }, 500);
 }
+
+setTimeout(() => {
+  const splash = document.getElementById('splash');
+  splash.classList.remove('active');
+}, 2100);
 
 go(1);
 renderProfile();
