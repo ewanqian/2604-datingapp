@@ -307,6 +307,42 @@
     .status-box.show{display:block}
     .status-box.success{background:#e8f5e9;color:#2e7d32}
     .status-box.error{background:#ffebee;color:#c62828}
+    /* Common tag suggestions */
+    .tag-suggestions{
+      display:flex;
+      flex-wrap:wrap;
+      gap:6px;
+      margin-top:8px;
+    }
+    .tag-suggestion{
+      padding:6px 10px;
+      border:1px solid var(--line);
+      border-radius:999px;
+      background:#fff;
+      font-size:12px;
+      color:var(--muted);
+      cursor:pointer;
+      transition:all .2s ease;
+    }
+    .tag-suggestion:hover{
+      background:var(--soft);
+      border-color:#111;
+      color:#111;
+    }
+    .tag-suggestion.added{
+      background:#111;
+      border-color:#111;
+      color:#fff;
+    }
+    .contact-note{
+      padding:12px;
+      border-radius:16px;
+      background:var(--soft);
+      font-size:12px;
+      line-height:1.6;
+      color:var(--muted);
+      margin-top:8px;
+    }
   </style>
 </head>
 <body>
@@ -529,6 +565,29 @@
       </div>
       <div class="sheet">
         <div class="label">标签（3-4 个）</div>
+        <div class="mini" style="margin-bottom:8px;color:var(--muted)">点击快速添加常见标签：</div>
+        <div class="tag-suggestions" id="tagSuggestions">
+          <span class="tag-suggestion" onclick="addSuggestedTag(this)">策展助理</span>
+          <span class="tag-suggestion" onclick="addSuggestedTag(this)">驻留</span>
+          <span class="tag-suggestion" onclick="addSuggestedTag(this)">数字媒体艺术</span>
+          <span class="tag-suggestion" onclick="addSuggestedTag(this)">新媒体艺术</span>
+          <span class="tag-suggestion" onclick="addSuggestedTag(this)">Web3</span>
+          <span class="tag-suggestion" onclick="addSuggestedTag(this)">DAO</span>
+          <span class="tag-suggestion" onclick="addSuggestedTag(this)">NFT</span>
+          <span class="tag-suggestion" onclick="addSuggestedTag(this)">AI</span>
+          <span class="tag-suggestion" onclick="addSuggestedTag(this)">AIGC</span>
+          <span class="tag-suggestion" onclick="addSuggestedTag(this)">XR</span>
+          <span class="tag-suggestion" onclick="addSuggestedTag(this)">空间叙事</span>
+          <span class="tag-suggestion" onclick="addSuggestedTag(this)">影像装置</span>
+          <span class="tag-suggestion" onclick="addSuggestedTag(this)">声音艺术</span>
+          <span class="tag-suggestion" onclick="addSuggestedTag(this)">文化策略</span>
+          <span class="tag-suggestion" onclick="addSuggestedTag(this)">社区运营</span>
+          <span class="tag-suggestion" onclick="addSuggestedTag(this)">理论研究</span>
+          <span class="tag-suggestion" onclick="addSuggestedTag(this)">媒体考古</span>
+          <span class="tag-suggestion" onclick="addSuggestedTag(this)">跨界</span>
+          <span class="tag-suggestion" onclick="addSuggestedTag(this)">社交在场</span>
+          <span class="tag-suggestion" onclick="addSuggestedTag(this)">github</span>
+        </div>
         <div id="tagList">
           <div class="tag-input-item">
             <input class="input tag-input" placeholder="标签 1" />
@@ -556,6 +615,9 @@
       <div class="sheet">
         <div class="label">肖像图片</div>
         <div class="mini" style="margin-bottom:8px">请上传一张 2:3 比例的竖屏肖像，压缩到 10-20KB 左右的 JPEG，然后把文件放到下面这个 GitHub Issue 里。<br>提交表单后会自动帮你打开 Issue 页面。</div>
+      </div>
+      <div class="contact-note">
+        <strong>联系方式：</strong> 如果你希望别人找到你，可以在 Issue 里顺便留下你的联系方式（Twitter / GitHub / 邮箱都可以）。所有人都能在 Issue 里看到并留言。
       </div>
       <div class="status-box" id="statusBox"></div>
       <div class="stack" style="margin-top:auto">
@@ -713,6 +775,36 @@ function removeTag(btn){
     return;
   }
   btn.parentElement.remove();
+}
+
+function addSuggestedTag(el){
+  const text = el.textContent.trim();
+  el.classList.toggle('added');
+  
+  if(el.classList.contains('added')){
+    const list = document.getElementById('tagList');
+    const div = document.createElement('div');
+    div.className = 'tag-input-item';
+    div.innerHTML = `<input class="input tag-input" value="${text}" readonly /><button class="remove-tag-btn" onclick="removeSuggestedTag(this, '${text.replace(/'/g, "\\'")}')">−</button>`;
+    list.appendChild(div);
+  } else {
+    const inputs = document.querySelectorAll('.tag-input');
+    inputs.forEach(input => {
+      if(input.value === text){
+        input.parentElement.remove();
+      }
+    });
+  }
+}
+
+function removeSuggestedTag(btn, text){
+  btn.parentElement.remove();
+  const suggestions = document.querySelectorAll('.tag-suggestion');
+  suggestions.forEach(sug => {
+    if(sug.textContent.trim() === text){
+      sug.classList.remove('added');
+    }
+  });
 }
 
 function showStatus(msg, type){
