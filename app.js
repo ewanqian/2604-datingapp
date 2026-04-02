@@ -126,8 +126,10 @@ function openChat(characterId) {
   currentChatCharacterId = characterId;
   currentStoryNode = null;
   
-  if (storylines[characterId]) {
+  if (storylines && storylines[characterId]) {
     currentStoryNode = storylines[characterId].startNode;
+  } else if (storylines && character.storyline && storylines[character.storyline]) {
+    currentStoryNode = storylines[character.storyline].startNode;
   }
   
   document.getElementById('inbox-view').classList.add('hidden');
@@ -155,8 +157,13 @@ function renderChatMessages() {
   
   if (chatMessages.length === 0 && currentStoryNode) {
     const character = characters.find(c => c.id === currentChatCharacterId);
-    const storyline = storylines[currentChatCharacterId];
-    if (storyline && storyline.nodes[currentStoryNode]) {
+    let storyline = storylines && storylines[currentChatCharacterId] 
+      ? storylines[currentChatCharacterId]
+      : (character && character.storyline && storylines && storylines[character.storyline] 
+        ? storylines[character.storyline] 
+        : null);
+    
+    if (storyline && storyline.nodes && storyline.nodes[currentStoryNode]) {
       const node = storyline.nodes[currentStoryNode];
       container.innerHTML = node.messages.map(msg => `
         <div class="message-bubble received">
@@ -178,11 +185,16 @@ function renderChatMessages() {
 function renderReplyOptions() {
   const container = document.getElementById('reply-options');
   const character = characters.find(c => c.id === currentChatCharacterId);
-  const storyline = storylines[currentChatCharacterId];
+  
+  let storyline = storylines && storylines[currentChatCharacterId] 
+    ? storylines[currentChatCharacterId]
+    : (character && character.storyline && storylines && storylines[character.storyline] 
+      ? storylines[character.storyline] 
+      : null);
   
   if (!character) return;
   
-  if (storyline && currentStoryNode && storyline.nodes[currentStoryNode]) {
+  if (storyline && currentStoryNode && storyline.nodes && storyline.nodes[currentStoryNode]) {
     const node = storyline.nodes[currentStoryNode];
     if (node.replies && node.replies.length > 0) {
       container.innerHTML = node.replies.map((reply, i) => `
@@ -192,17 +204,24 @@ function renderReplyOptions() {
     }
   }
   
-  const templates = messageTemplates.opening.slice(0, 3);
-  container.innerHTML = templates.map((t, i) => `
-    <button class="reply-chip" onclick="sendQuickReply('${t.replace(/'/g, "\\'")}')">${t}</button>
-  `).join('');
+  if (messageTemplates && messageTemplates.opening) {
+    const templates = messageTemplates.opening.slice(0, 3);
+    container.innerHTML = templates.map((t, i) => `
+      <button class="reply-chip" onclick="sendQuickReply('${t.replace(/'/g, "\\'")}')">${t}</button>
+    `).join('');
+  }
 }
 
 function selectReply(replyIndex) {
   const character = characters.find(c => c.id === currentChatCharacterId);
-  const storyline = storylines[currentChatCharacterId];
   
-  if (!storyline || !currentStoryNode) return;
+  let storyline = storylines && storylines[currentChatCharacterId] 
+    ? storylines[currentChatCharacterId]
+    : (character && character.storyline && storylines && storylines[character.storyline] 
+      ? storylines[character.storyline] 
+      : null);
+  
+  if (!storyline || !currentStoryNode || !storyline.nodes) return;
   
   const node = storyline.nodes[currentStoryNode];
   const reply = node.replies[replyIndex];
@@ -240,9 +259,11 @@ function sendQuickReply(text) {
   
   messages[currentChatCharacterId].push({ text: text, isUser: true });
   
-  const replies = messageTemplates.casual_ping;
-  const randomReply = replies[Math.floor(Math.random() * replies.length)];
-  messages[currentChatCharacterId].push({ text: randomReply, isUser: false });
+  if (messageTemplates && messageTemplates.casualPing) {
+    const replies = messageTemplates.casualPing;
+    const randomReply = replies[Math.floor(Math.random() * replies.length)];
+    messages[currentChatCharacterId].push({ text: randomReply, isUser: false });
+  }
   
   renderChatMessages();
   renderReplyOptions();
