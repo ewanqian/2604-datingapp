@@ -356,7 +356,7 @@
 
     <div class="card" style="padding:12px 14px; margin-bottom:12px">
       <div class="tinycaps">发现</div>
-      <div class="sub" style="margin-top:6px">不只匹配兴趣，也匹配节奏、距离与误判。</div>
+      <div class="sub" style="margin-top:6px">有些匹配不是因为合适。</div>
     </div>
 
     <div class="profile-card" style="margin-top:12px">
@@ -498,7 +498,7 @@
 
   <div class="detail-sheet" id="detailSheet">
     <div class="chat-header">
-      <button class="back" id="detailBack">返回</button>
+      <button class="back" id="detailBack">←</button>
       <div class="chat-user" style="cursor:default">
         <div>
           <div class="chat-name" id="detailNameTop">角色档案</div>
@@ -554,7 +554,7 @@
 
   <div class="chat-shell" id="chatShell">
     <div class="chat-header">
-      <button class="back" id="chatBack">返回</button>
+      <button class="back" id="chatBack">←</button>
       <div class="chat-user" id="chatUserTap" style="cursor:pointer">
         <img class="avatar-sm" id="chatAvatar" src="" alt="">
         <div class="avatar-fallback" id="chatAvatarFallback" style="display:none"></div>
@@ -590,7 +590,7 @@ const characters = [
     name:'Eva Lin', age:34, initials:'EL',
     role:'双年展顾问 / 影像策展协作',
     tags:['名单边缘','放映单元','机构通路'],
-    bio:'她擅长让人感觉自己快被看见了。不是直接给你门票，而是把你留在门边，让你始终差一点进去。',
+    bio:'她不会直接带你进去，但会让你一直觉得自己快到了。',
     upgrade:'潜在提升：更高密度的开幕酒会 / 被提及的机会 / “有人知道你” 的错觉',
     signal:18, status:'可见度上升',
     avatar:'assets/characters/01_eva_lin.jpg',
@@ -603,7 +603,7 @@ const characters = [
     name:'Luna Qiao', age:29, initials:'LQ',
     role:'Web3 艺术项目发起 / 社群共识设计',
     tags:['DAO','邀请码','闭环社群'],
-    bio:'她会把暧昧说成 alignment，把拉你进群说成 trust，把一切可能的试探都包成一种轻快的未来感。',
+    bio:'你分不清她是在邀请你，还是在筛你。',
     upgrade:'潜在提升：access code / 群内曝光 / 被纳入“我们正在做一些事情”的幻觉',
     signal:16, status:'共识同步中',
     avatar:'assets/characters/03_luna_qiao.jpg',
@@ -616,7 +616,7 @@ const characters = [
     name:'Adrian Park', age:33, initials:'AP',
     role:'AI 影像作者 / 新媒体项目协作',
     tags:['深夜回流','图像方法','项目外包'],
-    bio:'他会先和你聊感受，再聊图像，再聊最近状态，最后非常自然地问你一句：你方便帮我看个东西吗。',
+    bio:'你聊着聊着，就会发现他还是想让你帮他看东西。',
     upgrade:'潜在提升：进入项目核心群聊 / 被视作“懂他的人” / 创作劳动边缘准入',
     signal:17, status:'深夜波动',
     avatar:'assets/characters/04_adrian_park.jpg',
@@ -629,7 +629,7 @@ const characters = [
     name:'Kenji Mori', age:28, initials:'KM',
     role:'数字艺术新锐 / 场域出没型连接者',
     tags:['总在现场','刚好经过','边缘 insider'],
-    bio:'他并不坏，只是会让你不断见证他更靠近里面，而你一直在他旁边，像一个知道过程的人。',
+    bio:'他总像刚好又在一个对的地方出现。',
     upgrade:'潜在提升：被带入更高级别的现场 / 出现在正确的背景里 / 社交截图含金量提升',
     signal:14, status:'正在上升',
     avatar:'assets/characters/10_kenji_mori.jpg',
@@ -642,7 +642,7 @@ const characters = [
     name:'Camille Renard', age:33, initials:'CR',
     role:'活动影像策划 / 理论课程讲者',
     tags:['观看方式','讲述能力','距离感'],
-    bio:'每次聊得都很深，但所有亲密最后都会被她说成一种位置感、观看机制或关系结构。',
+    bio:'她总能理解你，但不一定会靠近你。',
     upgrade:'潜在提升：高质量的被理解感 / 精神层面的靠近 / 一段很漂亮但不落地的关系',
     signal:13, status:'解释进行中',
     avatar:'assets/characters/11_camille_renard.jpg',
@@ -655,7 +655,7 @@ const characters = [
     name:'Min Seo', age:30, initials:'MS',
     role:'沉浸式项目统筹 / 品牌匹配人',
     tags:['品牌局','项目联动','优先通道'],
-    bio:'她讲话很温柔，也很有效率。你以为这是关系在推进，但常常只是你正好被放进了一个很合适的位置。',
+    bio:'你以为关系在推进，但很多时候你只是正好被放进了一个合适的位置。',
     upgrade:'潜在提升：项目入口 / 更高质量的人脉局 / 被顺手带上的可能',
     signal:15, status:'通路开放中',
     avatar:'assets/characters/06_min_seo.jpg',
@@ -668,11 +668,11 @@ const characters = [
     name:'安由纪', age:26, initials:'AY',
     role:'后人类视觉研究者 / 化身表演艺术家',
     tags:['avatar 表演','数字身份','视觉测试'],
-    bio:'她不像那种会把自己一次说清楚的人。更多时候，她会给你看一个片段、一张图、一个深夜的表情、一个朋友镜头里捕到的瞬间。你会慢慢感觉自己在认识她。',
+    bio:'她不会一次说清楚自己，更像把一些图慢慢递给你。',
     upgrade:'潜在提升：私人图像通道 / 被选入视觉测试 / 一种很慢但很轻的靠近',
     signal:17, status:'私人通道半开',
     avatar:'assets/characters/08_yuki_ahn.jpg',
-    archetype:'图像亲密型',
+    archetype:'视觉型',
     genericHint:'她不会立刻给你全部，会一张一张慢慢放出来。',
     storyline:'yuki_main'
   }
@@ -959,7 +959,7 @@ const storylines = {
         ]
       },
       yuki_2:{
-        lines:['也不是。','只是有些东西先看，比先解释更准一点。'],
+        lines:['有些东西先看会更准。'],
         replies:[
           {text:'你比较相信图。', next:'yuki_3'},
           {text:'那你现在是在试我吗。', next:'yuki_3'},
@@ -967,7 +967,7 @@ const storylines = {
         ]
       },
       yuki_3:{
-        lines:['可能吧。','也可能只是想看看你会不会停下来。'],
+        lines:['我想先看你怎么接。'],
         replies:[
           {text:'我已经停下来了。', next:'yuki_4'},
           {text:'你很会把话说得像图。', next:'yuki_4'},
@@ -975,12 +975,12 @@ const storylines = {
         ]
       },
       yuki_4:{
-        lines:['后面有些图我会慢一点放出来。','先这样。'],
+        lines:['后面还有几张，我会慢一点给你看。'],
         replies:[
           {text:'行。', next:null},
           {text:'你这样很容易让人继续等。', next:null}
         ],
-        endState:'图像亲密'
+
       }
     }
   },
@@ -1744,7 +1744,7 @@ const profileDetails = {
   yuki: {
     statement: "她擅长把“被看见”这件事，做成一种很轻、很慢、很私人的引力。",
     city: "上海 / 首尔 / 屏幕与现场之间",
-    tendency: "图像亲密 / 慢速靠近",
+    tendency: "视觉探索 / 慢速靠近",
     current: "私人通道半开",
     longBio: "安由纪在后人类视觉、avatar 表演和图像化自我之间来回工作。她不像那种会把自己一次说清楚的人。更多时候，她会给你看一个片段、一张图、一个深夜的表情、一个朋友镜头里捕到的瞬间。你会慢慢感觉自己在认识她。",
     moments: [
