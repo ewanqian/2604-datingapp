@@ -354,10 +354,9 @@
   <section class="page active" id="page-discover">
     <div class="topbar"><div>9:41</div><div class="brand">CURATOR</div><div>Private Beta</div></div>
 
-    <div class="header-card">
-      <div class="mini-label">发现 · 精准匹配</div>
-      <h1 class="hero-title">让关系、误读与靠近<br>同时发生。</h1>
-      <p class="sub" style="margin-top:10px">这里不只匹配兴趣，也匹配节奏、方法、误会，以及你们可能一起经过的那个时刻。</p>
+    <div class="card" style="padding:12px 14px; margin-bottom:12px">
+      <div class="tinycaps">发现</div>
+      <div class="sub" style="margin-top:6px">不只匹配兴趣，也匹配节奏、距离与误判。</div>
     </div>
 
     <div class="profile-card" style="margin-top:12px">
@@ -386,12 +385,7 @@
       <button class="ghost" style="flex:1" id="discoverMoreBtn">更多资料</button>
       <button class="btn" style="flex:1" id="connectBtn">匹配</button>
     </div>
-
-    <div class="card" style="margin-top:12px">
-      <div class="tinycaps">本轮提示</div>
-      <div class="sub" id="discoverHint" style="margin-top:6px">你看中的未必只是某个人，也可能是他身上的空气、他经过的地方，和他没说完的话。</div>
-    </div>
-  </section>
+</section>
 
   <section class="page" id="page-inbox">
     <div class="topbar"><div>消息</div><div class="brand">CURATOR</div><div id="inboxUnread">0 unread</div></div>
@@ -432,17 +426,9 @@
       <div class="benefit"><span>更完整的活动记录</span><span class="muted">更细的轨迹与角色状态</span></div>
     </div>
 
-    <div class="pricing" style="margin-top:12px">
-      <div class="price-card">
-        <div class="tinycaps">当前阶段</div>
-        <div class="price">内测中</div>
-        <p class="sub" style="margin-top:6px">当前先保留访问入口。</p>
-      </div>
-      <div class="price-card">
-        <div class="tinycaps">后续开放</div>
-        <div class="price">逐步开放</div>
-        <p class="sub" style="margin-top:6px">根据后续更新逐步开放。</p>
-      </div>
+    <div class="card" style="margin-top:12px">
+      <div class="tinycaps">当前说明</div>
+      <p class="sub" style="margin-top:6px">当前先保留访问入口与更新通知。后续若开放更完整的角色档案、相册、长线分支与特殊事件，会统一在作者主页同步。</p>
     </div>
 
     <div class="card" style="margin-top:12px">
@@ -641,7 +627,7 @@ const characters = [
   {
     id:'kenji',
     name:'Kenji Mori', age:28, initials:'KM',
-    role:'数字艺术新锐 / 场域出没型匹配者',
+    role:'数字艺术新锐 / 场域出没型连接者',
     tags:['总在现场','刚好经过','边缘 insider'],
     bio:'他并不坏，只是会让你不断见证他更靠近里面，而你一直在他旁边，像一个知道过程的人。',
     upgrade:'潜在提升：被带入更高级别的现场 / 出现在正确的背景里 / 社交截图含金量提升',
@@ -688,23 +674,23 @@ const achievementsMeta = {
 
 const genericMessageBank = {
   opening: [
-    ['刚从外面回来。','突然想到你。'],
-    ['你这两天在忙什么？','我本来以为你会比现在更晚回。'],
-    ['今天在一个很吵的场子里。','有一瞬间想起你可能会不耐烦。']
+    ['你好。','先打个招呼。'],
+    ['刚看到你资料页。','你这个标签选得还挺准。'],
+    ['你看起来不像会乱聊的人。','所以我先礼貌一点。']
   ],
   warm: [
-    ['刚到家。','今天那个酒还是一样难喝。'],
-    ['你有时候回消息的节奏还挺像你这个人的。'],
-    ['本来想叫你。','但现场有点乱。']
+    ['你比资料页看起来没那么难接近。'],
+    ['你刚刚那句倒挺像你。'],
+    ['你回消息的节奏还挺稳定。']
   ],
   blurred: [
-    ['有人刚刚提到你。','倒不是坏话。'],
-    ['你最近状态是不是比前阵子稳一点？'],
-    ['我不太确定你会不会喜欢那个局。','但你去会有意思。']
+    ['本来想叫你。','但又觉得还早。'],
+    ['刚刚突然想到你。','不是很重的那种。'],
+    ['我不太确定你会不会喜欢那个场子。','但你可能会看两眼。']
   ],
   outcome: [
-    ['下次提前跟我说。','我看能不能给你留个位置。'],
-    ['先这样。','后面有更合适的再找你。']
+    ['先这样。','后面如果有更合适的再找你。'],
+    ['下次提前一点说。','这样比较像真的。']
   ]
 };
 
@@ -948,6 +934,45 @@ const storylines = {
       }
     }
   },
+
+  ,
+  yuki_main:{
+    start:'yuki_1',
+    nodes:{
+      yuki_1:{
+        lines:['先给你看一张图。','你不用急着评价。'],
+        replies:[
+          {text:'你这开场还挺像你。', next:'yuki_2'},
+          {text:'那我先不装懂。', next:'yuki_2'},
+          {text:'你通常都这么开始吗？', next:'yuki_2'}
+        ]
+      },
+      yuki_2:{
+        lines:['也不是。','只是有些东西先看，比先解释更准一点。'],
+        replies:[
+          {text:'你比较相信图。', next:'yuki_3'},
+          {text:'那你现在是在试我吗。', next:'yuki_3'},
+          {text:'好，我先接住。', next:'yuki_3'}
+        ]
+      },
+      yuki_3:{
+        lines:['可能吧。','也可能只是想看看你会不会停下来。'],
+        replies:[
+          {text:'我已经停下来了。', next:'yuki_4'},
+          {text:'你很会把话说得像图。', next:'yuki_4'},
+          {text:'那你再给我一点。', next:'yuki_4'}
+        ]
+      },
+      yuki_4:{
+        lines:['后面有些图我会慢一点放出来。','先这样。'],
+        replies:[
+          {text:'行。', next:null},
+          {text:'你这样很容易让人继续等。', next:null}
+        ],
+        endState:'图像亲密'
+      }
+    }
+  }
   kenji_main:{
     start:'kenji_1',
     nodes:{
@@ -1020,14 +1045,19 @@ const storylines = {
 
 const genericConversationTemplates = [
   {
-    preview:'刚从一个很吵的地方出来。',
-    messages:['刚从一个很吵的地方出来。','你可能会嫌那个场子太挤。'],
-    replies:['你今天又在外面？','听起来就不像我会喜欢。','所以你现在在回家的路上？']
+    preview:'你好，先打个招呼。',
+    messages:['你好。','先认识一下。'],
+    replies:['你好。','你倒是挺直接。','先看看你怎么聊。']
   },
   {
-    preview:'本来想叫你，但临时有点乱。',
-    messages:['本来想叫你。','但临时有点乱。'],
-    replies:['你每次都这样开头。','那你下次提前一点。','没事，我已经习惯了。']
+    preview:'刚看到你资料页。',
+    messages:['刚看到你资料页。','有几句还挺像你会写的。'],
+    replies:['你从哪句看出来的？','你观察人挺快。','先别急着下结论。']
+  },
+  {
+    preview:'你看起来不像会乱聊的人。',
+    messages:['你看起来不像会乱聊的人。','所以我先来打一声招呼。'],
+    replies:['你这个开头还挺会挑。','那你现在是在试水吗。','好，我收到了。']
   }
 ];
 
@@ -1248,6 +1278,21 @@ function openChat(id){
     beginConversation(id);
   }
 }
+
+
+function renderRepliesForCurrentNode(id){
+  const c = getCharacter(id);
+  if(c.storyline !== 'generic'){
+    const nodeKey = state.conversations[id].progress.node;
+    const node = storylines[c.storyline]?.nodes?.[nodeKey];
+    if(node && node.replies){
+      renderReplies(id, node.replies, null);
+      return;
+    }
+  }
+  renderGenericReplies(id, ['继续说。','你现在在哪。','我在看。']);
+}
+
 
 function beginConversation(id){
   const c = getCharacter(id);
