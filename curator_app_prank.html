@@ -317,13 +317,14 @@
   <section class="page active" id="page-discover">
     <div class="topbar"><div>9:41</div><div class="brand">CURATOR</div><div>Private Beta</div></div>
 
-    <div class="header-card">
+    <div class="header-card" id="welcomeCard">
       <div class="mini-label">发现 · 精准连接</div>
       <h1 class="hero-title">让关系、位置与可见度<br>同时发生。</h1>
       <p class="sub" style="margin-top:10px">这里不只匹配兴趣。也匹配方法、场域、节奏，以及你们将来可能一起进入的那道门。</p>
+      <button class="btn" style="width:100%; margin-top:12px" onclick="closeWelcome()">开始探索</button>
     </div>
 
-    <div class="profile-card" style="margin-top:12px">
+    <div class="profile-card" style="margin-top:12px; display:none" id="discoverCard">
       <div class="image-wrap">
         <span class="status-pill" id="discoverStatus">可见度上升</span>
         <span class="signal-pill" id="discoverSignal">Signal +18</span>
@@ -1447,6 +1448,12 @@ function injectFollowUpPings(){
 }
 
 function init(){
+  if(localStorage.getItem('curator_welcome_seen')){
+    document.getElementById('welcomeCard').style.display = 'none';
+    document.getElementById('discoverCard').style.display = 'block';
+  } else {
+    document.getElementById('discoverCard').style.display = 'none';
+  }
   bootMatchedConversations();
   initTabs();
   initActions();
@@ -1455,6 +1462,12 @@ function init(){
   renderProfile();
   tickMinutes();
   injectFollowUpPings();
+}
+
+function closeWelcome(){
+  localStorage.setItem('curator_welcome_seen', '1');
+  document.getElementById('welcomeCard').style.display = 'none';
+  document.getElementById('discoverCard').style.display = 'block';
 }
 init();
 </script>
