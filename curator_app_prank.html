@@ -6,22 +6,32 @@
   <title>CURATOR</title>
   <style>
     :root{
-      --bg:#f4f1eb;
+      --bg:#f5f1eb;
+      --bg-2:#efe7dc;
       --card:#fbf9f6;
-      --text:#111;
-      --muted:#6b665f;
-      --line:#d9d1c5;
-      --accent:#111;
-      --soft:#ece5db;
-      --danger:#8f3b2f;
+      --card-2:#fffdf9;
+      --text:#111111;
+      --muted:#6d665f;
+      --line:#ddd4c7;
+      --soft:#eee6db;
+      --accent:#111111;
+      --accent-2:#2f4c75;
+      --badge:#ece5db;
+      --gold:#b08b52;
+      --danger:#8a4338;
+      --success:#2f6b52;
+      --shadow:0 16px 40px rgba(17,17,17,.08);
+      --radius-xl:28px;
+      --radius-lg:22px;
+      --radius-md:18px;
+      --radius-sm:14px;
     }
     *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+    html,body{margin:0;height:100%}
     body{
-      margin:0;
       font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","PingFang SC","Helvetica Neue",sans-serif;
-      background:linear-gradient(180deg,#f5f1eb 0%,#efe7dc 100%);
+      background:linear-gradient(180deg,var(--bg) 0%,var(--bg-2) 100%);
       color:var(--text);
-      height:100vh;
       overflow:hidden;
     }
     .phone{
@@ -29,515 +39,1424 @@
       height:100vh;
       position:relative;
       overflow:hidden;
-      display:flex;
-      flex-direction:column;
+      background:linear-gradient(180deg,var(--bg) 0%,var(--bg-2) 100%);
     }
     .page{
-      position:absolute;
-      inset:0;
-      padding:18px 18px 90px;
-      display:flex;
-      flex-direction:column;
-      gap:14px;
-      opacity:0;
-      transform:translateX(28px);
-      pointer-events:none;
-      transition:all .42s ease;
+      position:absolute; inset:0;
+      padding:14px 16px 92px;
+      opacity:0; pointer-events:none;
+      transform:translateX(16px);
+      transition:.32s ease;
       overflow:auto;
     }
     .page.active{
-      opacity:1;
-      transform:translateX(0);
-      pointer-events:auto;
+      opacity:1; pointer-events:auto; transform:translateX(0);
     }
-    .hidden{display:none !important;}
-    .top-bar{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      font-size:12px;
-      color:var(--muted);
-      letter-spacing:.06em;
-      margin-top:4px;
+    .topbar{
+      display:flex; justify-content:space-between; align-items:center;
+      color:var(--muted); font-size:12px; letter-spacing:.06em;
+      padding:4px 2px 10px;
     }
-    .app-title{font-size:15px;font-weight:700;letter-spacing:.18em}
-    .status-pill{background:var(--soft);padding:6px 12px;border-radius:999px;font-size:11px;color:#403a33}
-    h1,h2,h3,p{margin:0}
-    
-    .profile-card{
+    .brand{font-weight:700; letter-spacing:.22em; font-size:13px; color:var(--text)}
+    .header-card,.card,.glass{
+      background:rgba(255,255,255,.55);
+      border:1px solid rgba(17,17,17,.08);
+      border-radius:var(--radius-xl);
+      backdrop-filter:blur(10px);
+      box-shadow:var(--shadow);
+    }
+    .header-card{padding:18px}
+    .hero-title{
+      font-size:32px; line-height:1.02; letter-spacing:-.05em; margin:10px 0 0;
+    }
+    .sub{font-size:14px; line-height:1.6; color:var(--muted)}
+    .row{display:flex; gap:10px}
+    .stack{display:flex; flex-direction:column; gap:10px}
+    .card{
       background:var(--card);
       border:1px solid var(--line);
-      border-radius:28px;
-      overflow:hidden;
-      flex:1;
-      display:flex;
-      flex-direction:column;
-    }
-    .profile-image-wrap{
-      width:100%;
-      aspect-ratio:4/5;
-      background-size:cover;
-      background-position:center;
-      position:relative;
-    }
-    .profile-image-wrap img{
-      width:100%;
-      height:100%;
-      object-fit:cover;
-    }
-    .profile-info{
+      border-radius:var(--radius-lg);
       padding:16px;
-      display:flex;
+      box-shadow:none;
+      backdrop-filter:none;
+    }
+    .mini-label{
+      display:inline-flex; align-items:center; gap:6px;
+      width:fit-content; padding:8px 12px; border-radius:999px;
+      background:var(--badge); font-size:12px; color:#443c34;
+    }
+    .big-metric{font-size:42px; letter-spacing:-.06em; font-weight:800}
+    .section-title{font-size:24px; line-height:1.1; letter-spacing:-.04em; margin:0}
+    .tinycaps{font-size:11px; color:var(--muted); letter-spacing:.15em; text-transform:uppercase}
+    .btn,.ghost,.chip,.reply-chip,.tab{
+      border:none; outline:none; cursor:pointer; font:inherit;
+    }
+    .btn{
+      background:var(--accent); color:#fff; border-radius:999px;
+      padding:14px 18px; font-size:15px; font-weight:700;
+    }
+    .ghost{
+      background:#fff; color:var(--text); border:1px solid var(--line);
+      border-radius:999px; padding:14px 18px; font-size:15px; font-weight:700;
+    }
+    .chip{
+      background:#fff; color:var(--text); border:1px solid var(--line);
+      border-radius:999px; padding:10px 12px; font-size:12px;
+    }
+    .profile-card{
+      background:var(--card-2);
+      border:1px solid var(--line);
+      border-radius:30px;
+      overflow:hidden;
+      box-shadow:var(--shadow);
+    }
+    .image-wrap{
+      position:relative;
+      aspect-ratio:4/5;
+      background:linear-gradient(180deg,#d9d0c1,#cabfb1);
+      overflow:hidden;
+    }
+    .image-wrap img{
+      width:100%; height:100%; object-fit:cover; display:block;
+    }
+    .placeholder{
+      position:absolute; inset:0;
+      display:flex; align-items:center; justify-content:center;
       flex-direction:column;
-      gap:10px;
+      color:#2f2a25;
+      background:linear-gradient(180deg,rgba(255,255,255,.25),rgba(17,17,17,.15));
     }
-    .profile-header{
-      display:flex;
-      justify-content:space-between;
-      align-items:flex-start;
+    .placeholder .initials{
+      font-size:48px; font-weight:800; letter-spacing:-.06em;
     }
-    .profile-header h2{
-      font-size:24px;
-      font-weight:700;
-      letter-spacing:-0.04em;
-      line-height:1.1;
+    .placeholder small{
+      font-size:12px; letter-spacing:.15em; text-transform:uppercase; opacity:.68;
     }
-    .signal-badge{
-      background:var(--accent);
-      color:#fff;
-      padding:6px 10px;
-      border-radius:999px;
+    .signal-pill,.status-pill,.score-pill{
+      position:absolute; top:14px;
+      padding:8px 10px; border-radius:999px;
+      background:rgba(255,255,255,.86);
       font-size:12px;
-      font-weight:600;
+      backdrop-filter:blur(8px);
     }
-    .profile-role{
-      font-size:14px;
-      color:var(--muted);
-      line-height:1.4;
-    }
-    .profile-bio{
-      font-size:14px;
-      line-height:1.6;
-      color:var(--text);
-    }
-    .tag-row{
-      display:flex;
-      flex-wrap:wrap;
-      gap:6px;
-    }
+    .signal-pill{right:14px}
+    .status-pill{left:14px}
+    .profile-info{padding:16px}
+    .name-row{display:flex; justify-content:space-between; align-items:flex-end; gap:12px}
+    .name-row h2{margin:0; font-size:30px; line-height:1; letter-spacing:-.05em}
+    .age{font-size:18px; color:#38332d}
+    .role{font-size:14px; color:#2c2926; margin-top:8px}
+    .bio{font-size:14px; line-height:1.6; color:#403a33; margin-top:10px}
+    .tag-row{display:flex; flex-wrap:wrap; gap:8px; margin-top:12px}
     .tag{
-      padding:6px 10px;
-      border-radius:999px;
-      background:var(--soft);
-      font-size:12px;
-      color:#403a33;
+      padding:8px 10px; border-radius:999px;
+      background:#fff; border:1px solid var(--line); font-size:12px; color:#433d36;
     }
-    .upgrade-line{
-      font-size:12px;
-      color:var(--muted);
-      line-height:1.4;
-      padding-top:8px;
-      border-top:1px solid var(--line);
+    .upgrade{
+      margin-top:12px; padding-top:12px; border-top:1px dashed var(--line);
+      font-size:13px; color:#544d46; line-height:1.55;
     }
-    
-    .action-row{
-      display:flex;
-      gap:10px;
+    .action-row{display:flex; gap:12px; margin-top:14px}
+    .icon-btn{
+      width:62px; height:62px; border-radius:50%; border:none; cursor:pointer;
+      background:#fff; box-shadow:var(--shadow); font-size:22px;
     }
-    .ghost-btn, .primary-btn{
-      border:none;
-      border-radius:999px;
-      padding:14px 18px;
-      font-size:15px;
-      font-weight:600;
-      flex:1;
+    .icon-btn.primary{background:#111;color:#fff}
+    .list{display:flex; flex-direction:column; gap:10px}
+    .conv-item,.match-item,.reward-item{
+      display:flex; align-items:center; gap:12px;
+      background:#fff; border:1px solid var(--line);
+      border-radius:20px; padding:12px;
     }
-    .primary-btn{background:var(--accent);color:#fff}
-    .ghost-btn{background:transparent;border:1px solid var(--line);color:var(--text)}
-    
-    .page-header{
-      margin-bottom:8px;
+    .avatar-sm{
+      width:52px; height:52px; border-radius:16px; object-fit:cover; background:linear-gradient(180deg,#ddd3c5,#c6bcaf);
+      flex:0 0 auto;
     }
-    .page-header h2{
-      font-size:28px;
-      font-weight:700;
-      letter-spacing:-0.04em;
-      line-height:1.1;
+    .avatar-fallback{
+      width:52px; height:52px; border-radius:16px; background:linear-gradient(180deg,#ddd3c5,#c6bcaf);
+      display:flex; align-items:center; justify-content:center;
+      font-size:18px; font-weight:800; color:#2f2a25; flex:0 0 auto;
     }
-    .matches-list, .conversation-list{
-      display:flex;
-      flex-direction:column;
-      gap:10px;
+    .conv-meta{flex:1; min-width:0}
+    .conv-top{display:flex; justify-content:space-between; gap:12px; align-items:center}
+    .conv-name{font-size:15px; font-weight:700}
+    .conv-time{font-size:12px; color:var(--muted)}
+    .conv-preview{
+      font-size:13px; color:#5b544d; margin-top:4px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
     }
-    .match-item, .conversation-item{
-      background:var(--card);
-      border:1px solid var(--line);
-      border-radius:20px;
-      padding:14px;
-      display:flex;
-      gap:12px;
-      align-items:center;
-      cursor:pointer;
-      transition:background .2s ease;
+    .unread-dot{
+      width:8px; height:8px; border-radius:50%; background:#111; flex:0 0 auto;
     }
-    .match-item:hover, .conversation-item:hover{background:#f7f3ed}
-    .match-item .avatar, .conversation-item .avatar{
-      width:56px;
-      height:56px;
-      border-radius:16px;
-      object-fit:cover;
+    .segmented{
+      display:flex; gap:8px; background:rgba(255,255,255,.4); padding:4px; border-radius:999px; border:1px solid rgba(17,17,17,.08);
     }
-    .match-copy, .conversation-copy{
-      flex:1;
-      display:flex;
-      flex-direction:column;
-      gap:4px;
+    .segmented button{
+      flex:1; border:none; background:transparent; padding:10px 12px; border-radius:999px; font-size:13px; color:#5d564f;
     }
-    .match-top, .conversation-top{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
+    .segmented button.active{background:#fff; color:#111; box-shadow:0 4px 16px rgba(17,17,17,.06)}
+    .chat-shell{
+      position:absolute; inset:0; background:linear-gradient(180deg,#f7f3ee 0%,#efe7dc 100%);
+      z-index:20; display:none; flex-direction:column;
     }
-    .match-name, .conversation-name{
-      font-size:15px;
-      font-weight:600;
-    }
-    .match-time, .conversation-time{
-      font-size:12px;
-      color:var(--muted);
-    }
-    .match-preview, .conversation-preview{
-      font-size:13px;
-      color:var(--muted);
-      line-height:1.4;
-    }
-    .empty-state{
-      text-align:center;
-      padding:40px 20px;
-      color:var(--muted);
-      font-size:14px;
-      line-height:1.6;
-    }
-    
-    .chat-view{
-      display:flex;
-      flex-direction:column;
-      height:100%;
-    }
+    .chat-shell.open{display:flex}
     .chat-header{
-      display:flex;
-      align-items:center;
-      gap:12px;
-      padding:10px 0;
-      border-bottom:1px solid var(--line);
-      margin-bottom:14px;
+      padding:14px 16px 10px;
+      border-bottom:1px solid rgba(17,17,17,.08);
+      background:rgba(255,255,255,.72);
+      backdrop-filter:blur(10px);
+      display:flex; align-items:center; gap:12px;
+      position:sticky; top:0; z-index:5;
     }
-    .back-btn{
-      background:transparent;
-      border:none;
-      font-size:15px;
-      color:var(--text);
-      padding:8px 8px 8px 0;
-      cursor:pointer;
+    .back{
+      width:36px; height:36px; border-radius:50%; border:none; background:#fff; font-size:14px;
     }
-    .chat-user{
-      display:flex;
-      align-items:center;
-      gap:10px;
-      flex:1;
+    .chat-user{display:flex; align-items:center; gap:10px; flex:1}
+    .chat-user .avatar-sm{width:40px; height:40px; border-radius:14px}
+    .chat-name{font-weight:700; font-size:15px}
+    .chat-status{font-size:12px; color:var(--muted)}
+    .chat-body{
+      flex:1; overflow:auto; padding:14px 14px 120px;
+      display:flex; flex-direction:column; gap:10px;
     }
-    .chat-user .avatar{
-      width:40px;
-      height:40px;
-      border-radius:12px;
-      object-fit:cover;
+    .msg{
+      max-width:78%;
+      padding:11px 13px; border-radius:18px;
+      font-size:14px; line-height:1.5;
+      white-space:pre-wrap;
     }
-    .chat-name{
-      font-size:15px;
-      font-weight:600;
-    }
-    .chat-status{
-      font-size:12px;
-      color:var(--muted);
-    }
-    .chat-messages{
-      flex:1;
-      overflow-y:auto;
-      display:flex;
-      flex-direction:column;
-      gap:10px;
-      padding-bottom:10px;
-    }
-    .message-bubble{
-      max-width:80%;
-      padding:12px 16px;
-      border-radius:20px;
-      font-size:14px;
-      line-height:1.5;
-    }
-    .message-bubble.sent{
-      align-self:flex-end;
-      background:var(--accent);
-      color:#fff;
-      border-bottom-right-radius:4px;
-    }
-    .message-bubble.received{
+    .msg.npc{
       align-self:flex-start;
-      background:var(--card);
-      border:1px solid var(--line);
-      border-bottom-left-radius:4px;
+      background:#fff; border:1px solid var(--line);
+      border-bottom-left-radius:8px;
     }
-    .message-text{word-break:break-word}
-    .reply-options{
-      display:flex;
-      flex-wrap:wrap;
-      gap:8px;
-      padding-top:10px;
-      border-top:1px solid var(--line);
+    .msg.user{
+      align-self:flex-end;
+      background:#111; color:#fff;
+      border-bottom-right-radius:8px;
+    }
+    .typing{
+      display:inline-flex; align-items:center; gap:4px;
+      width:fit-content; background:#fff; border:1px solid var(--line);
+      padding:12px 13px; border-radius:18px; border-bottom-left-radius:8px;
+    }
+    .typing span{
+      width:6px; height:6px; border-radius:50%; background:#9e968d;
+      animation:blink 1s infinite ease-in-out;
+    }
+    .typing span:nth-child(2){animation-delay:.15s}
+    .typing span:nth-child(3){animation-delay:.3s}
+    @keyframes blink{
+      0%,80%,100%{transform:translateY(0);opacity:.35}
+      40%{transform:translateY(-3px);opacity:1}
+    }
+    .reply-panel{
+      position:absolute; left:0; right:0; bottom:74px;
+      padding:10px 12px 14px;
+      background:linear-gradient(180deg,rgba(245,241,235,0) 0%,rgba(245,241,235,.86) 30%,rgba(245,241,235,1) 100%);
+    }
+    .reply-wrap{
+      display:flex; flex-wrap:wrap; gap:8px;
+      background:rgba(255,255,255,.65); border:1px solid rgba(17,17,17,.08);
+      border-radius:22px; padding:10px;
+      backdrop-filter:blur(10px);
     }
     .reply-chip{
-      background:var(--card);
-      border:1px solid var(--line);
-      border-radius:999px;
-      padding:10px 16px;
-      font-size:13px;
-      color:var(--text);
-      cursor:pointer;
-      transition:all .2s ease;
+      background:#fff; color:#111; border:1px solid var(--line);
+      padding:11px 12px; border-radius:999px; font-size:13px; line-height:1.25;
+      max-width:100%;
     }
-    .reply-chip:hover{background:var(--soft);border-color:var(--accent)}
-    
-    .profile-panel{
-      display:flex;
-      flex-direction:column;
-      gap:12px;
+    .membership-hero{
+      padding:18px; border-radius:28px; background:linear-gradient(180deg,#1f2632,#111827); color:#fff;
+      box-shadow:var(--shadow);
     }
-    .metric-card{
-      background:var(--card);
-      border:1px solid var(--line);
-      border-radius:22px;
-      padding:18px;
+    .membership-hero .sub{color:rgba(255,255,255,.72)}
+    .benefit{display:flex; justify-content:space-between; gap:12px; padding:12px 0; border-bottom:1px solid rgba(17,17,17,.08)}
+    .benefit:last-child{border-bottom:none}
+    .muted{color:var(--muted)}
+    .pricing{
+      display:grid; grid-template-columns:1fr 1fr; gap:10px;
     }
-    .metric-label{
-      font-size:12px;
-      text-transform:uppercase;
-      letter-spacing:.12em;
-      color:var(--muted);
-      margin-bottom:8px;
+    .price-card{
+      background:#fff; border:1px solid var(--line); border-radius:20px; padding:14px;
     }
-    .metric-number{
-      font-size:36px;
-      font-weight:800;
-      letter-spacing:-0.04em;
+    .price{font-size:28px; font-weight:800; letter-spacing:-.05em}
+    .profile-grid{
+      display:grid; grid-template-columns:1fr 1fr; gap:10px;
     }
-    .membership-card{
-      background:var(--card);
-      border:1px solid var(--line);
-      border-radius:22px;
-      padding:18px;
-      margin-top:12px;
+    .metric{
+      background:#fff; border:1px solid var(--line); border-radius:20px; padding:14px;
     }
-    .membership-card h3{
-      font-size:18px;
-      font-weight:700;
-      margin-bottom:8px;
+    .metric .label{font-size:11px; letter-spacing:.12em; color:var(--muted); text-transform:uppercase}
+    .metric .value{font-size:28px; font-weight:800; letter-spacing:-.05em; margin-top:6px}
+    .summary-card{
+      background:#fff; border:1px solid var(--line); border-radius:22px; padding:16px;
     }
-    .membership-card p{
-      font-size:14px;
-      line-height:1.6;
-      color:var(--muted);
-      margin-bottom:14px;
-    }
-    
-    .tab-bar{
-      position:fixed;
-      bottom:0;
-      left:0;
-      right:0;
-      background:var(--bg);
-      border-top:1px solid var(--line);
-      display:flex;
-      padding:12px 18px 20px;
-      gap:8px;
-      z-index:50;
-    }
-    .tab{
-      flex:1;
-      background:transparent;
-      border:none;
-      padding:12px 8px;
-      border-radius:16px;
-      font-size:13px;
-      font-weight:600;
-      color:var(--muted);
-      cursor:pointer;
-      transition:all .2s ease;
-    }
-    .tab.active{
-      background:var(--accent);
-      color:#fff;
-    }
-    
-    .discover-top{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:12px;
-    }
-    .tinycaps{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
-    .badge{
-      display:inline-flex;
-      padding:8px 12px;
-      border-radius:999px;
-      background:var(--soft);
-      font-size:12px;
-      color:#403a33;
-      gap:6px;
-      align-items:center;
+    .summary-line{display:flex; justify-content:space-between; gap:12px; padding:10px 0; border-bottom:1px dashed var(--line); font-size:14px}
+    .summary-line:last-child{border-bottom:none}
+    .reward-tag{
+      padding:7px 10px; border-radius:999px; background:var(--badge); font-size:11px; color:#4b443d;
       width:fit-content;
     }
+    .tabbar{
+      position:absolute; left:14px; right:14px; bottom:14px; z-index:30;
+      background:rgba(255,255,255,.78); backdrop-filter:blur(16px);
+      border:1px solid rgba(17,17,17,.08); border-radius:999px;
+      display:grid; grid-template-columns:repeat(4,1fr); padding:6px; gap:6px;
+      box-shadow:var(--shadow);
+    }
+    .tab{
+      background:transparent; border-radius:999px; padding:10px 8px; color:#5b544d; font-size:12px; line-height:1.2;
+    }
+    .tab.active{background:#fff; color:#111; font-weight:700}
+    .divider{height:1px; background:rgba(17,17,17,.08); margin:4px 0}
+    a.clean-link{color:inherit; text-decoration:none}
   </style>
 </head>
 <body>
-  <div class="phone">
+<div class="phone">
+  <section class="page active" id="page-discover">
+    <div class="topbar"><div>9:41</div><div class="brand">CURATOR</div><div>Private Beta</div></div>
 
-    <section id="page-discover" class="page active">
-      <div class="top-bar">
-        <div class="app-title">CURATOR</div>
-        <div class="status-pill">Private Beta</div>
+    <div class="header-card">
+      <div class="mini-label">发现 · 精准连接</div>
+      <h1 class="hero-title">让关系、位置与可见度<br>同时发生。</h1>
+      <p class="sub" style="margin-top:10px">这里不只匹配兴趣。也匹配方法、场域、节奏，以及你们将来可能一起进入的那道门。</p>
+    </div>
+
+    <div class="profile-card" style="margin-top:12px">
+      <div class="image-wrap">
+        <span class="status-pill" id="discoverStatus">可见度上升</span>
+        <span class="signal-pill" id="discoverSignal">Signal +18</span>
+        <img id="discoverImage" src="" alt="profile">
+        <div class="placeholder" id="discoverPlaceholder">
+          <div class="initials" id="discoverInitials">EL</div>
+          <small>profile pending</small>
+        </div>
       </div>
-      
-      <div class="discover-top">
+      <div class="profile-info">
+        <div class="name-row">
+          <h2><span id="discoverName">Eva Lin</span><span class="age" id="discoverAge">，34</span></h2>
+        </div>
+        <div class="role" id="discoverRole">双年展顾问 / 影像策展协作</div>
+        <div class="tag-row" id="discoverTags"></div>
+        <p class="bio" id="discoverBio"></p>
+        <div class="upgrade" id="discoverUpgrade"></div>
+      </div>
+    </div>
+
+    <div class="action-row">
+      <button class="ghost" style="flex:1" id="skipBtn">跳过</button>
+      <button class="btn" style="flex:1" id="connectBtn">连接</button>
+    </div>
+
+    <div class="card" style="margin-top:12px">
+      <div class="tinycaps">本轮提示</div>
+      <div class="sub" id="discoverHint" style="margin-top:6px">你看中的未必是某个人，很多时候是他身后的入口、场合与节奏。</div>
+    </div>
+  </section>
+
+  <section class="page" id="page-inbox">
+    <div class="topbar"><div>消息</div><div class="brand">CURATOR</div><div id="inboxUnread">0 unread</div></div>
+
+    <div class="segmented">
+      <button class="active" data-filter="active">最近</button>
+      <button data-filter="archive">归档</button>
+    </div>
+
+    <div class="list" id="conversationList" style="margin-top:12px"></div>
+
+    <div class="card" id="emptyInbox" style="margin-top:12px">
+      <div class="tinycaps">还没有会话</div>
+      <p class="sub" style="margin-top:6px">从“发现”页连接一个角色后，对话会自动进入这里。长线角色会在不同时间继续找你。</p>
+    </div>
+  </section>
+
+  <section class="page" id="page-membership">
+    <div class="topbar"><div>会员</div><div class="brand">CURATOR</div><div>更新中</div></div>
+
+    <div class="membership-hero">
+      <div class="mini-label" style="background:rgba(255,255,255,.12); color:#fff">Membership</div>
+      <h2 class="section-title" style="color:#fff; margin-top:12px">扩展你在网络中的可见度。</h2>
+      <p class="sub" style="margin-top:10px">更多长线剧情、隐藏事件、优先展示、扩展筛选与私密访问，将在后续版本逐步开放。</p>
+      <div class="row" style="margin-top:16px">
+        <a class="clean-link" style="flex:1" href="https://www.xiaohongshu.com/user/profile/60d73226000000000101f30e" target="_blank">
+          <button class="btn" style="width:100%; background:#fff; color:#111">打开作者主页</button>
+        </a>
+        <button class="ghost" style="flex:1; background:transparent; border-color:rgba(255,255,255,.24); color:#fff" onclick="alert('后续会员系统与邀请码会通过作者主页同步。')">获取访问</button>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:12px">
+      <div class="tinycaps">包含权益</div>
+      <div class="benefit"><span>优先展示</span><span class="muted">更早被看见</span></div>
+      <div class="benefit"><span>长线对话</span><span class="muted">更多隐藏分支</span></div>
+      <div class="benefit"><span>私密事件</span><span class="muted">名单 / 局 / 深夜回流</span></div>
+      <div class="benefit"><span>高级关系报告</span><span class="muted">更完整的结果页</span></div>
+    </div>
+
+    <div class="pricing" style="margin-top:12px">
+      <div class="price-card">
+        <div class="tinycaps">月度</div>
+        <div class="price">¥48</div>
+        <p class="sub" style="margin-top:6px">当前仅作展示。</p>
+      </div>
+      <div class="price-card">
+        <div class="tinycaps">年度</div>
+        <div class="price">¥298</div>
+        <p class="sub" style="margin-top:6px">后续开放。</p>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:12px">
+      <div class="tinycaps">获取方式</div>
+      <p class="sub" style="margin-top:6px">关注作者主页，接收更新、邀请码与后续版本开放信息。</p>
+      <a class="clean-link" href="https://www.xiaohongshu.com/user/profile/60d73226000000000101f30e" target="_blank">
+        <button class="ghost" style="width:100%; margin-top:12px">前往小红书主页</button>
+      </a>
+    </div>
+  </section>
+
+  <section class="page" id="page-profile">
+    <div class="topbar"><div>我的</div><div class="brand">CURATOR</div><div id="profileTier">Beta</div></div>
+
+    <div class="profile-grid">
+      <div class="metric"><div class="label">Signal Value</div><div class="value" id="metricSignal">0</div></div>
+      <div class="metric"><div class="label">已连接</div><div class="value" id="metricMatches">0</div></div>
+      <div class="metric"><div class="label">已解锁成就</div><div class="value" id="metricAchievements">0</div></div>
+      <div class="metric"><div class="label">停留时长</div><div class="value" id="metricMinutes">0m</div></div>
+    </div>
+
+    <div class="summary-card" style="margin-top:12px">
+      <div class="tinycaps">本次活动轨迹</div>
+      <div class="summary-line"><span>本次停留</span><span id="traceDuration">0 分钟</span></div>
+      <div class="summary-line"><span>建立连接</span><span id="traceMatches">0 条</span></div>
+      <div class="summary-line"><span>最长对话对象</span><span id="traceLongest">暂无</span></div>
+      <div class="summary-line"><span>当前状态</span><span id="traceStatus">仍在观察中</span></div>
+      <div class="summary-line"><span>本次总结</span><span id="traceSummary">尚未形成稳定关系</span></div>
+    </div>
+
+    <div class="card" style="margin-top:12px">
+      <div class="tinycaps">已解锁成就</div>
+      <div class="list" id="achievementList" style="margin-top:10px"></div>
+    </div>
+
+    <div class="card" style="margin-top:12px">
+      <div class="tinycaps">兑换中心</div>
+      <div class="list" style="margin-top:10px">
+        <div class="reward-item">
+          <div class="reward-tag">需要 1 项成就</div>
+          <div class="conv-meta">
+            <div class="conv-name">隐藏话术包</div>
+            <div class="conv-preview">解锁更长的回复选项与更暧昧的推进方式。</div>
+          </div>
+        </div>
+        <div class="reward-item">
+          <div class="reward-tag">需要 2 项成就</div>
+          <div class="conv-meta">
+            <div class="conv-name">特殊事件预告</div>
+            <div class="conv-preview">优先进入“名单边缘”“深夜回流”等关键事件。</div>
+          </div>
+        </div>
+        <div class="reward-item">
+          <div class="reward-tag">需要 关注作者</div>
+          <div class="conv-meta">
+            <div class="conv-name">会员访问资格</div>
+            <div class="conv-preview">关注作者主页，接收后续会员更新与邀请码。</div>
+          </div>
+        </div>
+      </div>
+      <a class="clean-link" href="https://www.xiaohongshu.com/user/profile/60d73226000000000101f30e" target="_blank">
+        <button class="btn" style="width:100%; margin-top:12px">前往作者主页</button>
+      </a>
+    </div>
+  </section>
+
+  <div class="chat-shell" id="chatShell">
+    <div class="chat-header">
+      <button class="back" id="chatBack">返回</button>
+      <div class="chat-user">
+        <img class="avatar-sm" id="chatAvatar" src="" alt="">
+        <div class="avatar-fallback" id="chatAvatarFallback" style="display:none"></div>
         <div>
-          <div class="tinycaps">Curated Pool</div>
-          <div style="font-size:22px;font-weight:700;letter-spacing:-.04em;margin-top:3px">为你精选的匹配对象</div>
-        </div>
-        <div class="badge"><span id="discover-index">1 / 18</span></div>
-      </div>
-
-      <div class="profile-card">
-        <div class="profile-image-wrap">
-          <img id="discover-image" src="assets/characters/01_eva_lin.jpg" alt="profile" />
-        </div>
-
-        <div class="profile-info">
-          <div class="profile-header">
-            <h2 id="discover-name">伊娃·林, 34</h2>
-            <span id="discover-signal" class="signal-badge">+18</span>
-          </div>
-
-          <div id="discover-role" class="profile-role">双年展策展顾问 / 影像项目连接人</div>
-
-          <div id="discover-tags" class="tag-row">
-            <span class="tag">双年展</span>
-            <span class="tag">评审名单</span>
-            <span class="tag">机构入口</span>
-          </div>
-
-          <p id="discover-bio" class="profile-bio">
-            长期围绕影像、软权力与选择性可见性工作。很擅长让别人觉得自己已经半只脚跨进门里了。
-          </p>
-
-          <div id="discover-upgrade" class="upgrade-line">
-            潜在提升: 策展晚餐 / 机构靠近感 / 主页身价抬升
-          </div>
+          <div class="chat-name" id="chatName">Eva Lin</div>
+          <div class="chat-status" id="chatStatus">在线</div>
         </div>
       </div>
-
-      <div class="action-row">
-        <button class="ghost-btn" onclick="prevDiscoverCard()">‹ 上一个</button>
-        <button class="ghost-btn" onclick="nextDiscoverCard()">跳过</button>
-        <button class="primary-btn" onclick="connectCurrentCharacter()">连接 ♡</button>
-        <button class="ghost-btn" onclick="nextDiscoverCard()">下一个 ›</button>
-      </div>
-    </section>
-
-    <section id="page-matches" class="page">
-      <div class="page-header">
-        <h2>配对</h2>
-      </div>
-
-      <div id="matches-list" class="matches-list"></div>
-    </section>
-
-    <section id="page-inbox" class="page">
-      <div id="inbox-view">
-        <div class="page-header">
-          <h2>消息</h2>
-        </div>
-        <div id="conversation-list" class="conversation-list"></div>
-      </div>
-
-      <div id="chat-view" class="chat-view hidden">
-        <div class="chat-header">
-          <button class="back-btn" onclick="closeChat()">← 返回</button>
-          <div class="chat-user">
-            <img id="chat-avatar" class="avatar" src="" alt="" />
-            <div>
-              <div id="chat-name" class="chat-name">Eva Lin</div>
-              <div id="chat-status" class="chat-status">在线</div>
-            </div>
-          </div>
-        </div>
-
-        <div id="chat-messages" class="chat-messages"></div>
-
-        <div id="reply-options" class="reply-options"></div>
-      </div>
-    </section>
-
-    <section id="page-profile" class="page">
-      <div class="page-header">
-        <h2>个人</h2>
-      </div>
-
-      <div class="profile-panel">
-        <div class="metric-card">
-          <div class="metric-label">Signal Value</div>
-          <div class="metric-number">84</div>
-        </div>
-
-        <div class="metric-card">
-          <div class="metric-label">Institutional Reach</div>
-          <div class="metric-number">High</div>
-        </div>
-
-        <div class="metric-card">
-          <div class="metric-label">Current Tier</div>
-          <div class="metric-number">Private Beta</div>
-        </div>
-      </div>
-
-      <div class="membership-card">
-        <h3>会员</h3>
-        <p>扩大可见性、优先介绍、高级筛选和私密开幕式。</p>
-        <button class="primary-btn">管理</button>
-      </div>
-    </section>
-
-    <nav class="tab-bar">
-      <button class="tab active" data-page="discover" onclick="switchPage('discover')">发现</button>
-      <button class="tab" data-page="matches" onclick="switchPage('matches')">配对</button>
-      <button class="tab" data-page="inbox" onclick="switchPage('inbox')">消息</button>
-      <button class="tab" data-page="profile" onclick="switchPage('profile')">个人</button>
-    </nav>
-
+    </div>
+    <div class="chat-body" id="chatBody"></div>
+    <div class="reply-panel">
+      <div class="reply-wrap" id="replyWrap"></div>
+    </div>
   </div>
 
-<script src="data/characters.js"></script>
-<script src="data/archetypes.js"></script>
-<script src="data/message_templates.js"></script>
-<script src="data/storylines.js"></script>
-<script src="data/system_config.js"></script>
-<script src="data/fake_notifications.js"></script>
-<script src="app.js"></script>
+  <nav class="tabbar">
+    <button class="tab active" data-page="discover">发现</button>
+    <button class="tab" data-page="inbox">消息</button>
+    <button class="tab" data-page="membership">会员</button>
+    <button class="tab" data-page="profile">我的</button>
+  </nav>
+</div>
+
 <script>
-if (typeof characters !== 'undefined' && characters.length > 0) {
-  setTimeout(function() {
-    renderDiscoverCard(characters[0]);
-    switchPage('discover');
-  }, 100);
+/* =========================
+   数据层：角色、事件、成就
+   未来可直接拆成 characters.zh.js / storylines.zh.js
+========================= */
+
+const characters = [
+  {
+    id:'eva',
+    name:'Eva Lin', age:34, initials:'EL',
+    role:'双年展顾问 / 影像策展协作',
+    tags:['名单边缘','放映单元','机构通路'],
+    bio:'她擅长让人感觉自己快被看见了。不是直接给你门票，而是把你留在门边，让你始终差一点进去。',
+    upgrade:'潜在提升：更高密度的开幕酒会 / 被提及的机会 / “有人知道你” 的错觉',
+    signal:18, status:'可见度上升',
+    avatar:'assets/characters/01_eva_lin.jpg',
+    archetype:'策展门槛型',
+    genericHint:'她不会说得很满，但会让你一直想继续往前。',
+    storyline:'eva_main'
+  },
+  {
+    id:'luna',
+    name:'Luna Qiao', age:29, initials:'LQ',
+    role:'Web3 艺术项目发起 / 社群共识设计',
+    tags:['DAO','邀请码','闭环社群'],
+    bio:'她会把暧昧说成 alignment，把拉你进群说成 trust，把一切可能的试探都包成一种轻快的未来感。',
+    upgrade:'潜在提升：access code / 群内曝光 / 被纳入“我们正在做一些事情”的幻觉',
+    signal:16, status:'共识同步中',
+    avatar:'assets/characters/03_luna_qiao.jpg',
+    archetype:'web3 共识型',
+    genericHint:'你不确定她到底是在 flirt，还是在筛选一个合适的人进去。',
+    storyline:'luna_main'
+  },
+  {
+    id:'adrian',
+    name:'Adrian Park', age:33, initials:'AP',
+    role:'AI 影像作者 / 新媒体项目协作',
+    tags:['深夜回流','图像方法','项目外包'],
+    bio:'他会先和你聊感受，再聊图像，再聊最近状态，最后非常自然地问你一句：你方便帮我看个东西吗。',
+    upgrade:'潜在提升：进入项目核心群聊 / 被视作“懂他的人” / 创作劳动边缘准入',
+    signal:17, status:'深夜波动',
+    avatar:'assets/characters/04_adrian_park.jpg',
+    archetype:'情绪劳动外包型',
+    genericHint:'他不是不真诚，只是他所有真诚最后都会滑向工作。',
+    storyline:'adrian_main'
+  },
+  {
+    id:'kenji',
+    name:'Kenji Mori', age:28, initials:'KM',
+    role:'数字艺术新锐 / 场域出没型连接者',
+    tags:['总在现场','刚好经过','边缘 insider'],
+    bio:'他并不坏，只是会让你不断见证他更靠近里面，而你一直在他旁边，像一个知道过程的人。',
+    upgrade:'潜在提升：被带入更高级别的现场 / 出现在正确的背景里 / 社交截图含金量提升',
+    signal:14, status:'正在上升',
+    avatar:'assets/characters/10_kenji_mori.jpg',
+    archetype:'混圈上升型',
+    genericHint:'你以为你们在一起上升，其实更多时候你在做陪跑。',
+    storyline:'kenji_main'
+  },
+  {
+    id:'camille',
+    name:'Camille Renard', age:33, initials:'CR',
+    role:'活动影像策划 / 理论课程讲者',
+    tags:['观看方式','讲述能力','距离感'],
+    bio:'每次聊得都很深，但所有亲密最后都会被她说成一种位置感、观看机制或关系结构。',
+    upgrade:'潜在提升：高质量的被理解感 / 精神层面的靠近 / 一段很漂亮但不落地的关系',
+    signal:13, status:'解释进行中',
+    avatar:'assets/characters/11_camille_renard.jpg',
+    archetype:'理论抽干型',
+    genericHint:'她总能理解你，但不一定会靠近你。',
+    storyline:'generic'
+  },
+  {
+    id:'min',
+    name:'Min Seo', age:30, initials:'MS',
+    role:'沉浸式项目统筹 / 品牌连接人',
+    tags:['品牌局','项目联动','优先通道'],
+    bio:'她讲话很温柔，也很有效率。你以为这是关系在推进，但常常只是你正好被放进了一个很合适的位置。',
+    upgrade:'潜在提升：项目入口 / 更高质量的人脉局 / 被顺手带上的可能',
+    signal:15, status:'通路开放中',
+    avatar:'assets/characters/06_min_seo.jpg',
+    archetype:'品牌项目型',
+    genericHint:'她很像会在你最需要的时候出现，也会在项目结束时自然消失。',
+    storyline:'generic'
+  }
+];
+
+const achievementsMeta = {
+  seen_once: {title:'被看见一次', desc:'你至少让一个人记住了你。'},
+  edge_list: {title:'名单边缘', desc:'你被放在了某个可能发生的名单边上。'},
+  late_night: {title:'深夜联系人', desc:'有人在很晚的时候想起你。'},
+  outside_ring: {title:'进入外圈', desc:'你被允许站得更近一点。'}
+};
+
+const genericMessageBank = {
+  opening: [
+    ['刚从外面回来。','突然想到你。'],
+    ['你这两天在忙什么？','我本来以为你会比现在更晚回。'],
+    ['今天在一个很吵的场子里。','有一瞬间想起你可能会不耐烦。']
+  ],
+  warm: [
+    ['刚到家。','今天那个酒还是一样难喝。'],
+    ['你有时候回消息的节奏还挺像你这个人的。'],
+    ['本来想叫你。','但现场有点乱。']
+  ],
+  blurred: [
+    ['有人刚刚提到你。','倒不是坏话。'],
+    ['你最近状态是不是比前阵子稳一点？'],
+    ['我不太确定你会不会喜欢那个局。','但你去会有意思。']
+  ],
+  outcome: [
+    ['下次提前跟我说。','我看能不能给你留个位置。'],
+    ['先这样。','后面有更合适的再找你。']
+  ]
+};
+
+const storylines = {
+  eva_main: {
+    start:'eva_1',
+    nodes:{
+      eva_1:{
+        lines:['有人刚刚提到你。','倒不是坏话。'],
+        replies:[
+          {text:'你这话说得有点悬。', next:'eva_2a', effect:{affinity:1}},
+          {text:'所以是好事还是坏事？', next:'eva_2b', effect:{affinity:0}},
+          {text:'你居然会突然来找我。', next:'eva_2c', effect:{affinity:1,clarity:-1}}
+        ]
+      },
+      eva_2a:{
+        lines:['只是觉得你最近比上次更像一个能被放进去的人。'],
+        replies:[
+          {text:'“放进去”这个说法很像你。', next:'eva_3'},
+          {text:'那我现在是在门口吗？', next:'eva_3'},
+          {text:'听起来像还没到。', next:'eva_3'}
+        ]
+      },
+      eva_2b:{
+        lines:['先别把事情理解得这么直。','有时候被提到，本身就是一个开始。'],
+        replies:[
+          {text:'好，那我克制一点。', next:'eva_3'},
+          {text:'你每次都只说一半。', next:'eva_3'}
+        ]
+      },
+      eva_2c:{
+        lines:['我也不是谁都会突然想起。','只是今天那个场子里，有人提到一个名字时，我想到的是你。'],
+        replies:[
+          {text:'这算夸我吗？', next:'eva_3'},
+          {text:'你是想让我接着问。', next:'eva_3'}
+        ]
+      },
+      eva_3:{
+        lines:['下周有个放映。','现在还没完全定。','名单边上可能还有一个空位。'],
+        replies:[
+          {text:'你其实是想叫我去？', next:'eva_4', effect:{signal:2}},
+          {text:'你这是在给我希望。', next:'eva_4'},
+          {text:'如果没位置就算了。', next:'eva_4b'}
+        ],
+        achievement:'edge_list'
+      },
+      eva_4:{
+        lines:['你别先想太多。','只是我觉得你应该先在那个房间里出现一次。'],
+        replies:[
+          {text:'我会准时。', next:'eva_5a'},
+          {text:'你这么说反而让我更在意。', next:'eva_5a'},
+          {text:'那我穿得低调一点。', next:'eva_5b'}
+        ]
+      },
+      eva_4b:{
+        lines:['你这种时候倒是很会退。','也不一定是坏事。'],
+        replies:[
+          {text:'我只是怕你难做。', next:'eva_5a'},
+          {text:'那你当我没说。', next:'eva_5c'}
+        ]
+      },
+      eva_5a:{
+        lines:['我明天再确认。','别先对外说。'],
+        replies:[
+          {text:'知道了。', next:'eva_6'},
+          {text:'行，我闭嘴。', next:'eva_6'}
+        ]
+      },
+      eva_5b:{
+        lines:['别太用力。','你只需要看起来像原本就在里面。'],
+        replies:[
+          {text:'这句很像你的工作方法。', next:'eva_6'},
+          {text:'那我就假装很自然。', next:'eva_6'}
+        ]
+      },
+      eva_5c:{
+        lines:['别装了。','你其实比你看上去更在意这些位置。'],
+        replies:[
+          {text:'被你看出来了。', next:'eva_6'},
+          {text:'那你还来找我。', next:'eva_6'}
+        ]
+      },
+      eva_6:{
+        lines:['还有一件事。','你到了以后先别急着找我。','先自己待一会。'],
+        replies:[
+          {text:'怕我太像被带进去的吗？', next:'eva_7'},
+          {text:'我懂。', next:'eva_7'}
+        ]
+      },
+      eva_7:{
+        lines:['不是。','是有些位置，必须看起来像你自己走进去的。'],
+        replies:[
+          {text:'你这句话会让我记很久。', next:'eva_8', effect:{affinity:2,signal:2}},
+          {text:'你真是把一切都处理得很像结构。', next:'eva_8'},
+          {text:'好，那我自己进去。', next:'eva_8'}
+        ]
+      },
+      eva_8:{
+        lines:['先这样。','明天我如果没再发你，就是默认可以。'],
+        replies:[
+          {text:'行，我等你不发。', next:null},
+          {text:'你这个结尾也太像你了。', next:null}
+        ],
+        endState:'边缘准入'
+      }
+    }
+  },
+  luna_main:{
+    start:'luna_1',
+    nodes:{
+      luna_1:{
+        lines:['我刚从一个很吵的 space 出来。','突然觉得你可能会懂今天那种气氛。'],
+        replies:[
+          {text:'你这是在夸我还是在筛我？', next:'luna_2'},
+          {text:'你今天又在哪个奇怪的地方。', next:'luna_2'},
+          {text:'听起来像你会发链接给我。', next:'luna_2'}
+        ]
+      },
+      luna_2:{
+        lines:['都有一点。','我们最近在做个很小的闭环。','不是公开放的。'],
+        replies:[
+          {text:'闭环这个词有点危险。', next:'luna_3'},
+          {text:'你已经准备拉我了是吗。', next:'luna_3'},
+          {text:'那我先听听看。', next:'luna_3'}
+        ]
+      },
+      luna_3:{
+        lines:['你不用现在答应。','我只是觉得你应该先在里面。'],
+        replies:[
+          {text:'这句话很会让人上头。', next:'luna_4'},
+          {text:'里面有什么？', next:'luna_4'},
+          {text:'你每次都先把门开一条缝。', next:'luna_4'}
+        ]
+      },
+      luna_4:{
+        lines:['几个人。','一点很早期的东西。','还有一个还没公开的 access。'],
+        replies:[
+          {text:'你是想让我进去，还是想让我表态。', next:'luna_5'},
+          {text:'我现在比较像哪一种？', next:'luna_5'},
+          {text:'你继续，我还在。', next:'luna_5'}
+        ],
+        achievement:'outside_ring'
+      },
+      luna_5:{
+        lines:['先别这么分。','有时候进去本身就是一种表态。'],
+        replies:[
+          {text:'这话也太 web3 了。', next:'luna_6'},
+          {text:'你这样说我更想知道了。', next:'luna_6'}
+        ]
+      },
+      luna_6:{
+        lines:['我晚一点发你一个 code。','先别转别人。'],
+        replies:[
+          {text:'行，我先留着。', next:'luna_7'},
+          {text:'你这是在试我。', next:'luna_7'}
+        ]
+      },
+      luna_7:{
+        lines:['也不完全是。','只是我不太想每个人都进。','你在里面，会比较对。'],
+        replies:[
+          {text:'你很会让人误会这是特别待遇。', next:'luna_8'},
+          {text:'那我就先当真一下。', next:'luna_8'}
+        ]
+      },
+      luna_8:{
+        lines:['你可以当真。','但先不要太用力。'],
+        replies:[
+          {text:'收到。', next:null},
+          {text:'你这句像在管我。', next:null}
+        ],
+        endState:'获得 access'
+      }
+    }
+  },
+  adrian_main:{
+    start:'adrian_1',
+    nodes:{
+      adrian_1:{
+        lines:['你睡了吗。','我刚从机房出来。'],
+        replies:[
+          {text:'还没。你又这么晚。', next:'adrian_2', effect:{affinity:1}},
+          {text:'又卡住了？', next:'adrian_2'},
+          {text:'你每次都挑这种时候出现。', next:'adrian_2'}
+        ],
+        achievement:'late_night'
+      },
+      adrian_2:{
+        lines:['嗯。','今天有一段东西怎么都不对。','看了很久，反而更空。'],
+        replies:[
+          {text:'你现在是在说作品，还是在说自己。', next:'adrian_3'},
+          {text:'先别继续盯了。', next:'adrian_3'},
+          {text:'发我看看。', next:'adrian_3'}
+        ]
+      },
+      adrian_3:{
+        lines:['你有时候真的很会一下说到点上。','所以我才会来找你。'],
+        replies:[
+          {text:'这句听起来有点危险。', next:'adrian_4'},
+          {text:'那你继续。', next:'adrian_4'},
+          {text:'我先当你是在夸我。', next:'adrian_4'}
+        ]
+      },
+      adrian_4:{
+        lines:['其实也没什么。','就是突然很不想让别人先看到。','但你可以。'],
+        replies:[
+          {text:'你这是信任我，还是拿我试水。', next:'adrian_5'},
+          {text:'发吧。', next:'adrian_5'},
+          {text:'好，我看。', next:'adrian_5'}
+        ]
+      },
+      adrian_5:{
+        lines:['我发你一段。','不用回太认真。'],
+        replies:[
+          {text:'你这句话通常意味着要认真回。', next:'adrian_6'},
+          {text:'行，那我先看。', next:'adrian_6'}
+        ]
+      },
+      adrian_6:{
+        lines:['还有个事。','你明天方便帮我看一下那组视觉吗？','不久。'],
+        replies:[
+          {text:'你看，还是绕回来了。', next:'adrian_7'},
+          {text:'可以，几点？', next:'adrian_7', effect:{utility:2}},
+          {text:'所以前面那些也是铺垫？', next:'adrian_7'}
+        ]
+      },
+      adrian_7:{
+        lines:['也不全是。','只是有些人，我只会在需要的时候想起。','你别把这句话理解坏了。'],
+        replies:[
+          {text:'已经有点坏了。', next:'adrian_8'},
+          {text:'我懂，你至少还会想起。', next:'adrian_8'},
+          {text:'行，明天再说。', next:'adrian_8'}
+        ]
+      },
+      adrian_8:{
+        lines:['那明天我白天找你。','今晚你先别太快睡。'],
+        replies:[
+          {text:'你这句也很像你。', next:null},
+          {text:'知道了。', next:null}
+        ],
+        endState:'暧昧型协作'
+      }
+    }
+  },
+  kenji_main:{
+    start:'kenji_1',
+    nodes:{
+      kenji_1:{
+        lines:['你今天居然不在。','刚刚那个场子有点神。'],
+        replies:[
+          {text:'你又跑去哪了。', next:'kenji_2'},
+          {text:'我怎么觉得你每天都在现场。', next:'kenji_2'},
+          {text:'所以你是来炫耀的吗。', next:'kenji_2'}
+        ]
+      },
+      kenji_2:{
+        lines:['没有。','本来想叫你。','但临时太乱了。'],
+        replies:[
+          {text:'你每次都“本来想”。', next:'kenji_3'},
+          {text:'那你下次提前一点。', next:'kenji_3'},
+          {text:'你是不是已经混熟了。', next:'kenji_3'}
+        ]
+      },
+      kenji_3:{
+        lines:['也没有多熟。','就是刚好有人带我进去。','然后我又刚好认识另一个。'],
+        replies:[
+          {text:'这就叫熟了。', next:'kenji_4'},
+          {text:'你这个“刚好”很有技术。', next:'kenji_4'},
+          {text:'那我是不是也该学一下。', next:'kenji_4'}
+        ]
+      },
+      kenji_4:{
+        lines:['你不用学我。','你要是去，会是另一种路。'],
+        replies:[
+          {text:'你这句像在安慰我。', next:'kenji_5'},
+          {text:'那你倒是带我一次。', next:'kenji_5'},
+          {text:'听起来还是在说我不够熟。', next:'kenji_5'}
+        ]
+      },
+      kenji_5:{
+        lines:['下周可能有个更小的。','那个反而适合你。','人少一点，没那么乱。'],
+        replies:[
+          {text:'你是认真的，还是又先画个饼。', next:'kenji_6'},
+          {text:'那你这次别临时忘了我。', next:'kenji_6'},
+          {text:'好，你先记着。', next:'kenji_6'}
+        ],
+        achievement:'seen_once'
+      },
+      kenji_6:{
+        lines:['我记着。','而且我觉得你在的话，会比我站得住。'],
+        replies:[
+          {text:'这句很容易让人当真。', next:'kenji_7'},
+          {text:'那你其实也知道我不是不行。', next:'kenji_7'}
+        ]
+      },
+      kenji_7:{
+        lines:['我一直都知道。','只是有的人要先出现在一些背景里。'],
+        replies:[
+          {text:'你现在说话越来越像里面的人了。', next:'kenji_8'},
+          {text:'那我先从背景开始。', next:'kenji_8'}
+        ]
+      },
+      kenji_8:{
+        lines:['别这么说。','到时候我提前发你。'],
+        replies:[
+          {text:'好。', next:null},
+          {text:'这次我记下了。', next:null}
+        ],
+        endState:'外圈准入'
+      }
+    }
+  }
+};
+
+const genericConversationTemplates = [
+  {
+    preview:'刚从一个很吵的地方出来。',
+    messages:['刚从一个很吵的地方出来。','你可能会嫌那个场子太挤。'],
+    replies:['你今天又在外面？','听起来就不像我会喜欢。','所以你现在在回家的路上？']
+  },
+  {
+    preview:'本来想叫你，但临时有点乱。',
+    messages:['本来想叫你。','但临时有点乱。'],
+    replies:['你每次都这样开头。','那你下次提前一点。','没事，我已经习惯了。']
+  }
+];
+
+const state = {
+  currentPage:'discover',
+  discoverIndex:0,
+  matchedIds: JSON.parse(localStorage.getItem('curator_matched_ids') || '[]'),
+  conversations: JSON.parse(localStorage.getItem('curator_conversations') || '{}'),
+  stats: JSON.parse(localStorage.getItem('curator_stats') || '{"signal":0,"minutes":0,"connects":0,"events":0,"achievements":[]}'),
+  openedChat:null,
+  startTime:Date.now(),
+  currentFilter:'active'
+};
+
+let minuteTimer = null;
+let pendingTimer = null;
+
+function saveState(){
+  localStorage.setItem('curator_matched_ids', JSON.stringify(state.matchedIds));
+  localStorage.setItem('curator_conversations', JSON.stringify(state.conversations));
+  localStorage.setItem('curator_stats', JSON.stringify(state.stats));
 }
+
+function initials(name){
+  return name.split(' ').map(n=>n[0]).join('').slice(0,2).toUpperCase();
+}
+
+function getCharacter(id){
+  return characters.find(c=>c.id===id);
+}
+
+function formatMinutes(min){
+  return `${min}m`;
+}
+
+function switchPage(page){
+  state.currentPage = page;
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById(`page-${page}`).classList.add('active');
+  document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active', t.dataset.page===page));
+  if(page === 'inbox'){ renderInbox(); }
+  if(page === 'profile'){ renderProfile(); }
+}
+
+function renderDiscover(){
+  const c = characters[state.discoverIndex % characters.length];
+  const img = document.getElementById('discoverImage');
+  const placeholder = document.getElementById('discoverPlaceholder');
+  document.getElementById('discoverName').textContent = c.name;
+  document.getElementById('discoverAge').textContent = `，${c.age}`;
+  document.getElementById('discoverRole').textContent = c.role;
+  document.getElementById('discoverBio').textContent = c.bio;
+  document.getElementById('discoverUpgrade').textContent = c.upgrade;
+  document.getElementById('discoverSignal').textContent = `Signal +${c.signal}`;
+  document.getElementById('discoverStatus').textContent = c.status;
+  document.getElementById('discoverHint').textContent = c.genericHint;
+  document.getElementById('discoverInitials').textContent = c.initials || initials(c.name);
+
+  const tags = document.getElementById('discoverTags');
+  tags.innerHTML = '';
+  c.tags.forEach(tag=>{
+    const span = document.createElement('span');
+    span.className = 'tag';
+    span.textContent = tag;
+    tags.appendChild(span);
+  });
+
+  img.src = c.avatar;
+  img.style.display = 'block';
+  placeholder.style.display = 'flex';
+  img.onerror = ()=>{ img.style.display='none'; placeholder.style.display='flex'; };
+  img.onload = ()=>{ placeholder.style.display='none'; img.style.display='block'; };
+}
+
+function nextDiscover(){
+  state.discoverIndex = (state.discoverIndex + 1) % characters.length;
+  renderDiscover();
+}
+
+function ensureConversation(id){
+  if(!state.conversations[id]){
+    const c = getCharacter(id);
+    state.conversations[id] = {
+      id,
+      unread: 1,
+      archived:false,
+      preview:'已建立连接',
+      time:'刚刚',
+      messages: [],
+      progress: {},
+      achievements: [],
+      stage: 'S0',
+      genericIndex: 0
+    };
+  }
+}
+
+function connectCurrent(){
+  const c = characters[state.discoverIndex % characters.length];
+  if(!state.matchedIds.includes(c.id)){
+    state.matchedIds.unshift(c.id);
+    ensureConversation(c.id);
+    state.stats.signal += c.signal;
+    state.stats.connects += 1;
+    state.conversations[c.id].preview = `已建立连接 · ${c.role}`;
+    seedConversation(c.id);
+    saveState();
+    renderInbox();
+    renderProfile();
+  }
+  switchPage('inbox');
+}
+
+function seedConversation(id){
+  const c = getCharacter(id);
+  const convo = state.conversations[id];
+  if(convo.messages.length) return;
+
+  if(c.storyline !== 'generic'){
+    const story = storylines[c.storyline];
+    convo.progress.node = story.start;
+    convo.preview = story.nodes[story.start].lines[0];
+    convo.time = '刚刚';
+  } else {
+    const t = genericConversationTemplates[0];
+    convo.progress.genericStage = 0;
+    convo.preview = t.preview;
+    convo.time = '刚刚';
+  }
+}
+
+function renderInbox(){
+  const list = document.getElementById('conversationList');
+  const empty = document.getElementById('emptyInbox');
+  const unread = state.matchedIds.reduce((acc,id)=>acc+(state.conversations[id]?.unread||0),0);
+  document.getElementById('inboxUnread').textContent = `${unread} unread`;
+
+  list.innerHTML = '';
+  const ids = state.matchedIds.filter(id=>{
+    const convo = state.conversations[id];
+    return state.currentFilter === 'active' ? !convo.archived : convo.archived;
+  });
+
+  empty.style.display = ids.length ? 'none' : 'block';
+
+  ids.forEach(id=>{
+    const c = getCharacter(id);
+    const convo = state.conversations[id];
+    const item = document.createElement('div');
+    item.className = 'conv-item';
+    item.onclick = ()=>openChat(id);
+
+    const img = document.createElement('img');
+    img.className = 'avatar-sm';
+    img.src = c.avatar;
+    img.onerror = ()=>{
+      img.replaceWith(makeFallbackAvatar(c.initials || initials(c.name)));
+    };
+
+    const meta = document.createElement('div');
+    meta.className = 'conv-meta';
+    meta.innerHTML = `
+      <div class="conv-top">
+        <span class="conv-name">${c.name}</span>
+        <span class="conv-time">${convo.time || '刚刚'}</span>
+      </div>
+      <div class="conv-preview">${convo.preview || c.role}</div>
+    `;
+
+    item.appendChild(img);
+    item.appendChild(meta);
+    if(convo.unread > 0){
+      const dot = document.createElement('span');
+      dot.className = 'unread-dot';
+      item.appendChild(dot);
+    }
+    list.appendChild(item);
+  });
+}
+
+function makeFallbackAvatar(text){
+  const div = document.createElement('div');
+  div.className = 'avatar-fallback';
+  div.textContent = text;
+  return div;
+}
+
+function openChat(id){
+  state.openedChat = id;
+  const c = getCharacter(id);
+  const convo = state.conversations[id];
+  convo.unread = 0;
+  saveState();
+  renderInbox();
+
+  const chatShell = document.getElementById('chatShell');
+  const avatar = document.getElementById('chatAvatar');
+  const avatarFallback = document.getElementById('chatAvatarFallback');
+  avatar.src = c.avatar;
+  avatar.style.display = 'block';
+  avatarFallback.style.display = 'none';
+  avatar.onerror = ()=>{
+    avatar.style.display = 'none';
+    avatarFallback.style.display = 'flex';
+    avatarFallback.textContent = c.initials || initials(c.name);
+  };
+
+  document.getElementById('chatName').textContent = c.name;
+  document.getElementById('chatStatus').textContent = c.archetype;
+  document.getElementById('chatBody').innerHTML = '';
+  document.getElementById('replyWrap').innerHTML = '';
+  chatShell.classList.add('open');
+
+  if(convo.messages.length){
+    convo.messages.forEach(m => appendMessage(m.speaker, m.text, false));
+    renderRepliesForCurrentNode(id);
+  } else {
+    beginConversation(id);
+  }
+}
+
+function beginConversation(id){
+  const c = getCharacter(id);
+  if(c.storyline !== 'generic'){
+    const node = storylines[c.storyline].nodes[state.conversations[id].progress.node];
+    playNpcLines(id, node.lines, ()=> renderReplies(id, node.replies, node.achievement));
+  } else {
+    const t = genericConversationTemplates[state.conversations[id].genericIndex % genericConversationTemplates.length];
+    playNpcLines(id, t.messages, ()=> renderGenericReplies(id, t.replies));
+  }
+}
+
+function appendMessage(speaker, text, persist=true){
+  const body = document.getElementById('chatBody');
+  const div = document.createElement('div');
+  div.className = `msg ${speaker === 'user' ? 'user' : 'npc'}`;
+  div.textContent = text;
+  body.appendChild(div);
+  body.scrollTop = body.scrollHeight;
+  if(persist && state.openedChat){
+    state.conversations[state.openedChat].messages.push({speaker, text});
+    saveState();
+  }
+}
+
+function showTyping(){
+  const body = document.getElementById('chatBody');
+  const typing = document.createElement('div');
+  typing.className = 'typing';
+  typing.id = 'typingBubble';
+  typing.innerHTML = '<span></span><span></span><span></span>';
+  body.appendChild(typing);
+  body.scrollTop = body.scrollHeight;
+}
+
+function hideTyping(){
+  const el = document.getElementById('typingBubble');
+  if(el) el.remove();
+}
+
+function randomDelay(min=1200,max=3600){
+  return Math.floor(Math.random()*(max-min+1))+min;
+}
+
+function playNpcLines(id, lines, done){
+  let index = 0;
+  function nextLine(){
+    if(index >= lines.length){ done && done(); return; }
+    showTyping();
+    const delay = index === 0 ? randomDelay(1200,3200) : randomDelay(800,2200);
+    pendingTimer = setTimeout(()=>{
+      hideTyping();
+      appendMessage('npc', lines[index], true);
+      state.conversations[id].preview = lines[index];
+      state.conversations[id].time = '刚刚';
+      state.stats.events += 1;
+      saveState();
+      index += 1;
+      pendingTimer = setTimeout(nextLine, randomDelay(400,1100));
+    }, delay);
+  }
+  nextLine();
+}
+
+function renderReplies(id, replies, achievementKey){
+  const wrap = document.getElementById('replyWrap');
+  wrap.innerHTML = '';
+  if(achievementKey) unlockAchievement(achievementKey);
+
+  replies.forEach(r=>{
+    const btn = document.createElement('button');
+    btn.className = 'reply-chip';
+    btn.textContent = r.text;
+    btn.onclick = ()=>{
+      wrap.innerHTML = '';
+      appendMessage('user', r.text, true);
+      applyEffects(r.effect || {});
+      if(!r.next){
+        const convo = state.conversations[id];
+        convo.preview = r.text;
+        convo.time = '刚刚';
+        saveState();
+        maybeInjectOutcome(id);
+        return;
+      }
+      state.conversations[id].progress.node = r.next;
+      saveState();
+      const c = getCharacter(id);
+      const node = storylines[c.storyline].nodes[r.next];
+      playNpcLines(id, node.lines, ()=> renderReplies(id, node.replies, node.achievement));
+    };
+    wrap.appendChild(btn);
+  });
+}
+
+function renderGenericReplies(id, replies){
+  const wrap = document.getElementById('replyWrap');
+  wrap.innerHTML = '';
+  replies.forEach(text=>{
+    const btn = document.createElement('button');
+    btn.className = 'reply-chip';
+    btn.textContent = text;
+    btn.onclick = ()=>{
+      wrap.innerHTML = '';
+      appendMessage('user', text, true);
+      state.conversations[id].genericIndex += 1;
+      const stage = state.conversations[id].genericIndex % 4;
+      const bankKey = stage === 1 ? 'warm' : stage === 2 ? 'blurred' : stage === 3 ? 'outcome' : 'opening';
+      const lines = genericMessageBank[bankKey][Math.floor(Math.random()*genericMessageBank[bankKey].length)];
+      playNpcLines(id, lines, ()=>{
+        const nextReplies = ['你这句倒是挺像真的。','你现在还在那边？','行，你继续说。'];
+        renderGenericReplies(id, nextReplies);
+      });
+    };
+    wrap.appendChild(btn);
+  });
+}
+
+function maybeInjectOutcome(id){
+  const wrap = document.getElementById('replyWrap');
+  wrap.innerHTML = '';
+  const c = getCharacter(id);
+  const convo = state.conversations[id];
+  convo.preview = '关系仍在继续';
+  convo.time = '刚刚';
+  saveState();
+
+  const btn1 = document.createElement('button');
+  btn1.className = 'reply-chip';
+  btn1.textContent = '继续保持联系';
+  btn1.onclick = ()=>{
+    wrap.innerHTML = '';
+    playNpcLines(id, ['先这样。','后面有更合适的再找你。'], ()=>{});
+  };
+
+  const btn2 = document.createElement('button');
+  btn2.className = 'reply-chip';
+  btn2.textContent = '暂时归档';
+  btn2.onclick = ()=>{
+    convo.archived = true;
+    saveState();
+    closeChat();
+    renderInbox();
+  };
+  wrap.appendChild(btn1);
+  wrap.appendChild(btn2);
+}
+
+function applyEffects(effect){
+  if(effect.affinity){ /* 预留 */ }
+  if(effect.signal){ state.stats.signal += effect.signal; }
+  if(effect.utility){ /* 预留 */ }
+  if(effect.clarity){ /* 预留 */ }
+  saveState();
+  renderProfile();
+}
+
+function unlockAchievement(key){
+  if(!key) return;
+  if(!state.stats.achievements.includes(key)){
+    state.stats.achievements.push(key);
+    saveState();
+    renderProfile();
+  }
+}
+
+function closeChat(){
+  if(pendingTimer) clearTimeout(pendingTimer);
+  hideTyping();
+  document.getElementById('chatShell').classList.remove('open');
+}
+
+function renderProfile(){
+  const mins = Math.max(1, Math.floor((Date.now() - state.startTime)/60000)) + (state.stats.minutes || 0);
+  document.getElementById('metricSignal').textContent = state.stats.signal;
+  document.getElementById('metricMatches').textContent = state.matchedIds.length;
+  document.getElementById('metricAchievements').textContent = state.stats.achievements.length;
+  document.getElementById('metricMinutes').textContent = formatMinutes(mins);
+
+  document.getElementById('traceDuration').textContent = `${mins} 分钟`;
+  document.getElementById('traceMatches').textContent = `${state.matchedIds.length} 条`;
+  document.getElementById('traceLongest').textContent = getLongestChatName();
+  document.getElementById('traceStatus').textContent = getTraceStatus();
+  document.getElementById('traceSummary').textContent = getTraceSummary();
+
+  const list = document.getElementById('achievementList');
+  list.innerHTML = '';
+  if(!state.stats.achievements.length){
+    const div = document.createElement('div');
+    div.className = 'reward-item';
+    div.innerHTML = '<div class="conv-meta"><div class="conv-name">尚未解锁成就</div><div class="conv-preview">继续连接角色、推进对话或触发特殊事件。</div></div>';
+    list.appendChild(div);
+  } else {
+    state.stats.achievements.forEach(key=>{
+      const meta = achievementsMeta[key];
+      const item = document.createElement('div');
+      item.className = 'reward-item';
+      item.innerHTML = `
+        <div class="reward-tag">已解锁</div>
+        <div class="conv-meta">
+          <div class="conv-name">${meta.title}</div>
+          <div class="conv-preview">${meta.desc}</div>
+        </div>
+      `;
+      list.appendChild(item);
+    });
+  }
+}
+
+function getLongestChatName(){
+  let max = 0, target = '暂无';
+  Object.keys(state.conversations).forEach(id=>{
+    const count = state.conversations[id].messages.length;
+    if(count > max){
+      max = count; target = getCharacter(id)?.name || '暂无';
+    }
+  });
+  return target;
+}
+function getTraceStatus(){
+  if(state.stats.achievements.includes('edge_list')) return '名单边缘';
+  if(state.stats.achievements.includes('outside_ring')) return '进入外圈';
+  if(state.stats.achievements.includes('late_night')) return '深夜联系中';
+  if(state.matchedIds.length >= 3) return '仍在观察中';
+  return '尚未形成稳定关系';
+}
+function getTraceSummary(){
+  if(state.matchedIds.length === 0) return '尚未形成稳定关系';
+  if(state.stats.achievements.length >= 3) return '本次获得多重信号，关系进入可继续推进状态';
+  if(state.matchedIds.length >= 2) return '维持了数段模糊连接，可见度有轻微提升';
+  return '已建立连接，但关系仍处于试探阶段';
+}
+
+function initTabs(){
+  document.querySelectorAll('.tab').forEach(tab=>{
+    tab.onclick = ()=>{
+      switchPage(tab.dataset.page);
+    };
+  });
+  document.querySelectorAll('.segmented button').forEach(btn=>{
+    btn.onclick = ()=>{
+      document.querySelectorAll('.segmented button').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      state.currentFilter = btn.dataset.filter;
+      renderInbox();
+    };
+  });
+}
+
+function initActions(){
+  document.getElementById('skipBtn').onclick = nextDiscover;
+  document.getElementById('connectBtn').onclick = connectCurrent;
+  document.getElementById('chatBack').onclick = closeChat;
+}
+
+function bootMatchedConversations(){
+  state.matchedIds.forEach(id=>{
+    ensureConversation(id);
+  });
+}
+
+function tickMinutes(){
+  if(minuteTimer) clearInterval(minuteTimer);
+  minuteTimer = setInterval(()=>{
+    state.stats.minutes += 1;
+    saveState();
+    if(state.currentPage === 'profile') renderProfile();
+  }, 60000);
+}
+
+function injectFollowUpPings(){
+  // 轻量模拟：已有会话时，间隔一段时间给最近对象增加未读
+  setInterval(()=>{
+    if(!state.matchedIds.length) return;
+    const id = state.matchedIds[Math.floor(Math.random()*state.matchedIds.length)];
+    if(state.openedChat === id) return;
+    const convo = state.conversations[id];
+    const c = getCharacter(id);
+    const line = [
+      '刚到家。',
+      '你今天回得有点慢。',
+      '我刚刚又想到你上次那句话。',
+      '下周可能有个局。'
+    ][Math.floor(Math.random()*4)];
+    convo.preview = line;
+    convo.time = '刚刚';
+    convo.unread = (convo.unread || 0) + 1;
+    convo.messages.push({speaker:'npc', text:line});
+    saveState();
+    if(state.currentPage === 'inbox') renderInbox();
+  }, 42000);
+}
+
+function init(){
+  bootMatchedConversations();
+  initTabs();
+  initActions();
+  renderDiscover();
+  renderInbox();
+  renderProfile();
+  tickMinutes();
+  injectFollowUpPings();
+}
+init();
 </script>
 </body>
 </html>
