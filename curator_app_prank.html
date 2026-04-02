@@ -215,7 +215,7 @@
     .chat-name{font-weight:700; font-size:15px}
     .chat-status{font-size:12px; color:var(--muted)}
     .chat-body{
-      flex:1; overflow:auto; padding:14px 14px 120px;
+      flex:1; overflow:auto; padding:14px 14px 180px;
       display:flex; flex-direction:column; gap:10px;
     }
     .msg{
@@ -264,6 +264,20 @@
       background:#fff; color:#111; border:1px solid var(--line);
       padding:11px 12px; border-radius:999px; font-size:13px; line-height:1.25;
       max-width:100%;
+      pointer-events:auto;
+      cursor:pointer;
+      -webkit-user-select:none;
+      user-select:none;
+    }
+    .reply-chip:active{
+      transform:scale(0.98);
+      background:#f7f3ed;
+    }
+    .waiting-hint{
+      text-align:center;
+      padding:12px;
+      font-size:13px;
+      color:var(--muted);
     }
     .membership-hero{
       padding:18px; border-radius:28px; background:linear-gradient(180deg,#1f2632,#111827); color:#fff;
@@ -1199,6 +1213,7 @@ function randomDelay(min=1200,max=3600){
 }
 
 function playNpcLines(id, lines, done){
+  document.getElementById('replyWrap').innerHTML = '';
   let index = 0;
   function nextLine(){
     if(index >= lines.length){ done && done(); return; }
@@ -1227,8 +1242,9 @@ function renderReplies(id, replies, achievementKey){
     const btn = document.createElement('button');
     btn.className = 'reply-chip';
     btn.textContent = r.text;
-    btn.onclick = ()=>{
-      wrap.innerHTML = '';
+    btn.onclick = (e)=>{
+      e.stopPropagation();
+      wrap.innerHTML = '<div class="waiting-hint">正在回复中...</div>';
       appendMessage('user', r.text, true);
       applyEffects(r.effect || {});
       if(!r.next){
@@ -1256,8 +1272,9 @@ function renderGenericReplies(id, replies){
     const btn = document.createElement('button');
     btn.className = 'reply-chip';
     btn.textContent = text;
-    btn.onclick = ()=>{
-      wrap.innerHTML = '';
+    btn.onclick = (e)=>{
+      e.stopPropagation();
+      wrap.innerHTML = '<div class="waiting-hint">正在回复中...</div>';
       appendMessage('user', text, true);
       state.conversations[id].genericIndex += 1;
       const stage = state.conversations[id].genericIndex % 4;
@@ -1284,15 +1301,17 @@ function maybeInjectOutcome(id){
   const btn1 = document.createElement('button');
   btn1.className = 'reply-chip';
   btn1.textContent = '继续保持联系';
-  btn1.onclick = ()=>{
-    wrap.innerHTML = '';
+  btn1.onclick = (e)=>{
+    e.stopPropagation();
+    wrap.innerHTML = '<div class="waiting-hint">正在回复中...</div>';
     playNpcLines(id, ['先这样。','后面有更合适的再找你。'], ()=>{});
   };
 
   const btn2 = document.createElement('button');
   btn2.className = 'reply-chip';
   btn2.textContent = '暂时归档';
-  btn2.onclick = ()=>{
+  btn2.onclick = (e)=>{
+    e.stopPropagation();
     convo.archived = true;
     saveState();
     closeChat();
