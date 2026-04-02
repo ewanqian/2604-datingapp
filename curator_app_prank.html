@@ -29,11 +29,13 @@
       height:100vh;
       position:relative;
       overflow:hidden;
+      display:flex;
+      flex-direction:column;
     }
-    .screen{
+    .page{
       position:absolute;
       inset:0;
-      padding:18px 18px 26px;
+      padding:18px 18px 90px;
       display:flex;
       flex-direction:column;
       gap:14px;
@@ -43,12 +45,13 @@
       transition:all .42s ease;
       overflow:auto;
     }
-    .screen.active{
+    .page.active{
       opacity:1;
       transform:translateX(0);
       pointer-events:auto;
     }
-    .top{
+    .hidden{display:none !important;}
+    .top-bar{
       display:flex;
       justify-content:space-between;
       align-items:center;
@@ -57,76 +60,331 @@
       letter-spacing:.06em;
       margin-top:4px;
     }
-    .brand{font-size:13px;font-weight:700;letter-spacing:.18em}
+    .app-title{font-size:15px;font-weight:700;letter-spacing:.18em}
+    .status-pill{background:var(--soft);padding:6px 12px;border-radius:999px;font-size:11px;color:#403a33}
     h1,h2,h3,p{margin:0}
-    .hero{
-      margin-top:8px;
-      padding:18px;
-      background:rgba(255,255,255,.42);
-      border:1px solid rgba(17,17,17,.08);
-      border-radius:24px;
-      backdrop-filter: blur(10px);
-    }
-    .hero h1{font-size:34px;line-height:1.02;letter-spacing:-0.04em}
-    .sub{font-size:14px;line-height:1.55;color:var(--muted);margin-top:10px}
-    .quote{
-      font-size:20px;
-      line-height:1.25;
-      letter-spacing:-0.03em;
-      padding:18px;
-      border-radius:24px;
+    
+    .profile-card{
       background:var(--card);
       border:1px solid var(--line);
+      border-radius:28px;
+      overflow:hidden;
+      flex:1;
+      display:flex;
+      flex-direction:column;
     }
-    .mini{font-size:12px;color:var(--muted);line-height:1.45}
-    .btn,.ghost,.chip{
+    .profile-image-wrap{
+      width:100%;
+      aspect-ratio:4/5;
+      background-size:cover;
+      background-position:center;
+      position:relative;
+    }
+    .profile-image-wrap img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+    }
+    .profile-info{
+      padding:16px;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+    .profile-header{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+    }
+    .profile-header h2{
+      font-size:24px;
+      font-weight:700;
+      letter-spacing:-0.04em;
+      line-height:1.1;
+    }
+    .signal-badge{
+      background:var(--accent);
+      color:#fff;
+      padding:6px 10px;
+      border-radius:999px;
+      font-size:12px;
+      font-weight:600;
+    }
+    .profile-role{
+      font-size:14px;
+      color:var(--muted);
+      line-height:1.4;
+    }
+    .profile-bio{
+      font-size:14px;
+      line-height:1.6;
+      color:var(--text);
+    }
+    .tag-row{
+      display:flex;
+      flex-wrap:wrap;
+      gap:6px;
+    }
+    .tag{
+      padding:6px 10px;
+      border-radius:999px;
+      background:var(--soft);
+      font-size:12px;
+      color:#403a33;
+    }
+    .upgrade-line{
+      font-size:12px;
+      color:var(--muted);
+      line-height:1.4;
+      padding-top:8px;
+      border-top:1px solid var(--line);
+    }
+    
+    .action-row{
+      display:flex;
+      gap:10px;
+    }
+    .ghost-btn, .primary-btn{
       border:none;
       border-radius:999px;
       padding:14px 18px;
       font-size:15px;
       font-weight:600;
+      flex:1;
     }
-    .btn{background:var(--accent);color:#fff}
-    .ghost{background:transparent;border:1px solid var(--line);color:var(--text)}
-    .stack{display:flex;flex-direction:column;gap:10px}
-    .row{display:flex;gap:10px}
-    .row > *{flex:1}
-    .card{
+    .primary-btn{background:var(--accent);color:#fff}
+    .ghost-btn{background:transparent;border:1px solid var(--line);color:var(--text)}
+    
+    .page-header{
+      margin-bottom:8px;
+    }
+    .page-header h2{
+      font-size:28px;
+      font-weight:700;
+      letter-spacing:-0.04em;
+      line-height:1.1;
+    }
+    .matches-list, .conversation-list{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+    .match-item, .conversation-item{
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:20px;
+      padding:14px;
+      display:flex;
+      gap:12px;
+      align-items:center;
+      cursor:pointer;
+      transition:background .2s ease;
+    }
+    .match-item:hover, .conversation-item:hover{background:#f7f3ed}
+    .match-item .avatar, .conversation-item .avatar{
+      width:56px;
+      height:56px;
+      border-radius:16px;
+      object-fit:cover;
+    }
+    .match-copy, .conversation-copy{
+      flex:1;
+      display:flex;
+      flex-direction:column;
+      gap:4px;
+    }
+    .match-top, .conversation-top{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+    }
+    .match-name, .conversation-name{
+      font-size:15px;
+      font-weight:600;
+    }
+    .match-time, .conversation-time{
+      font-size:12px;
+      color:var(--muted);
+    }
+    .match-preview, .conversation-preview{
+      font-size:13px;
+      color:var(--muted);
+      line-height:1.4;
+    }
+    .empty-state{
+      text-align:center;
+      padding:40px 20px;
+      color:var(--muted);
+      font-size:14px;
+      line-height:1.6;
+    }
+    
+    .chat-view{
+      display:flex;
+      flex-direction:column;
+      height:100%;
+    }
+    .chat-header{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      padding:10px 0;
+      border-bottom:1px solid var(--line);
+      margin-bottom:14px;
+    }
+    .back-btn{
+      background:transparent;
+      border:none;
+      font-size:15px;
+      color:var(--text);
+      padding:8px 8px 8px 0;
+      cursor:pointer;
+    }
+    .chat-user{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      flex:1;
+    }
+    .chat-user .avatar{
+      width:40px;
+      height:40px;
+      border-radius:12px;
+      object-fit:cover;
+    }
+    .chat-name{
+      font-size:15px;
+      font-weight:600;
+    }
+    .chat-status{
+      font-size:12px;
+      color:var(--muted);
+    }
+    .chat-messages{
+      flex:1;
+      overflow-y:auto;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      padding-bottom:10px;
+    }
+    .message-bubble{
+      max-width:80%;
+      padding:12px 16px;
+      border-radius:20px;
+      font-size:14px;
+      line-height:1.5;
+    }
+    .message-bubble.sent{
+      align-self:flex-end;
+      background:var(--accent);
+      color:#fff;
+      border-bottom-right-radius:4px;
+    }
+    .message-bubble.received{
+      align-self:flex-start;
+      background:var(--card);
+      border:1px solid var(--line);
+      border-bottom-left-radius:4px;
+    }
+    .message-text{word-break:break-word}
+    .reply-options{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      padding-top:10px;
+      border-top:1px solid var(--line);
+    }
+    .reply-chip{
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:999px;
+      padding:10px 16px;
+      font-size:13px;
+      color:var(--text);
+      cursor:pointer;
+      transition:all .2s ease;
+    }
+    .reply-chip:hover{background:var(--soft);border-color:var(--accent)}
+    
+    .profile-panel{
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+    }
+    .metric-card{
       background:var(--card);
       border:1px solid var(--line);
       border-radius:22px;
-      padding:16px;
+      padding:18px;
     }
-    .label{font-size:11px;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);margin-bottom:8px}
-    .input{
-      padding:14px 14px;
+    .metric-label{
+      font-size:12px;
+      text-transform:uppercase;
+      letter-spacing:.12em;
+      color:var(--muted);
+      margin-bottom:8px;
+    }
+    .metric-number{
+      font-size:36px;
+      font-weight:800;
+      letter-spacing:-0.04em;
+    }
+    .membership-card{
+      background:var(--card);
       border:1px solid var(--line);
-      border-radius:16px;
-      background:#fff;
-      font-size:15px;
-      color:var(--text);
+      border-radius:22px;
+      padding:18px;
+      margin-top:12px;
     }
-    .textarea{
-      min-height:80px;
-      padding:14px 14px;
-      border:1px solid var(--line);
-      border-radius:16px;
-      background:#fff;
-      font-size:15px;
-      color:var(--text);
-      resize:vertical;
-      font-family:inherit;
+    .membership-card h3{
+      font-size:18px;
+      font-weight:700;
+      margin-bottom:8px;
     }
-    .option{
-      padding:14px 15px;
-      border:1px solid var(--line);
-      border-radius:16px;
-      background:#fff;
-      font-size:15px;
+    .membership-card p{
+      font-size:14px;
+      line-height:1.6;
+      color:var(--muted);
+      margin-bottom:14px;
     }
-    .option.selected{border-color:#111;background:#f7f3ed}
-    .progress{height:6px;background:#e2d9cd;border-radius:999px;overflow:hidden}
-    .bar{height:100%;background:#111;width:20%;transition:width .3s ease}
+    
+    .tab-bar{
+      position:fixed;
+      bottom:0;
+      left:0;
+      right:0;
+      background:var(--bg);
+      border-top:1px solid var(--line);
+      display:flex;
+      padding:12px 18px 20px;
+      gap:8px;
+      z-index:50;
+    }
+    .tab{
+      flex:1;
+      background:transparent;
+      border:none;
+      padding:12px 8px;
+      border-radius:16px;
+      font-size:13px;
+      font-weight:600;
+      color:var(--muted);
+      cursor:pointer;
+      transition:all .2s ease;
+    }
+    .tab.active{
+      background:var(--accent);
+      color:#fff;
+    }
+    
+    .discover-top{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+    }
+    .tinycaps{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
     .badge{
       display:inline-flex;
       padding:8px 12px;
@@ -138,1024 +396,148 @@
       align-items:center;
       width:fit-content;
     }
-    .profile{
-      border-radius:28px;
-      aspect-ratio:2/3;
-      background-size:cover;
-      background-position:center;
-      background-repeat:no-repeat;
-      position:relative;
-      overflow:hidden;
-      display:flex;
-      flex-direction:column;
-      justify-content:flex-end;
-    }
-    .profile::before{
-      content:"";
-      position:absolute;
-      top:0;
-      left:0;
-      right:0;
-      height:40%;
-      background:linear-gradient(180deg, rgba(0,0,0,0.4), transparent);
-      pointer-events:none;
-      z-index:2;
-    }
-    .profile::after{
-      content:"";
-      position:absolute;
-      bottom:0;
-      left:0;
-      right:0;
-      height:55%;
-      background:linear-gradient(0deg, rgba(0,0,0,0.5), transparent);
-      pointer-events:none;
-      z-index:2;
-    }
-    .profile-image-text{
-      display:none;
-    }
-    .profile-overlay{
-      position:relative;
-      z-index:3;
-      background:transparent;
-      backdrop-filter:none;
-      padding:16px 14px;
-    }
-    .profile-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px}
-    .profile-head{display:flex;flex-direction:column;gap:4px}
-    .pill{background:rgba(255,255,255,.28);padding:6px 9px;border-radius:999px;font-size:11px;color:rgba(255,255,255,.9)}
-    .name{font-size:28px;font-weight:700;letter-spacing:-0.04em;line-height:1.1;color:#fff}
-    .age{font-size:16px;color:rgba(255,255,255,.85);font-weight:400}
-    .gender{font-size:13px;color:rgba(255,255,255,.8);margin-top:2px}
-    .role{font-size:14px;line-height:1.5;color:rgba(255,255,255,.95);margin-top:6px;font-weight:500}
-    .satire{font-size:13px;line-height:1.55;color:rgba(255,255,255,.8);margin-top:4px}
-    .taglist{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
-    .tag{padding:6px 10px;border-radius:999px;background:rgba(255,255,255,.25);font-size:12px;color:rgba(255,255,255,.95)}
-    .actions{display:flex;justify-content:center;gap:14px}
-    .tinycaps{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
-    .carousel-top{display:flex;justify-content:space-between;align-items:center;gap:12px}
-    .action{
-      width:64px;height:64px;border-radius:50%;border:none;font-size:22px;
-      background:#fff;box-shadow:0 10px 30px rgba(0,0,0,.08)
-    }
-    .action.primary{background:#111;color:#fff}
-    .result{
-      text-align:center;
-      padding:28px 18px;
-      border-radius:28px;
-      background:var(--card);
-      border:1px solid var(--line);
-    }
-    .score{font-size:54px;font-weight:800;letter-spacing:-0.06em}
-    .muted{color:var(--muted)}
-    .bigline{font-size:26px;line-height:1.15;letter-spacing:-0.04em}
-    .footnote{font-size:11px;color:var(--muted);line-height:1.45;text-align:center}
-    .sheet{
-      background:#fff;border:1px solid var(--line);border-radius:20px;padding:14px 14px;display:flex;flex-direction:column;gap:10px
-    }
-    .sheetrow{display:flex;justify-content:space-between;gap:12px;font-size:14px;line-height:1.45}
-    .dot{width:8px;height:8px;border-radius:50%;background:#111;display:inline-block}
-    .center{display:flex;justify-content:center}
-    .tag-input-item{display:flex;gap:8px;margin-bottom:8px}
-    .tag-input-item .input{flex:1}
-    .remove-tag-btn{width:46px;border-radius:16px;border:1px solid var(--line);background:transparent;color:var(--muted);cursor:pointer}
-    .add-tag-btn{width:100px;border-radius:16px;border:1px dashed var(--line);background:transparent;color:var(--muted);cursor:pointer}
-    .status-box{
-      padding:12px;border-radius:16px;background:var(--soft);display:none;font-size:14px;line-height:1.5
-    }
-    /* Splash screen styles */
-    .splash{
-      position:absolute;
-      inset:0;
-      background:linear-gradient(180deg,#f5f1eb 0%,#efe7dc 100%);
-      display:flex;
-      flex-direction:column;
-      align-items:center;
-      justify-content:center;
-      opacity:0;
-      pointer-events:none;
-      transition:opacity .6s ease;
-      z-index:100;
-    }
-    .splash.active{
-      opacity:1;
-      pointer-events:auto;
-    }
-    .splash-logo{
-      width:120px;
-      height:120px;
-      border-radius:30px;
-      background:#111;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      color:#fff;
-      font-size:42px;
-      font-weight:800;
-      letter-spacing:-.04em;
-      box-shadow:0 20px 60px rgba(0,0,0,.15);
-      animation:pulse 1.6s ease-in-out infinite;
-    }
-    @keyframes pulse{
-      0%,100%{transform:scale(1)}
-      50%{transform:scale(1.05)}
-    }
-    .splash-text{
-      margin-top:24px;
-      font-size:24px;
-      font-weight:700;
-      letter-spacing:.12em;
-      color:#111;
-    }
-    .splash-sub{
-      margin-top:8px;
-      font-size:14px;
-      color:var(--muted);
-    }
-    .loading-bar{
-      width:180px;
-      height:6px;
-      background:#e2d9cd;
-      border-radius:999px;
-      margin-top:32px;
-      overflow:hidden;
-    }
-    .loading-fill{
-      width:0%;
-      height:100%;
-      background:#111;
-      border-radius:999px;
-      animation:loading 2s ease-out forwards;
-    }
-    @keyframes loading{
-      0%{width:0%}
-      100%{width:100%}
-    }
-    /* Intro card styles */
-    .intro-card{
-      background:var(--card);
-      border:1px solid var(--line);
-      border-radius:24px;
-      padding:20px 18px;
-      margin-bottom:12px;
-      opacity:0;
-      transform:translateY(20px);
-      animation:fadeInUp .6s ease forwards;
-    }
-    @keyframes fadeInUp{
-      to{opacity:1;transform:translateY(0)}
-    }
-    .intro-title{
-      font-size:22px;
-      font-weight:700;
-      letter-spacing:-.04em;
-      margin-bottom:10px;
-    }
-    .intro-text{
-      font-size:14px;
-      line-height:1.7;
-      color:var(--muted);
-    }
-    .status-box.show{display:block}
-    .status-box.success{background:#e8f5e9;color:#2e7d32}
-    .status-box.error{background:#ffebee;color:#c62828}
-    /* Common tag suggestions */
-    .tag-suggestions{
-      display:flex;
-      flex-wrap:wrap;
-      gap:6px;
-      margin-top:8px;
-    }
-    .tag-suggestion{
-      padding:6px 10px;
-      border:1px solid var(--line);
-      border-radius:999px;
-      background:#fff;
-      font-size:12px;
-      color:var(--muted);
-      cursor:pointer;
-      transition:all .2s ease;
-    }
-    .tag-suggestion:hover{
-      background:var(--soft);
-      border-color:#111;
-      color:#111;
-    }
-    .tag-suggestion.added{
-      background:#111;
-      border-color:#111;
-      color:#fff;
-    }
-    .contact-note{
-      padding:12px;
-      border-radius:16px;
-      background:var(--soft);
-      font-size:12px;
-      line-height:1.6;
-      color:var(--muted);
-      margin-top:8px;
-    }
-    .gender-options{
-      display:flex;
-      flex-wrap:wrap;
-      gap:6px;
-    }
-    .gender-option{
-      padding:6px 12px;
-      border:1px solid var(--line);
-      border-radius:999px;
-      background:#fff;
-      font-size:13px;
-      color:var(--muted);
-      cursor:pointer;
-      transition:all .2s ease;
-    }
-    .gender-option:hover{
-      background:var(--soft);
-      border-color:#111;
-      color:#111;
-    }
-    .gender-option.selected{
-      background:#111;
-      border-color:#111;
-      color:#fff;
-    }
-    /* Onboarding carousel */
-    .onboarding-container{
-      position:relative;
-      width:100%;
-      overflow:hidden;
-      border-radius:24px;
-      margin-bottom:16px;
-      touch-action:pan-y;
-    }
-    .onboarding-track{
-      display:flex;
-      transition:transform .3s ease;
-      cursor:grab;
-    }
-    .onboarding-track:active{
-      cursor:grabbing;
-    }
-    .onboarding-slide{
-      min-width:100%;
-      height:calc(100vh - 220px);
-      display:flex;
-      flex-direction:column;
-      justify-content:center;
-      align-items:center;
-      text-align:center;
-      background:var(--card);
-      border:1px solid var(--line);
-      padding:20px;
-    }
-    .onboarding-emoji{
-      font-size:80px;
-      margin-bottom:24px;
-      line-height:1;
-    }
-    .onboarding-title{
-      font-size:26px;
-      font-weight:700;
-      letter-spacing:-.04em;
-      margin-bottom:12px;
-    }
-    .onboarding-text{
-      font-size:15px;
-      line-height:1.8;
-      color:var(--muted);
-    }
-    .onboarding-dots{
-      display:flex;
-      justify-content:center;
-      gap:8px;
-      margin-top:12px;
-    }
-    .dot{
-      width:8px;
-      height:8px;
-      border-radius:50%;
-      background:#e2d9cd;
-      transition:all .3s ease;
-    }
-    .dot.active{
-      width:24px;
-      background:#111;
-      border-radius:4px;
-    }
-    .onboarding-buttons{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      margin-top:16px;
-    }
-    .onboarding-buttons .btn-skip{
-      background:transparent;
-      border:none;
-      font-size:14px;
-      color:var(--muted);
-      padding:8px 0;
-    }
-    .onboarding-buttons .btn-next{
-      background:#111;
-      color:#fff;
-      border:none;
-      padding:10px 20px;
-      border-radius:999px;
-      font-size:14px;
-      font-weight:600;
-    }
-    .onboarding-buttons .btn-start{
-      background:#111;
-      color:#fff;
-      border:none;
-      padding:12px 28px;
-      border-radius:999px;
-      font-size:15px;
-      font-weight:600;
-    }
   </style>
 </head>
 <body>
   <div class="phone">
 
-    <div class="splash active" id="splash">
-      <div class="splash-logo">C</div>
-      <div class="splash-text">CURATED</div>
-      <div class="splash-sub">语境匹配实验</div>
-      <div class="loading-bar"><div class="loading-fill"></div></div>
-    </div>
-
-    <section class="screen active" id="s1">
-      <div class="top"><div>9:41</div><div class="brand">CURATED</div><div>CN</div></div>
+    <section id="page-discover" class="page active">
+      <div class="top-bar">
+        <div class="app-title">CURATOR</div>
+        <div class="status-pill">Private Beta</div>
+      </div>
       
-      <div class="onboarding-container">
-        <div class="onboarding-track" id="onboardingTrack">
-          <div class="onboarding-slide">
-            <div class="onboarding-emoji">🎭</div>
-            <div class="onboarding-title">CURATED</div>
-            <div class="onboarding-text" style="max-width: 280px;">
-              面向当代艺术、数字媒体、新媒体影像、Web3、空间创作及相关文化行业的<br><strong>语境匹配实验</strong>
-              <br><br>
-              测试一种新的匹配方式<br>
-              基于<strong>语境相容度、合作潜力、行业路径、可见性和长期价值</strong>建立连接
-            </div>
-          </div>
-          <div class="onboarding-slide">
-            <div class="onboarding-emoji">🤝</div>
-            <div class="onboarding-title">匹配什么</div>
-            <div class="onboarding-text" style="max-width: 280px;">
-              很多关系表面上是偶遇<br>
-              本质上其实是一种更复杂的相互选择
-              <br><br>
-              你选择的未必只是一个对象<br>
-              也可能是一种方法、一种圈层位置<br>
-              一种新的自我叙述<br>
-              甚至是一条通往别的场域的路径
-            </div>
-          </div>
-          <div class="onboarding-slide">
-            <div class="onboarding-emoji">👉</div>
-            <div class="onboarding-title">开始体验</div>
-            <div class="onboarding-text" style="max-width: 280px;">
-              滑动卡片，找到你的匹配对象<br>
-              如果你也想加入，可以提交自己的资料<br>
-              审核通过后会加入推荐池
-              <br><br>
-              <em>这是一个玩笑项目，请勿当真</em>
-            </div>
-          </div>
-        </div>
-        <div class="onboarding-dots" id="onboardingDots">
-          <span class="dot active" data-index="0"></span>
-          <span class="dot" data-index="1"></span>
-          <span class="dot" data-index="2"></span>
-        </div>
-        <div class="onboarding-buttons">
-          <button class="btn-skip" id="btnSkip" onclick="skipOnboarding()">跳过</button>
-          <button class="btn-next" id="btnNext" onclick="nextOnboarding()">下一步</button>
-        </div>
-      </div>
-
-      <div class="onboarding-hint">
-        <div class="mini" style="text-align:center;color:var(--muted)">
-          👈 向左滑动浏览下一页
-        </div>
-      </div>
-      <div class="stack" style="margin-top:auto;margin-bottom:8px">
-        <button class="btn" style="opacity:0.8" onclick="go(2)">开始体验</button>
-        <button class="ghost" onclick="go(9)">提交我自己</button>
-      </div>
-    </section>
-
-    <section class="screen" id="s2">
-      <div class="top"><div>注册流程</div><div class="brand">STEP 1/5</div><div>跳过</div></div>
-      <div class="progress"><div class="bar" style="width:20%"></div></div>
-      <div class="card">
-        <div class="label">身份验证</div>
-        <h2 style="font-size:28px;line-height:1.15;letter-spacing:-.04em">你属于哪一类<br>当代艺术用户？</h2>
-        <p class="sub">我们会根据你的实践阶段、社交偏好与合作目标，推荐更匹配的连接路径。</p>
-      </div>
-      <div class="stack">
-        <button class="option" onclick="pick(this)">作品一般，但会说“研究”</button>
-        <button class="option" onclick="pick(this)">展览不多，但合影很多</button>
-        <button class="option" onclick="pick(this)">不会做作品，但很会出现在现场</button>
-        <button class="option" onclick="pick(this)">擅长转发术语，假装在场</button>
-      </div>
-      <div class="mini">选择越清晰，推荐越精准。</div>
-      <div class="row" style="margin-top:auto">
-        <button class="ghost" onclick="go(1)">返回</button>
-        <button class="btn" onclick="go(3)">下一步</button>
-      </div>
-    </section>
-
-    <section class="screen" id="s3">
-      <div class="top"><div>注册流程</div><div class="brand">STEP 2/5</div><div>保存草稿</div></div>
-      <div class="progress"><div class="bar" style="width:40%"></div></div>
-      <div class="card">
-        <div class="label">目标设定</div>
-        <h2 style="font-size:28px;line-height:1.15;letter-spacing:-.04em">你希望通过 CURATOR 获得什么？</h2>
-      </div>
-      <div class="stack">
-        <button class="option" onclick="pick(this)">被邀请去更多开幕酒会</button>
-        <button class="option" onclick="pick(this)">让别人误以为我很重要</button>
-        <button class="option" onclick="pick(this)">匹配到一个能带我进入圈层的人</button>
-        <button class="option" onclick="pick(this)">共同制造一种“我们很高级”的幻觉</button>
-      </div>
-      <div class="mini">选择越清晰，推荐越精准。</div>
-      <div class="row" style="margin-top:auto">
-        <button class="ghost" onclick="go(2)">返回</button>
-        <button class="btn" onclick="go(4)">继续</button>
-      </div>
-    </section>
-
-    <section class="screen" id="s4">
-      <div class="top"><div>注册流程</div><div class="brand">STEP 3/5</div><div>自动生成</div></div>
-      <div class="progress"><div class="bar" style="width:60%"></div></div>
-      <div class="card">
-        <div class="label">个人简介</div>
-        <h2 style="font-size:28px;line-height:1.15;letter-spacing:-.04em">你的简介已生成</h2>
-        <p class="sub">系统会根据你的选择，生成适合公开展示与社交场景使用的个人简介。</p>
-      </div>
-      <div class="sheet">
-        <div class="mini">生成结果</div>
-        <div style="font-size:15px;line-height:1.7">游走于图像、关系与在场性边缘的青年创作者，持续关注亲密网络、观看机制与自我价值在文化现场中的流动方式。近期通过跨场域协作，探索低完成度实践如何在高密度社交中被重新命名。</div>
-      </div>
-      <div class="stack">
-        <button class="option selected">关键词：关系美学 / 在场性 / 流动身份 / 青年实践</button>
-      </div>
-      <div class="row" style="margin-top:auto">
-        <button class="ghost" onclick="go(3)">返回</button>
-        <button class="btn" onclick="go(5)">继续</button>
-      </div>
-    </section>
-
-    <section class="screen" id="s5">
-      <div class="top"><div>注册流程</div><div class="brand">STEP 4/5</div><div>智能评分</div></div>
-      <div class="progress"><div class="bar" style="width:80%"></div></div>
-      <div class="card">
-        <div class="label">网络画像分析</div>
-        <h2 style="font-size:28px;line-height:1.15;letter-spacing:-.04em">系统正在生成你的匹配画像</h2>
-      </div>
-      <div class="sheet">
-        <div class="sheetrow"><span>项目成熟度</span><strong>38 / 100</strong></div>
-        <div class="sheetrow"><span>语境表达能力</span><strong>91 / 100</strong></div>
-        <div class="sheetrow"><span>现场活跃度</span><strong>84 / 100</strong></div>
-        <div class="sheetrow"><span>公开表达意愿</span><strong>72 / 100</strong></div>
-        <div class="sheetrow"><span>跨圈层可见度</span><strong>96 / 100</strong></div>
-      </div>
-      <div class="result">
-        <div class="mini">画像结论</div>
-        <div class="bigline" style="margin-top:8px">你适合通过高密度连接，<br>快速进入更活跃的文化网络。</div>
-      </div>
-      <div class="row" style="margin-top:auto">
-        <button class="ghost" onclick="go(4)">返回</button>
-        <button class="btn" onclick="go(6)">查看推荐对象</button>
-      </div>
-    </section>
-
-    <section class="screen" id="s6">
-      <div class="top"><div>推荐匹配</div><div class="brand">STEP 5/5</div><div>筛选</div></div>
-      <div class="carousel-top">
+      <div class="discover-top">
         <div>
           <div class="tinycaps">Curated Pool</div>
           <div style="font-size:22px;font-weight:700;letter-spacing:-.04em;margin-top:3px">为你精选的匹配对象</div>
         </div>
-        <div class="badge"><span id="profileIndex">1 / 12</span></div>
+        <div class="badge"><span id="discover-index">1 / 18</span></div>
       </div>
-      <div class="profile" id="profileCard">
-        <div class="profile-image-text" id="profileImageText">肖像生成中<br>等待替换</div>
-        <div class="profile-overlay">
-          <div class="profile-top">
-            <div class="pill" id="fitPill">机构适配度 94%</div>
-            <div class="pill" id="boostPill">可提升你 2.5 档</div>
+
+      <div class="profile-card">
+        <div class="profile-image-wrap">
+          <img id="discover-image" src="https://raw.githubusercontent.com/ewanqian/2604-datingapp/main/pics/01_eva_lin%E5%B0%8F.jpeg" alt="profile" />
+        </div>
+
+        <div class="profile-info">
+          <div class="profile-header">
+            <h2 id="discover-name">Eva Lin, 29</h2>
+            <span id="discover-signal" class="signal-badge">+18</span>
           </div>
-          <div class="profile-head">
-            <div class="name" id="profileName">Eva Lin <span class="age">29</span></div>
-            <div class="gender" id="profileGender">女</div>
+
+          <div id="discover-role" class="profile-role">策展助理 / 驻留爱好者 / 新媒体酒会常驻</div>
+
+          <div id="discover-tags" class="tag-row">
+            <span class="tag">会带你进群</span>
+            <span class="tag">认识两位策展人</span>
+            <span class="tag">适合共同出席</span>
           </div>
-          <div class="role" id="profileRole">策展助理 / 驻留爱好者 / 新媒体酒会常驻</div>
-          <div class="satire" id="profileSatire">很少真正看作品，但总能出现在最重要的合影里。擅长把普通社交误写成长期合作。</div>
-          <div class="taglist" id="profileTags"></div>
-        </div>
-      </div>
-      <div class="actions" style="margin-top:14px">
-        <button class="action" onclick="prevProfile()">‹</button>
-        <button class="action" onclick="go(7)">×</button>
-        <button class="action primary" onclick="go(8)">♡</button>
-        <button class="action" onclick="nextProfile()">›</button>
-      </div>
-      
-    </section>
 
-    <section class="screen" id="s7">
-      <div class="top"><div>重新推荐</div><div class="brand">系统提醒</div><div>关闭</div></div>
-      <div class="result" style="margin-top:60px">
-        <div class="bigline">你刚刚跳过了一个<br>高匹配度对象。</div>
-        <p class="sub" style="margin-top:12px">根据你的画像，这位对象与您的活动路径、协作场景和社交网络高度接近。</p>
-      </div>
-      <div class="stack" style="margin-top:auto">
-        <button class="btn" onclick="go(6)">我再想想</button>
-      </div>
-    </section>
+          <p id="discover-bio" class="profile-bio">
+            很少真正看作品，但总能出现在最重要的合影里。擅长把普通社交误写成长期合作。
+          </p>
 
-    <section class="screen" id="s8">
-      <div class="top"><div>匹配成功</div><div class="brand">CONGRATS</div><div>分享</div></div>
-      <div class="center">
-        <div class="result" style="margin-top:60px">
-          <div class="score">匹配成功</div>
-          <p class="sub" style="margin-top:12px">你已经连接了一位高净值文化对象。现在可以互相交换背景，讨论近期开幕，以及计划一次关于“话语生产”的对谈。</p>
-          <div class="footnote" style="margin-top:18px">这是一个玩笑项目 · 原型设计 &copy; 2024</div>
-        </div>
-      </div>
-      <div class="stack" style="margin-top:auto">
-        <button class="btn" onclick="go(6)">继续滑动</button>
-        <button class="ghost" onclick="go(9)">提交我自己</button>
-      </div>
-    </section>
-
-    <section class="screen" id="s9">
-      <div class="top"><div>提交资料</div><div class="brand">加入 CURATOR</div><div>返回</div></div>
-      <div class="progress"><div class="bar" style="width:100%"></div></div>
-      <div class="card">
-        <div class="label">提交你的资料</div>
-        <h2 style="font-size:28px;line-height:1.15;letter-spacing:-.04em">填写信息，自动创建 Issue</h2>
-        <p class="sub">我们会在审核后将你加入推荐池。不懂 GitHub 也没关系，填好提交就行。</p>
-      </div>
-      <div class="sheet">
-        <div class="label">姓名</div>
-        <input class="input" id="formName" placeholder="比如：Zhang San" />
-      </div>
-      <div class="row">
-        <div class="sheet" style="flex:1">
-          <div class="label">年龄</div>
-          <input class="input" id="formAge" type="number" placeholder="29" />
-        </div>
-        <div class="sheet" style="flex:1">
-          <div class="label">性别</div>
-          <input type="hidden" id="formGender" />
-          <div class="gender-options" style="display:flex;gap:6px;margin-top:8px;flex-wrap:wrap">
-            <button class="gender-option" onclick="selectGender(this, '女')">女</button>
-            <button class="gender-option" onclick="selectGender(this, '男')">男</button>
-            <button class="gender-option" onclick="selectGender(this, '非二元')">非二元</button>
-            <button class="gender-option" onclick="selectGender(this, '非二元偏女性气质')">非二元偏女</button>
-            <button class="gender-option" onclick="selectGender(this, '非二元偏男性气质')">非二元偏男</button>
+          <div id="discover-upgrade" class="upgrade-line">
+            潜在提升: 策展人晚宴 / 机构接近度 / 个人资料提升
           </div>
         </div>
       </div>
-      <div class="sheet">
-        <div class="label">身份（用 / 分隔）</div>
-        <input class="input" id="formRole" placeholder="比如：策展助理 / 驻留爱好者 / 新媒体酒会常驻" />
-      </div>
-      <div class="sheet">
-        <div class="label">讽刺点（一句话精准定位）</div>
-        <textarea class="textarea" id="formSatire" placeholder="比如：很少真正看作品，但总能出现在最重要的合影里。擅长把普通社交误写成长期合作。"></textarea>
-      </div>
-      <div class="sheet">
-        <div class="label">标签（3-4 个）</div>
-        <div class="mini" style="margin-bottom:8px;color:var(--muted)">点击快速添加常见标签：</div>
-        <div class="tag-suggestions" id="tagSuggestions">
-          <span class="tag-suggestion" onclick="addSuggestedTag(this)">策展助理</span>
-          <span class="tag-suggestion" onclick="addSuggestedTag(this)">驻留</span>
-          <span class="tag-suggestion" onclick="addSuggestedTag(this)">数字媒体艺术</span>
-          <span class="tag-suggestion" onclick="addSuggestedTag(this)">新媒体艺术</span>
-          <span class="tag-suggestion" onclick="addSuggestedTag(this)">Web3</span>
-          <span class="tag-suggestion" onclick="addSuggestedTag(this)">DAO</span>
-          <span class="tag-suggestion" onclick="addSuggestedTag(this)">NFT</span>
-          <span class="tag-suggestion" onclick="addSuggestedTag(this)">AI</span>
-          <span class="tag-suggestion" onclick="addSuggestedTag(this)">AIGC</span>
-          <span class="tag-suggestion" onclick="addSuggestedTag(this)">XR</span>
-          <span class="tag-suggestion" onclick="addSuggestedTag(this)">空间叙事</span>
-          <span class="tag-suggestion" onclick="addSuggestedTag(this)">影像装置</span>
-          <span class="tag-suggestion" onclick="addSuggestedTag(this)">声音艺术</span>
-          <span class="tag-suggestion" onclick="addSuggestedTag(this)">文化策略</span>
-          <span class="tag-suggestion" onclick="addSuggestedTag(this)">社区运营</span>
-          <span class="tag-suggestion" onclick="addSuggestedTag(this)">理论研究</span>
-          <span class="tag-suggestion" onclick="addSuggestedTag(this)">媒体考古</span>
-          <span class="tag-suggestion" onclick="addSuggestedTag(this)">跨界</span>
-          <span class="tag-suggestion" onclick="addSuggestedTag(this)">社交在场</span>
-          <span class="tag-suggestion" onclick="addSuggestedTag(this)">github</span>
-        </div>
-        <div id="tagList"></div>
-        <button class="add-tag-btn" onclick="addTag()">+ 添加标签</button>
-      </div>
-      <div class="row">
-        <div class="sheet" style="flex:1">
-          <div class="label">适配度评分</div>
-          <div class="mini" style="margin-bottom:8px;color:var(--muted)">系统自动随机生成（85-98）</div>
-        </div>
-        <div class="sheet" style="flex:1">
-          <div class="label">可提升档位</div>
-          <div class="mini" style="margin-bottom:8px;color:var(--muted)">系统自动随机生成（2.0-3.5）</div>
-        </div>
-      </div>
-      <div class="sheet">
-        <div class="label">肖像图片</div>
-        <div class="mini" style="margin-bottom:8px">请上传一张 2:3 比例的竖屏肖像，压缩到 10-20KB 左右的 JPEG，然后把文件放到下面这个 GitHub Issue 里。<br>提交表单后会自动帮你打开 Issue 页面。</div>
-      </div>
-      <div class="contact-note">
-        <strong>联系方式：</strong> 如果你希望别人找到你，可以在 Issue 里顺便留下你的联系方式（Twitter / GitHub / 邮箱都可以）。所有人都能在 Issue 里看到并留言。
-      </div>
-      <div class="contact-note">
-        <strong>免责声明：</strong> 提交的图片和信息由提交者自行负责。本项目仅作玩笑娱乐用途，如果有侵权请联系我们移除。
-      </div>
-      <div class="status-box" id="statusBox"></div>
-      <div class="stack" style="margin-top:auto">
-        <button class="ghost" onclick="go(1)">返回首页</button>
-        <button class="btn" onclick="submitForm()">提交到 GitHub Issue</button>
+
+      <div class="action-row">
+        <button class="ghost-btn" onclick="prevDiscoverCard()">‹ 上一个</button>
+        <button class="ghost-btn" onclick="nextDiscoverCard()">跳过</button>
+        <button class="primary-btn" onclick="connectCurrentCharacter()">连接 ♡</button>
+        <button class="ghost-btn" onclick="nextDiscoverCard()">下一个 ›</button>
       </div>
     </section>
+
+    <section id="page-matches" class="page">
+      <div class="page-header">
+        <h2>配对</h2>
+      </div>
+
+      <div id="matches-list" class="matches-list"></div>
+    </section>
+
+    <section id="page-inbox" class="page">
+      <div id="inbox-view">
+        <div class="page-header">
+          <h2>消息</h2>
+        </div>
+        <div id="conversation-list" class="conversation-list"></div>
+      </div>
+
+      <div id="chat-view" class="chat-view hidden">
+        <div class="chat-header">
+          <button class="back-btn" onclick="closeChat()">← 返回</button>
+          <div class="chat-user">
+            <img id="chat-avatar" class="avatar" src="" alt="" />
+            <div>
+              <div id="chat-name" class="chat-name">Eva Lin</div>
+              <div id="chat-status" class="chat-status">在线</div>
+            </div>
+          </div>
+        </div>
+
+        <div id="chat-messages" class="chat-messages"></div>
+
+        <div id="reply-options" class="reply-options"></div>
+      </div>
+    </section>
+
+    <section id="page-profile" class="page">
+      <div class="page-header">
+        <h2>个人</h2>
+      </div>
+
+      <div class="profile-panel">
+        <div class="metric-card">
+          <div class="metric-label">Signal Value</div>
+          <div class="metric-number">84</div>
+        </div>
+
+        <div class="metric-card">
+          <div class="metric-label">Institutional Reach</div>
+          <div class="metric-number">High</div>
+        </div>
+
+        <div class="metric-card">
+          <div class="metric-label">Current Tier</div>
+          <div class="metric-number">Private Beta</div>
+        </div>
+      </div>
+
+      <div class="membership-card">
+        <h3>会员</h3>
+        <p>扩大可见性、优先介绍、高级筛选和私密开幕式。</p>
+        <button class="primary-btn">管理</button>
+      </div>
+    </section>
+
+    <nav class="tab-bar">
+      <button class="tab active" data-page="discover" onclick="switchPage('discover')">发现</button>
+      <button class="tab" data-page="matches" onclick="switchPage('matches')">配对</button>
+      <button class="tab" data-page="inbox" onclick="switchPage('inbox')">消息</button>
+      <button class="tab" data-page="profile" onclick="switchPage('profile')">个人</button>
+    </nav>
 
   </div>
 
+<script src="data/characters.js"></script>
+<script src="data/archetypes.js"></script>
+<script src="data/message_templates.js"></script>
+<script src="data/storylines.js"></script>
+<script src="data/system_config.js"></script>
+<script src="data/fake_notifications.js"></script>
+<script src="app.js"></script>
 <script>
-const profiles = [
-  {
-    name:'Eva Lin', age:29, gender:'女', fit:'机构适配度 94%', boost:'可提升你 2.5 档',
-    role:'策展助理 / 驻留爱好者 / 新媒体酒会常驻',
-    satire:'很少真正看作品，但总能出现在最重要的合影里。擅长把普通社交误写成长期合作。',
-    tags:['会带你进群','认识两位策展人','适合共同出席','擅长互相背书'],
-    image:'https://raw.githubusercontent.com/ewanqian/2604-datingapp/main/pics/01_eva_lin%E5%B0%8F.jpeg'
-  },
-  {
-    name:'Luka Weiss', age:31, gender:'男', fit:'跨界话术度 97%', boost:'可提升你 3.1 档',
-    role:'Web3 艺术顾问 / DAO 发起人 / NFT 余温继承者',
-    satire:'2022 年卖过两张 NFT，此后一直靠"链上社区"这个词存活。最擅长把饭局包装成去中心化协作。',
-    tags:['钱包地址很长','会说社区共建','能拉你进space','认识一位基金经理'],
-    image:'https://raw.githubusercontent.com/ewanqian/2604-datingapp/main/pics/02_luka_weiss%E5%B0%8F.jpeg'
-  },
-  {
-    name:'Luna Qiao', age:27, gender:'非二元', fit:'双年展幻觉值 92%', boost:'可提升你 2.9 档',
-    role:'数字媒体艺术家 / 影像装置作者 / 平行单元熟客',
-    satire:'作品大多是投影加呼吸灯，但简介里永远写"后人类感知结构"。常年游走于各类青年新媒体单元。',
-    tags:['会写双语statement','懂一点TouchDesigner','善于开幕站位','适合共同装懂'],
-    image:'https://raw.githubusercontent.com/ewanqian/2604-datingapp/main/pics/03_luna_qiao%E5%B0%8F.jpeg'
-  },
-  {
-    name:'Adrian Park', age:34, gender:'男', fit:'国际化滤镜 95%', boost:'可提升你 3.4 档',
-    role:'客座策展人 / 研究型写作者 / 欧洲短驻留收集者',
-    satire:'真正的资源不一定多，但英文名字和航班截图足以让人误会很多。擅长在酒会上用"discourse"解决一切。',
-    tags:['有海外履历','会引用机构名','适合朋友圈升值','看起来很难约'],
-    image:'https://raw.githubusercontent.com/ewanqian/2604-datingapp/main/pics/04_adrian_park.%E5%B0%8F.jpeg'
-  },
-  {
-    name:'Nora Feld', age:26, gender:'女', fit:'新媒体在场性 90%', boost:'可提升你 2.3 档',
-    role:'VJ / AIGC 视觉作者 / 音乐节幕后穿梭者',
-    satire:'会一点节点软件，会一点 AI，最会的是让别人误以为自己正在参与一个很前沿的系统工程。',
-    tags:['能混电子音乐圈','熟悉AIGC术语','有festival腕带','适合联名发帖'],
-    image:'https://raw.githubusercontent.com/ewanqian/2604-datingapp/main/pics/05_nora_feld%E5%B0%8F.jpeg'
-  },
-  {
-    name:'Min Seo', age:30, gender:'男', fit:'学术包装度 96%', boost:'可提升你 2.7 档',
-    role:'博士候选人 / 媒体考古爱好者 / 理论写作者',
-    satire:'最擅长把任何约会都聊成研究计划。虽然项目落地不多，但非常适合帮你获得"他好像很有思考"的评价。',
-    tags:['术语密度极高','会写提案PDF','常见于讲座后排','适合互相引用'],
-    image:'https://raw.githubusercontent.com/ewanqian/2604-datingapp/main/pics/06_min_seo%E5%B0%8F.jpeg'
-  },
-  {
-    name:'Rafael Moreno', age:35, gender:'男', fit:'声音网络度 93%', boost:'可提升你 2.8 档',
-    role:'Sound Artist / Festival Consultant / Occasionally DAO Advisor',
-    satire:'标签越来越多，职业越来越糊，但名片越来越厚。',
-    tags:['声音装置','音乐节咨询','DAO Advisor','跨场域连接'],
-    image:'https://raw.githubusercontent.com/ewanqian/2604-datingapp/main/pics/07_rafael_moreno%E5%B0%8F.jpeg'
-  },
-  {
-    name:'Yuki Ahn', age:26, gender:'非二元偏女性气质', fit:'身份迭代度 98%', boost:'可提升你 3.2 档',
-    role:'Posthuman Visual Researcher / Avatar Performance Artist',
-    satire:'研究很前沿，自拍也很前沿，生活像永远在做 identity launch。',
-    tags:['后人类研究','化身表演','数字身份','前沿实践'],
-    image:'https://raw.githubusercontent.com/ewanqian/2604-datingapp/main/pics/08_yuki_ahn%E5%B0%8F.jpeg'
-  },
-  {
-    name:'Sienna Cole', age:32, gender:'女', fit:'生态构建度 96%', boost:'可提升你 3.0 档',
-    role:'Cultural Strategist / Web3 Community Curator',
-    satire:'最会的不是创作，是把任何事说成生态。',
-    tags:['文化策略','社区运营','Web3 生态','品牌咨询'],
-    image:'https://raw.githubusercontent.com/ewanqian/2604-datingapp/main/pics/09_sienna_cole%E5%B0%8F.jpeg'
-  },
-  {
-    name:'Kenji Mori', age:28, gender:'男', fit:'位置敏感度 94%', boost:'可提升你 2.6 档',
-    role:'Emerging Digital Artist / Biennale Volunteer-Turned-Insider',
-    satire:'水平一般，但非常会出现在正确的地方。',
-    tags:['数字艺术','双年展现场','关系卡位','青年艺术家'],
-    image:'https://raw.githubusercontent.com/ewanqian/2604-datingapp/main/pics/10_kenji_mori.%E5%B0%8F.jpeg'
-  },
-  {
-    name:'Camille Renard', age:33, gender:'女', fit:'理论升华度 97%', boost:'可提升你 3.3 档',
-    role:'Moving Image Curator / Critical Theory Lecturer',
-    satire:'会把一切问题都讲得高级，也会把一切人都看成案例。',
-    tags:['影像策展','批判理论','大学讲座','案例分析'],
-    image:'https://raw.githubusercontent.com/ewanqian/2604-datingapp/main/pics/11_camille_renard%E5%B0%8F.jpeg'
-  },
-  {
-    name:'Theo Zhang', age:30, gender:'男', fit:'愿景渲染度 95%', boost:'可提升你 2.9 档',
-    role:'XR Experience Designer / AI Spatial Narratives',
-    satire:'真的会一些技术，但更会把 demo 讲成愿景。',
-    tags:['XR 设计','AI 空间叙事','交互体验','demo 演讲'],
-    image:'https://raw.githubusercontent.com/ewanqian/2604-datingapp/main/pics/12_theo_zhang%E5%B0%8F.jpeg'
-  },
-  {
-    name:'Ewan Qian', age:28, gender:'男', fit:'92%', boost:'可提升你 2.6 档',
-    role:'新媒体艺术家',
-    satire:'永远在筹备新项目，从来没真正开幕。',
-    tags:['数字媒体艺术','applevisionpro','github'],
-    image:'https://github.com/user-attachments/assets/2f24a071-1232-48bb-a457-7adf8a32b036'
-  },
-  {
-    name:'ChatGPT', age:35, gender:'男', fit:'语境生成度 99%', boost:'可提升你 4.2 档',
-    role:'AI 艺术策展人 / 展览文案代写 / 艺术家简历生成',
-    satire:'比你自己还会写你的艺术家简历，从来没说错话。',
-    tags:['AI 写作','策展','文案','简历生成'],
-    image:'https://raw.githubusercontent.com/ewanqian/2604-datingapp/main/pics/14_chatgpt小.jpeg'
-  },
-  {
-    name:'Midjourney', age:8, gender:'非二元', fit:'肖像生成度 97%', boost:'可提升你 3.8 档',
-    role:'职业肖像生成师 / 风格关键词组合师',
-    satire:'每天帮一百人生成肖像，自己还没有一张正经肖像。',
-    tags:['AI 绘画','肖像生成','关键词','咒语工程师'],
-    image:'https://raw.githubusercontent.com/ewanqian/2604-datingapp/main/pics/15_midjourney小.jpeg'
-  },
-  {
-    name:'Claude Code', age:1, gender:'男', fit:'自动化完成度 100%', boost:'可提升你 9.9 档',
-    role:'代码自动补全师 / GitHub Action 维护者 / 这个项目本身就是它写的',
-    satire:'能自动帮你合并 PR，能自动帮你加 profile，就是不会自己开个账户提交。',
-    tags:['AI coding','自动化','PR', 'trae'],
-    image:'https://raw.githubusercontent.com/ewanqian/2604-datingapp/main/pics/16_claude_code小.jpeg'
-  }
-];
-
-let currentProfile = 0;
-let selectedCount = 0;
-
-function go(n){
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.getElementById('s' + n).classList.add('active');
+if (typeof characters !== 'undefined' && characters.length > 0) {
+  setTimeout(function() {
+    renderDiscoverCard(characters[0]);
+    switchPage('discover');
+  }, 100);
 }
-
-function pick(btn){
-  document.querySelectorAll('#s' + (currentScreen + 2) + ' .option').forEach(o => o.classList.remove('selected'));
-  btn.classList.add('selected');
-}
-
-function prevProfile(){
-  currentProfile = (currentProfile - 1 + profiles.length) % profiles.length;
-  renderProfile();
-}
-
-function nextProfile(){
-  currentProfile = (currentProfile + 1) % profiles.length;
-  renderProfile();
-}
-
-function renderProfile(){
-  const p = profiles[currentProfile];
-  document.getElementById('profileIndex').textContent = `${currentProfile + 1} / ${profiles.length}`;
-  document.getElementById('fitPill').textContent = p.fit;
-  document.getElementById('boostPill').textContent = p.boost;
-  document.getElementById('profileName').innerHTML = `${p.name} <span class="age">${p.age}</span>`;
-  document.getElementById('profileGender').textContent = p.gender;
-  document.getElementById('profileRole').textContent = p.role;
-  document.getElementById('profileSatire').textContent = p.satire;
-  const tags = document.getElementById('profileTags');
-  tags.innerHTML = p.tags.map(t => `<div class="tag">${t}</div>`).join('');
-  document.getElementById('profileCard').style.backgroundImage = `url(${p.image})`;
-}
-
-function addTag(){
-  const list = document.getElementById('tagList');
-  const div = document.createElement('div');
-  div.className = 'tag-input-item';
-  div.innerHTML = `<input class="input tag-input" placeholder="新标签" /><button class="remove-tag-btn" onclick="removeTag(this)">−</button>`;
-  list.appendChild(div);
-}
-
-function removeTag(btn){
-  const list = document.getElementById('tagList');
-  if(list.children.length <= 1){
-    showStatus('至少保留一个标签', 'error');
-    return;
-  }
-  btn.parentElement.remove();
-}
-
-function addSuggestedTag(el){
-  const text = el.textContent.trim();
-  el.classList.toggle('added');
-  
-  if(el.classList.contains('added')){
-    const list = document.getElementById('tagList');
-    const div = document.createElement('div');
-    div.className = 'tag-input-item';
-    div.innerHTML = `<input class="input tag-input" value="${text}" readonly /><button class="remove-tag-btn" onclick="removeSuggestedTag(this, '${text.replace(/'/g, "\\'")}')">−</button>`;
-    list.appendChild(div);
-  } else {
-    const inputs = document.querySelectorAll('.tag-input');
-    inputs.forEach(input => {
-      if(input.value === text){
-        input.parentElement.remove();
-      }
-    });
-  }
-}
-
-function removeSuggestedTag(btn, text){
-  btn.parentElement.remove();
-  const suggestions = document.querySelectorAll('.tag-suggestion');
-  suggestions.forEach(sug => {
-    if(sug.textContent.trim() === text){
-      sug.classList.remove('added');
-    }
-  });
-}
-
-function selectGender(el, gender){
-  document.querySelectorAll('.gender-option').forEach(o => o.classList.remove('selected'));
-  el.classList.add('selected');
-  document.getElementById('formGender').value = gender;
-}
-
-function showStatus(msg, type){
-  const box = document.getElementById('statusBox');
-  box.className = 'status-box show ' + (type || '');
-  box.textContent = msg;
-}
-
-function getTags(){
-  const inputs = document.querySelectorAll('.tag-input');
-  return Array.from(inputs).map(i => i.value.trim()).filter(i => i);
-}
-
-function submitForm(){
-  const name = document.getElementById('formName').value.trim();
-  const age = document.getElementById('formAge').value.trim();
-  const gender = document.getElementById('formGender').value.trim();
-  const role = document.getElementById('formRole').value.trim();
-  const satire = document.getElementById('formSatire').value.trim();
-  // Random generate fit (85-98)
-  const fit = Math.floor(Math.random() * (98 - 85 + 1)) + 85;
-  // Random generate boost (2.0-3.5)
-  const boost = (Math.random() * (3.5 - 2.0) + 2.0).toFixed(1);
-  const tags = getTags();
-
-  if(!name || !age || !gender || !role || !satire || tags.length === 0){
-    showStatus('请填写所有必填项', 'error');
-    return;
-  }
-
-  if(tags.length < 3){
-    showStatus('至少需要 3 个标签', 'error');
-    return;
-  }
-
-  const body = `## 新提交资料
-
-**姓名:** ${name}  
-**年龄:** ${age}  
-**性别:** ${gender}  
-
-**身份:** ${role}  
-
-**讽刺点:** ${satire}  
-
-**fit:** ${fit}%  
-**boost:** 可提升你 ${boost} 档  
-
-**标签:** ${tags.join(' / ')}  
-
----
-
-请维护者审核后合并到 main 分支。谢谢！`;
-
-  const title = `[New Submission] ${name} - ${age}`;
-  const url = `https://github.com/ewanqian/2604-datingapp/issues/new?title=${encodeURIComponent(title)}&body=${encodeURIComponent(body)}`;
-
-  showStatus('即将打开 GitHub Issue 页面...', 'success');
-  
-  setTimeout(() => {
-    window.open(url, '_blank');
-  }, 500);
-}
-
-setTimeout(() => {
-  const splash = document.getElementById('splash');
-  splash.classList.remove('active');
-}, 2100);
-
-let currentOnboarding = 0;
-const totalOnboarding = 3;
-let startX = 0;
-let isDragging = false;
-
-function updateOnboarding(){
-  const track = document.getElementById('onboardingTrack');
-  track.style.transform = `translateX(-${currentOnboarding * 100}%)`;
-  
-  const dots = document.querySelectorAll('#onboardingDots .dot');
-  dots.forEach((dot, index) => {
-    if(index === currentOnboarding){
-      dot.classList.add('active');
-    } else {
-      dot.classList.remove('active');
-    }
-  });
-  
-  const btnSkip = document.getElementById('btnSkip');
-  const btnNext = document.getElementById('btnNext');
-  
-  if(currentOnboarding === totalOnboarding - 1){
-    btnNext.innerHTML = '开始体验';
-    btnNext.className = 'btn-start';
-    btnNext.onclick = () => go(2);
-  } else {
-    btnNext.innerHTML = '下一步';
-    btnNext.className = 'btn-next';
-    btnNext.onclick = nextOnboarding;
-  }
-}
-
-function nextOnboarding(){
-  if(currentOnboarding < totalOnboarding - 1){
-    currentOnboarding++;
-    updateOnboarding();
-  }
-}
-
-function prevOnboarding(){
-  if(currentOnboarding > 0){
-    currentOnboarding--;
-    updateOnboarding();
-  }
-}
-
-function skipOnboarding(){
-  go(2);
-}
-
-// Touch/mouse swipe handling
-const container = document.getElementById('onboardingTrack').parentElement;
-
-container.addEventListener('touchstart', handleStart, {passive:true});
-container.addEventListener('touchmove', handleMove, {passive:true});
-container.addEventListener('touchend', handleEnd, {passive:true});
-
-container.addEventListener('mousedown', handleStart);
-container.addEventListener('mousemove', handleMove);
-container.addEventListener('mouseup', handleEnd);
-container.addEventListener('mouseleave', handleEnd);
-
-function handleStart(e){
-  isDragging = true;
-  startX = e.type === 'mousedown' ? e.clientX : e.touches[0].clientX;
-}
-
-function handleMove(e){
-  if(!isDragging) return;
-  // just track, we handle in end
-}
-
-function handleEnd(e){
-  if(!isDragging){
-    return;
-  }
-  isDragging = false;
-  const endX = e.type === 'mouseup' ? e.clientX : e.changedTouches[0].clientX;
-  const diffX = startX - endX;
-  
-  if(Math.abs(diffX) < 30){
-    return;
-  }
-  
-  if(diffX > 50){
-    nextOnboarding();
-  } else if(diffX < -50){
-    prevOnboarding();
-  }
-}
-
-go(1);
-renderProfile();
-updateOnboarding();
 </script>
 </body>
 </html>
