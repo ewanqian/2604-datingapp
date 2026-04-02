@@ -126,9 +126,8 @@
       color:#2f2a25;
       background:linear-gradient(180deg,rgba(255,255,255,.25),rgba(17,17,17,.15));
     }
-    .placeholder .loading-emoji{
-      font-size:64px;
-      margin-bottom:8px;
+    .placeholder .initials{
+      font-size:48px; font-weight:800; letter-spacing:-.06em;
     }
     .placeholder small{
       font-size:12px; letter-spacing:.15em; text-transform:uppercase; opacity:.68;
@@ -176,7 +175,7 @@
     .avatar-fallback{
       width:52px; height:52px; border-radius:16px; background:linear-gradient(180deg,#ddd3c5,#c6bcaf);
       display:flex; align-items:center; justify-content:center;
-      font-size:24px; flex:0 0 auto;
+      font-size:18px; font-weight:800; color:#2f2a25; flex:0 0 auto;
     }
     .conv-meta{flex:1; min-width:0}
     .conv-top{display:flex; justify-content:space-between; gap:12px; align-items:center}
@@ -216,7 +215,7 @@
     .chat-name{font-weight:700; font-size:15px}
     .chat-status{font-size:12px; color:var(--muted)}
     .chat-body{
-      flex:1; overflow:auto; padding:14px 14px 180px;
+      flex:1; overflow:auto; padding:14px 14px 120px;
       display:flex; flex-direction:column; gap:10px;
     }
     .msg{
@@ -265,20 +264,6 @@
       background:#fff; color:#111; border:1px solid var(--line);
       padding:11px 12px; border-radius:999px; font-size:13px; line-height:1.25;
       max-width:100%;
-      pointer-events:auto;
-      cursor:pointer;
-      -webkit-user-select:none;
-      user-select:none;
-    }
-    .reply-chip:active{
-      transform:scale(0.98);
-      background:#f7f3ed;
-    }
-    .waiting-hint{
-      text-align:center;
-      padding:12px;
-      font-size:13px;
-      color:var(--muted);
     }
     .membership-hero{
       padding:18px; border-radius:28px; background:linear-gradient(180deg,#1f2632,#111827); color:#fff;
@@ -325,6 +310,43 @@
     .tab.active{background:#fff; color:#111; font-weight:700}
     .divider{height:1px; background:rgba(17,17,17,.08); margin:4px 0}
     a.clean-link{color:inherit; text-decoration:none}
+  
+    .detail-sheet{
+      position:absolute; inset:0; z-index:25; display:none; flex-direction:column;
+      background:linear-gradient(180deg,#f7f3ee 0%,#efe7dc 100%);
+    }
+    .detail-sheet.open{display:flex}
+    .detail-scroll{flex:1; overflow:auto; padding:0 16px 110px}
+    .detail-hero,.detail-block{
+      background:#fff; border:1px solid var(--line); border-radius:24px;
+    }
+    .detail-hero{overflow:hidden; margin-top:10px}
+    .detail-main-image{aspect-ratio:4/5; position:relative; background:linear-gradient(180deg,#ddd3c5,#c7bcae)}
+    .detail-main-image img{width:100%; height:100%; object-fit:cover; display:block}
+    .detail-main-placeholder{
+      position:absolute; inset:0; display:flex; align-items:center; justify-content:center; text-align:center; padding:24px;
+      color:#2d2925; line-height:1.7; font-size:14px;
+      background:linear-gradient(180deg,rgba(255,255,255,.25),rgba(17,17,17,.08));
+    }
+    .detail-block{padding:16px; margin-top:12px}
+    .statement{font-size:18px; line-height:1.6; letter-spacing:-.02em}
+    .archive-line{display:flex; justify-content:space-between; gap:12px; padding:10px 0; border-bottom:1px dashed var(--line); font-size:14px}
+    .archive-line:last-child{border-bottom:none}
+    .gallery-grid{display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:10px}
+    .gallery-item{
+      border:1px solid var(--line); border-radius:18px; overflow:hidden; background:#faf7f2;
+    }
+    .gallery-item img{width:100%; aspect-ratio:4/5; object-fit:cover; display:block}
+    .gallery-placeholder{
+      aspect-ratio:4/5; display:flex; align-items:center; justify-content:center; text-align:left; padding:14px;
+      font-size:12px; line-height:1.65; color:#4a443d;
+      background:linear-gradient(180deg,#f4eee6,#ebe1d4);
+    }
+    .gallery-caption{padding:10px 12px; font-size:12px; line-height:1.55; color:#5b544d; background:#fff}
+    .moment{padding:12px 0; border-bottom:1px dashed var(--line)}
+    .moment:last-child{border-bottom:none}
+    .moment-time{font-size:11px; color:var(--muted); letter-spacing:.12em; text-transform:uppercase; margin-bottom:5px}
+
   </style>
 </head>
 <body>
@@ -332,21 +354,20 @@
   <section class="page active" id="page-discover">
     <div class="topbar"><div>9:41</div><div class="brand">CURATOR</div><div>Private Beta</div></div>
 
-    <div class="header-card" id="welcomeCard">
-      <div class="mini-label">发现 · 精准连接</div>
-      <h1 class="hero-title">让关系、位置与可见度<br>同时发生。</h1>
-      <p class="sub" style="margin-top:10px">这里不只匹配兴趣。也匹配方法、场域、节奏，以及你们将来可能一起进入的那道门。</p>
-      <button class="btn" style="width:100%; margin-top:12px" onclick="closeWelcome()">开始探索</button>
+    <div class="header-card">
+      <div class="mini-label">发现 · 精准匹配</div>
+      <h1 class="hero-title">让关系、误读与靠近<br>同时发生。</h1>
+      <p class="sub" style="margin-top:10px">这里不只匹配兴趣，也匹配节奏、方法、误会，以及你们可能一起经过的那个时刻。</p>
     </div>
 
-    <div class="profile-card" style="margin-top:12px; display:none" id="discoverCard">
+    <div class="profile-card" style="margin-top:12px">
       <div class="image-wrap">
         <span class="status-pill" id="discoverStatus">可见度上升</span>
         <span class="signal-pill" id="discoverSignal">Signal +18</span>
         <img id="discoverImage" src="" alt="profile">
         <div class="placeholder" id="discoverPlaceholder">
-          <div class="loading-emoji">⏳</div>
-          <small>加载中...</small>
+          <div class="initials" id="discoverInitials">EL</div>
+          <small>profile pending</small>
         </div>
       </div>
       <div class="profile-info">
@@ -362,12 +383,13 @@
 
     <div class="action-row">
       <button class="ghost" style="flex:1" id="skipBtn">跳过</button>
-      <button class="btn" style="flex:1" id="connectBtn">连接</button>
+      <button class="ghost" style="flex:1" id="discoverMoreBtn">更多资料</button>
+      <button class="btn" style="flex:1" id="connectBtn">匹配</button>
     </div>
 
     <div class="card" style="margin-top:12px">
       <div class="tinycaps">本轮提示</div>
-      <div class="sub" id="discoverHint" style="margin-top:6px">你看中的未必是某个人，很多时候是他身后的入口、场合与节奏。</div>
+      <div class="sub" id="discoverHint" style="margin-top:6px">你看中的未必只是某个人，也可能是他身上的空气、他经过的地方，和他没说完的话。</div>
     </div>
   </section>
 
@@ -382,8 +404,8 @@
     <div class="list" id="conversationList" style="margin-top:12px"></div>
 
     <div class="card" id="emptyInbox" style="margin-top:12px">
-      <div class="tinycaps">还没有会话</div>
-      <p class="sub" style="margin-top:6px">从“发现”页连接一个角色后，对话会自动进入这里。长线角色会在不同时间继续找你。</p>
+      <div class="tinycaps">还没有消息</div>
+      <p class="sub" style="margin-top:6px">从“发现”页匹配一个角色后，对话会自动进入这里。长线角色会在不同时间继续找你。</p>
     </div>
   </section>
 
@@ -392,8 +414,8 @@
 
     <div class="membership-hero">
       <div class="mini-label" style="background:rgba(255,255,255,.12); color:#fff">Membership</div>
-      <h2 class="section-title" style="color:#fff; margin-top:12px">扩展你在网络中的可见度。</h2>
-      <p class="sub" style="margin-top:10px">更多长线剧情、隐藏事件、优先展示、扩展筛选与私密访问，将在后续版本逐步开放。</p>
+      <h2 class="section-title" style="color:#fff; margin-top:12px">把一些原本不会发生的靠近，留在更久一点的地方。</h2>
+      <p class="sub" style="margin-top:10px">更多长线剧情、隐藏事件、更完整的角色档案、扩展筛选与私密访问，将在后续版本逐步开放。</p>
       <div class="row" style="margin-top:16px">
         <a class="clean-link" style="flex:1" href="https://www.xiaohongshu.com/user/profile/60d73226000000000101f30e" target="_blank">
           <button class="btn" style="width:100%; background:#fff; color:#111">打开作者主页</button>
@@ -403,29 +425,29 @@
     </div>
 
     <div class="card" style="margin-top:12px">
-      <div class="tinycaps">包含权益</div>
-      <div class="benefit"><span>优先展示</span><span class="muted">更早被看见</span></div>
-      <div class="benefit"><span>长线对话</span><span class="muted">更多隐藏分支</span></div>
-      <div class="benefit"><span>私密事件</span><span class="muted">名单 / 局 / 深夜回流</span></div>
-      <div class="benefit"><span>高级关系报告</span><span class="muted">更完整的结果页</span></div>
+      <div class="tinycaps">可能开放的内容</div>
+      <div class="benefit"><span>更完整的角色档案</span><span class="muted">更多相册与 statement</span></div>
+      <div class="benefit"><span>更长的关系分支</span><span class="muted">更慢、更细的对话推进</span></div>
+      <div class="benefit"><span>特殊事件</span><span class="muted">相册解锁 / 深夜回流 / 特殊节点</span></div>
+      <div class="benefit"><span>更完整的活动记录</span><span class="muted">更细的轨迹与角色状态</span></div>
     </div>
 
     <div class="pricing" style="margin-top:12px">
       <div class="price-card">
-        <div class="tinycaps">月度</div>
-        <div class="price">¥48</div>
-        <p class="sub" style="margin-top:6px">当前仅作展示。</p>
+        <div class="tinycaps">当前阶段</div>
+        <div class="price">内测中</div>
+        <p class="sub" style="margin-top:6px">当前先保留访问入口。</p>
       </div>
       <div class="price-card">
-        <div class="tinycaps">年度</div>
-        <div class="price">¥298</div>
-        <p class="sub" style="margin-top:6px">后续开放。</p>
+        <div class="tinycaps">后续开放</div>
+        <div class="price">逐步开放</div>
+        <p class="sub" style="margin-top:6px">根据后续更新逐步开放。</p>
       </div>
     </div>
 
     <div class="card" style="margin-top:12px">
-      <div class="tinycaps">获取方式</div>
-      <p class="sub" style="margin-top:6px">关注作者主页，接收更新、邀请码与后续版本开放信息。</p>
+      <div class="tinycaps">访问方式</div>
+      <p class="sub" style="margin-top:6px">通过作者主页接收更新、测试入口与后续版本说明。</p>
       <a class="clean-link" href="https://www.xiaohongshu.com/user/profile/60d73226000000000101f30e" target="_blank">
         <button class="ghost" style="width:100%; margin-top:12px">前往小红书主页</button>
       </a>
@@ -437,7 +459,7 @@
 
     <div class="profile-grid">
       <div class="metric"><div class="label">Signal Value</div><div class="value" id="metricSignal">0</div></div>
-      <div class="metric"><div class="label">已连接</div><div class="value" id="metricMatches">0</div></div>
+      <div class="metric"><div class="label">已匹配</div><div class="value" id="metricMatches">0</div></div>
       <div class="metric"><div class="label">已解锁成就</div><div class="value" id="metricAchievements">0</div></div>
       <div class="metric"><div class="label">停留时长</div><div class="value" id="metricMinutes">0m</div></div>
     </div>
@@ -445,7 +467,7 @@
     <div class="summary-card" style="margin-top:12px">
       <div class="tinycaps">本次活动轨迹</div>
       <div class="summary-line"><span>本次停留</span><span id="traceDuration">0 分钟</span></div>
-      <div class="summary-line"><span>建立连接</span><span id="traceMatches">0 条</span></div>
+      <div class="summary-line"><span>建立匹配</span><span id="traceMatches">0 条</span></div>
       <div class="summary-line"><span>最长对话对象</span><span id="traceLongest">暂无</span></div>
       <div class="summary-line"><span>当前状态</span><span id="traceStatus">仍在观察中</span></div>
       <div class="summary-line"><span>本次总结</span><span id="traceSummary">尚未形成稳定关系</span></div>
@@ -487,10 +509,67 @@
     </div>
   </section>
 
+
+  <div class="detail-sheet" id="detailSheet">
+    <div class="chat-header">
+      <button class="back" id="detailBack">返回</button>
+      <div class="chat-user" style="cursor:default">
+        <div>
+          <div class="chat-name" id="detailNameTop">角色档案</div>
+          <div class="chat-status">资料 · statement · 相册 · moments</div>
+        </div>
+      </div>
+    </div>
+    <div class="detail-scroll">
+      <div class="detail-hero">
+        <div class="detail-main-image">
+          <img id="detailMainImage" src="" alt="">
+          <div class="detail-main-placeholder" id="detailMainPlaceholder"></div>
+          <span class="status-pill" id="detailStatusPill">资料更新中</span>
+        </div>
+        <div class="profile-info">
+          <div class="name-row">
+            <h2><span id="detailName">Eva Lin</span><span class="age" id="detailAge">，34</span></h2>
+          </div>
+          <div class="role" id="detailRole">双年展顾问 / 影像策展协作</div>
+          <div class="tag-row" id="detailTags"></div>
+        </div>
+      </div>
+
+      <div class="detail-block">
+        <div class="tinycaps">Statement</div>
+        <div class="statement" id="detailStatement"></div>
+      </div>
+
+      <div class="detail-block">
+        <div class="tinycaps">Archive</div>
+        <div class="archive-line"><span>常驻</span><span id="detailCity">上海 / 柏林</span></div>
+        <div class="archive-line"><span>关系倾向</span><span id="detailTendency">保持悬置</span></div>
+        <div class="archive-line"><span>最近状态</span><span id="detailCurrent">低频出现</span></div>
+      </div>
+
+      <div class="detail-block">
+        <div class="tinycaps">About</div>
+        <p class="sub" id="detailLongBio" style="margin-top:8px"></p>
+      </div>
+
+      <div class="detail-block">
+        <div class="tinycaps">Gallery</div>
+        <div class="gallery-grid" id="detailGallery"></div>
+      </div>
+
+      <div class="detail-block">
+        <div class="tinycaps">Moments</div>
+        <div id="detailMoments"></div>
+      </div>
+    </div>
+  </div>
+
+
   <div class="chat-shell" id="chatShell">
     <div class="chat-header">
       <button class="back" id="chatBack">返回</button>
-      <div class="chat-user">
+      <div class="chat-user" id="chatUserTap" style="cursor:pointer">
         <img class="avatar-sm" id="chatAvatar" src="" alt="">
         <div class="avatar-fallback" id="chatAvatarFallback" style="display:none"></div>
         <div>
@@ -562,7 +641,7 @@ const characters = [
   {
     id:'kenji',
     name:'Kenji Mori', age:28, initials:'KM',
-    role:'数字艺术新锐 / 场域出没型连接者',
+    role:'数字艺术新锐 / 场域出没型匹配者',
     tags:['总在现场','刚好经过','边缘 insider'],
     bio:'他并不坏，只是会让你不断见证他更靠近里面，而你一直在他旁边，像一个知道过程的人。',
     upgrade:'潜在提升：被带入更高级别的现场 / 出现在正确的背景里 / 社交截图含金量提升',
@@ -588,7 +667,7 @@ const characters = [
   {
     id:'min',
     name:'Min Seo', age:30, initials:'MS',
-    role:'沉浸式项目统筹 / 品牌连接人',
+    role:'沉浸式项目统筹 / 品牌匹配人',
     tags:['品牌局','项目联动','优先通道'],
     bio:'她讲话很温柔，也很有效率。你以为这是关系在推进，但常常只是你正好被放进了一个很合适的位置。',
     upgrade:'潜在提升：项目入口 / 更高质量的人脉局 / 被顺手带上的可能',
@@ -1035,7 +1114,7 @@ function ensureConversation(id){
       id,
       unread: 1,
       archived:false,
-      preview:'已建立连接',
+      preview:'已建立匹配',
       time:'刚刚',
       messages: [],
       progress: {},
@@ -1053,7 +1132,7 @@ function connectCurrent(){
     ensureConversation(c.id);
     state.stats.signal += c.signal;
     state.stats.connects += 1;
-    state.conversations[c.id].preview = `已建立连接 · ${c.role}`;
+    state.conversations[c.id].preview = `已建立匹配 · ${c.role}`;
     seedConversation(c.id);
     saveState();
     renderInbox();
@@ -1132,7 +1211,7 @@ function renderInbox(){
 function makeFallbackAvatar(text){
   const div = document.createElement('div');
   div.className = 'avatar-fallback';
-  div.textContent = '👤';
+  div.textContent = text;
   return div;
 }
 
@@ -1214,7 +1293,6 @@ function randomDelay(min=1200,max=3600){
 }
 
 function playNpcLines(id, lines, done){
-  document.getElementById('replyWrap').innerHTML = '';
   let index = 0;
   function nextLine(){
     if(index >= lines.length){ done && done(); return; }
@@ -1243,9 +1321,8 @@ function renderReplies(id, replies, achievementKey){
     const btn = document.createElement('button');
     btn.className = 'reply-chip';
     btn.textContent = r.text;
-    btn.onclick = (e)=>{
-      e.stopPropagation();
-      wrap.innerHTML = '<div class="waiting-hint">正在回复中...</div>';
+    btn.onclick = ()=>{
+      wrap.innerHTML = '';
       appendMessage('user', r.text, true);
       applyEffects(r.effect || {});
       if(!r.next){
@@ -1273,9 +1350,8 @@ function renderGenericReplies(id, replies){
     const btn = document.createElement('button');
     btn.className = 'reply-chip';
     btn.textContent = text;
-    btn.onclick = (e)=>{
-      e.stopPropagation();
-      wrap.innerHTML = '<div class="waiting-hint">正在回复中...</div>';
+    btn.onclick = ()=>{
+      wrap.innerHTML = '';
       appendMessage('user', text, true);
       state.conversations[id].genericIndex += 1;
       const stage = state.conversations[id].genericIndex % 4;
@@ -1302,17 +1378,15 @@ function maybeInjectOutcome(id){
   const btn1 = document.createElement('button');
   btn1.className = 'reply-chip';
   btn1.textContent = '继续保持联系';
-  btn1.onclick = (e)=>{
-    e.stopPropagation();
-    wrap.innerHTML = '<div class="waiting-hint">正在回复中...</div>';
+  btn1.onclick = ()=>{
+    wrap.innerHTML = '';
     playNpcLines(id, ['先这样。','后面有更合适的再找你。'], ()=>{});
   };
 
   const btn2 = document.createElement('button');
   btn2.className = 'reply-chip';
   btn2.textContent = '暂时归档';
-  btn2.onclick = (e)=>{
-    e.stopPropagation();
+  btn2.onclick = ()=>{
     convo.archived = true;
     saveState();
     closeChat();
@@ -1364,7 +1438,7 @@ function renderProfile(){
   if(!state.stats.achievements.length){
     const div = document.createElement('div');
     div.className = 'reward-item';
-    div.innerHTML = '<div class="conv-meta"><div class="conv-name">尚未解锁成就</div><div class="conv-preview">继续连接角色、推进对话或触发特殊事件。</div></div>';
+    div.innerHTML = '<div class="conv-meta"><div class="conv-name">尚未解锁成就</div><div class="conv-preview">继续匹配角色、推进对话或触发特殊事件。</div></div>';
     list.appendChild(div);
   } else {
     state.stats.achievements.forEach(key=>{
@@ -1403,8 +1477,8 @@ function getTraceStatus(){
 function getTraceSummary(){
   if(state.matchedIds.length === 0) return '尚未形成稳定关系';
   if(state.stats.achievements.length >= 3) return '本次获得多重信号，关系进入可继续推进状态';
-  if(state.matchedIds.length >= 2) return '维持了数段模糊连接，可见度有轻微提升';
-  return '已建立连接，但关系仍处于试探阶段';
+  if(state.matchedIds.length >= 2) return '维持了数段模糊匹配，可见度有轻微提升';
+  return '已建立匹配，但关系仍处于试探阶段';
 }
 
 function initTabs(){
@@ -1427,6 +1501,16 @@ function initActions(){
   document.getElementById('skipBtn').onclick = nextDiscover;
   document.getElementById('connectBtn').onclick = connectCurrent;
   document.getElementById('chatBack').onclick = closeChat;
+  const moreBtn = document.getElementById('discoverMoreBtn');
+  if(moreBtn) moreBtn.onclick = ()=> openDetailByCharacter(currentCharacterFromDiscover());
+  const detailBack = document.getElementById('detailBack');
+  if(detailBack) detailBack.onclick = ()=> document.getElementById('detailSheet').classList.remove('open');
+  const chatTap = document.getElementById('chatUserTap');
+  if(chatTap) chatTap.onclick = ()=>{
+    if(state.openedChat){
+      openDetailByCharacter(getCharacter(state.openedChat));
+    }
+  };
 }
 
 function bootMatchedConversations(){
@@ -1467,13 +1551,253 @@ function injectFollowUpPings(){
   }, 42000);
 }
 
-function init(){
-  if(localStorage.getItem('curator_welcome_seen')){
-    document.getElementById('welcomeCard').style.display = 'none';
-    document.getElementById('discoverCard').style.display = 'block';
-  } else {
-    document.getElementById('discoverCard').style.display = 'none';
+
+const profileDetails = {
+  eva: {
+    statement: "她不急着解释任何东西。她更擅长把人放在一个微妙的位置里：不完全靠近，也不彻底离开。",
+    city: "上海 / 威尼斯 / 柏林",
+    tendency: "低温靠近 / 延后准入",
+    current: "名单边缘，仍在观察",
+    longBio: "Eva 长期在影像、策展协作与跨城市的文化场景之间移动。她真正关心的不是热闹本身，而是谁会在什么时刻被放进一个更合适的位置。她很少把话说透，但每一次停顿、每一次保留，都会让关系多出一层意味。",
+    moments: [
+      ["昨晚 23:40", "散场后在酒店窗边待了很久。她没发现场照，只发了一句：今天比想象中安静。"],
+      ["三天前", "把一个原本快定下来的名单又改了一次。"],
+      ["更早一些", "有人提到你时，她没有接话，只是在心里记了一下。"]
+    ],
+    gallery: [
+      {src:"assets/characters/01_eva_lin.jpg", caption:"主头像。她看向镜头的时候，像在判断你会不会先开口。"},
+      {caption:"朋友在开幕结束后拍的她。人群已经散了，她还没走。"},
+      {caption:"出差酒店窗边的夜景自拍，没发出去，只留在了草稿里。"},
+      {caption:"工作台一角，名单、票根和一支写到一半没墨的笔。"},
+      {caption:"低光环境里拿着酒杯的侧影，像刚结束一段不太必要的寒暄。"},
+      {caption:"电梯镜子里很轻的一张自拍，像是发给很少数的人。"},
+      {caption:"门口等待放行前的抓拍，背景虚掉了，人反而更清楚。"},
+      {caption:"一张未公开的入口照片。她没有说明，只留了一句：先别对外说。"}
+    ]
+  },
+  luna: {
+    statement: "她会把很多东西说得像一种邀请：关系、项目、群聊、闭环，甚至只是一个还没完全成形的晚上。",
+    city: "上海 / 香港 / 新加坡",
+    tendency: "热情试探 / 轻度收编",
+    current: "入口半开，正在筛选",
+    longBio: "Luna 游走在 web3、艺术项目与小范围共识网络之间。她擅长搭一种很早期的气氛：还没有完全成型，但你已经可以感觉到某种“在里面”的温度。至于那是关系、共识还是筛选，她通常不会说透。",
+    moments: [
+      ["今天 01:12", "丢来一个没公开的链接，只写了句：先别往外转。"],
+      ["昨天", "在一个很吵的 lounge 里拍了张灯光反射。"],
+      ["上周", "说某个小群还没满，但也不一定对外开。"]
+    ],
+    gallery: [
+      {src:"assets/characters/03_luna_qiao.jpg", caption:"主头像。她看起来像刚从一个亮得有点过头的活动出来。"},
+      {caption:"LED 灯光打在侧脸上的一张抓拍，朋友说她那天情绪特别好。"},
+      {caption:"电梯镜子里的自拍，手里拿着 badge，还没摘。"},
+      {caption:"活动休息区的一张低光照片，桌上有半杯没喝完的香槟。"},
+      {caption:"凌晨车窗里的倒影，像是转场路上的短暂停顿。"},
+      {caption:"电脑屏幕前的随手图，页面停在一个还没公开的入口。"},
+      {caption:"某个群聊现场的背景照，只有她笑得特别轻。"},
+      {caption:"未公开 access 页面相关的占位图：未来会替换成正式视觉。"}
+    ]
+  },
+  adrian: {
+    statement: "他会先把真实的一小部分递给你，再很自然地把你卷进他的不安、他的工作，和他没有讲清楚的需要里。",
+    city: "上海 / 首尔 / 远程工作室",
+    tendency: "深夜回流 / 模糊调用",
+    current: "低频出现，但会突然认真",
+    longBio: "Adrian 长期在 AI 影像与新媒体项目之间工作。他对图像成立与否非常敏感，也因此常在深夜反复确认某些东西是不是空的。他会去找那些“看得懂”的人，但当理解和请求叠在一起，关系就没那么清楚了。",
+    moments: [
+      ["凌晨 02:06", "又发来一段测试片，只说：你先看，不急着回。"],
+      ["前天", "工作室里只开了一块显示器，拍了一张很暗的照片。"],
+      ["更早", "他曾经差点删掉一整组图，因为觉得里面没有一个真成立。"]
+    ],
+    gallery: [
+      {src:"assets/characters/04_adrian_park.jpg", caption:"主头像。看起来很安静，但像是已经熬了很久。"},
+      {caption:"工作室里电脑屏幕的冷光打在脸上，像一种半夜才会出现的情绪。"},
+      {caption:"便利店门口的随手图，手里还拿着没喝完的水。"},
+      {caption:"工作台局部：硬盘、便签、散落的时间码。"},
+      {caption:"朋友拍到他盯着屏幕的一瞬间，像完全没发现镜头。"},
+      {caption:"一张手机前置自拍，不精致，但很真。"},
+      {caption:"低光环境里的背影，像刚从机房里出来。"},
+      {caption:"未公开样片 still 占位图：后续会替换成正式生成的画面。"}
+    ]
+  },
+  kenji: {
+    statement: "他总在往里走，也总会回头看你一眼，好像下次你也许真的能跟上。",
+    city: "上海 / 东京 / 各种现场之间",
+    tendency: "一起出现 / 外圈陪跑",
+    current: "总在现场，持续上升",
+    longBio: "Kenji 熟悉各种开幕、放映、活动与局里的空气。他并不是天生就在里面，相反，他很清楚靠近一层网络是怎么一点一点发生的。也正因为如此，跟着他的人总会有一种“再走一会也许就到了”的错觉。",
+    moments: [
+      ["今晚", "又在某个活动入口站了很久，像在等人，也像在确认自己已经很自然地站进去了。"],
+      ["昨天", "发来一张 wristband 的照片，没有解释。"],
+      ["上周", "他说下次会提前叫你，但没有把话说满。"]
+    ],
+    gallery: [
+      {src:"assets/characters/10_kenji_mori.jpg", caption:"主头像。看起来像一个刚好又出现在对的地方的人。"},
+      {caption:"活动入口前的抓拍，背景里刚好有人经过。"},
+      {caption:"badge 和腕带的近景照，像是在证明今天确实去了。"},
+      {caption:"朋友拍下他正在和人说话的瞬间，身体已经自然转向里面。"},
+      {caption:"电梯镜子自拍，一种很典型的转场照片。"},
+      {caption:"夜里路边回家图，鞋子上还有一点灰。"},
+      {caption:"大厅等人的照片，像是他最擅长的场合。"},
+      {caption:"站进了一个对的背景里的占位图：后续替换成正式生成图。"}
+    ]
+  },
+  camille: {
+    statement: "她会把很多关系解释清楚，也会因此让它们始终停在一个漂亮但不落地的位置上。",
+    city: "巴黎 / 上海 / 放映与讲座之间",
+    tendency: "理解很深 / 靠近很慢",
+    current: "解释进行中",
+    longBio: "Camille 擅长观看、分析与转述，她能很快抓住一段关系里的位置差和观看方式。她让人觉得自己被理解了，但真正的靠近往往会在被说清楚之前停下来。和她相处，像经历一场很精致的延迟。",
+    moments: [
+      ["昨天深夜", "她写下一句：被理解和被留下来，其实不是一回事。"],
+      ["前几天", "在放映结束后又多留了很久，像不想立刻回到现实里。"],
+      ["更早", "她曾经说自己最怕一种关系：什么都对，但就是不落地。"]
+    ],
+    gallery: [
+      {src:"assets/characters/11_camille_renard.jpg", caption:"主头像。她看人的时候，总像先理解了再决定靠不靠近。"},
+      {caption:"讲座后半空的教室里，朋友拍的一张侧面。"},
+      {caption:"一本摊开的目录册，上面有很多细小的标注。"},
+      {caption:"窗边的低光照片，像刚结束一场不太必要的讨论。"},
+      {caption:"咖啡杯旁边的一页笔记，字很整齐，但停在半句。"},
+      {caption:"一张很安静的街角照片，像她自己会留着不发的那种。"},
+      {caption:"镜子里的半张脸，像一次不彻底的自拍。"},
+      {caption:"未公开资料页占位图：未来可替换成讲座、放映或私人日常相关视觉。"}
+    ]
+  },
+  min: {
+    statement: "她讲话很温柔，也很有效率。你以为这是关系在推进，但很多时候，你只是正好被放在了一个合适的位置上。",
+    city: "首尔 / 上海 / 项目现场之间",
+    tendency: "项目靠近 / 品牌型温柔",
+    current: "通路开放中",
+    longBio: "Min 很擅长在品牌、项目、空间与人之间搭桥。她会让一切看起来很自然：刚好带你过去、刚好想起你、刚好这个位置适合你。她的可贵和危险都在这里——你很难分清这到底是她的工作方法，还是她表达靠近的方式。",
+    moments: [
+      ["今天", "发来一张现场空场图，说灯还没调完，但已经差不多了。"],
+      ["前天", "她说有个更适合你的入口，但没继续解释。"],
+      ["更早", "她总在很多人下班之后，才像终于回到自己的节奏里。"]
+    ],
+    gallery: [
+      {src:"assets/characters/06_min_seo.jpg", caption:"主头像。她看起来总像已经准备好下一件事了。"},
+      {caption:"现场空场时的一张抓拍，背景里有还没关掉的灯。"},
+      {caption:"平板、耳机、腕带和一支口红放在一起的桌面照。"},
+      {caption:"后台休息区的随手图，像刚从一段高强度沟通里出来。"},
+      {caption:"车里补妆的镜子自拍，朋友说那是她少见的放松状态。"},
+      {caption:"活动前检查动线的一张背影照。"},
+      {caption:"晚上收工后的一张安静照片，她没发，只留在相册里。"},
+      {caption:"未更新项目视觉占位图：后续可以替换成正式现场图。"}
+    ]
+  },
+  yuki: {
+    statement: "她擅长把“被看见”这件事，做成一种很轻、很慢、很私人的引力。",
+    city: "上海 / 首尔 / 屏幕与现场之间",
+    tendency: "图像亲密 / 慢速靠近",
+    current: "私人通道半开",
+    longBio: "安由纪在后人类视觉、avatar 表演和图像化自我之间来回工作。她不像那种会把自己一次说清楚的人。更多时候，她会给你看一个片段、一张图、一个深夜的表情、一个朋友镜头里捕到的瞬间。你会慢慢感觉自己在认识她。",
+    moments: [
+      ["凌晨", "发来一张朋友拍的模糊照，只说：这张先别转。"],
+      ["昨晚", "她问你会不会觉得某张图有点过头。"],
+      ["更早", "她说自己并不总想太真实地出现。"]
+    ],
+    gallery: [
+      {caption:"主头像占位图：她站在很轻的光里，看起来像刚从另一个版本的自己里回来。"},
+      {caption:"朋友拍的生活照，占位说明：路边、风很大，她没有看镜头。"},
+      {caption:"镜子自拍，占位说明：手机挡住一半表情，只露出一点眼神。"},
+      {caption:"便利店或夜里路边的图，占位说明：日常但带一点漂浮感。"},
+      {caption:"房间里电脑屏或投影前的照片，占位说明：像某段未公开测试的停顿。"},
+      {caption:"失焦图，占位说明：看不清，但很像她会发出来的东西。"},
+      {caption:"安静图，占位说明：窗边、床边或走廊里，一种很轻的停留。"},
+      {caption:"未公开测试片段占位图：未来可替换成 avatar / 视觉 still。"}
+    ]
   }
+};
+
+function currentCharacterFromDiscover(){
+  return characters[state.discoverIndex % characters.length];
+}
+
+function openDetailByCharacter(c){
+  const d = profileDetails[c.id] || {
+    statement: c.bio,
+    city: "资料暂未完善",
+    tendency: "仍在更新",
+    current: "状态待补充",
+    longBio: c.bio,
+    moments: [["现在", "更多资料会在后续更新中补齐。"]],
+    gallery: [{caption:"图片占位中：后续会补充更完整的生活图与资料图。"}]
+  };
+  document.getElementById('detailNameTop').textContent = c.name;
+  document.getElementById('detailName').textContent = c.name;
+  document.getElementById('detailAge').textContent = `，${c.age}`;
+  document.getElementById('detailRole').textContent = c.role;
+  document.getElementById('detailStatement').textContent = d.statement;
+  document.getElementById('detailCity').textContent = d.city;
+  document.getElementById('detailTendency').textContent = d.tendency;
+  document.getElementById('detailCurrent').textContent = d.current;
+  document.getElementById('detailLongBio').textContent = d.longBio;
+  document.getElementById('detailStatusPill').textContent = c.status || '资料更新中';
+
+  const tags = document.getElementById('detailTags');
+  tags.innerHTML = '';
+  c.tags.forEach(tag=>{
+    const span = document.createElement('span');
+    span.className = 'tag';
+    span.textContent = tag;
+    tags.appendChild(span);
+  });
+
+  const img = document.getElementById('detailMainImage');
+  const ph = document.getElementById('detailMainPlaceholder');
+  const firstGallery = d.gallery && d.gallery[0];
+  const src = firstGallery && firstGallery.src ? firstGallery.src : c.avatar;
+  const desc = firstGallery && firstGallery.caption ? firstGallery.caption : '图片占位中：后续会替换成这个角色更完整的资料图。';
+  img.src = src || '';
+  ph.textContent = desc;
+  img.style.display = 'block';
+  ph.style.display = 'flex';
+  img.onerror = ()=>{img.style.display='none'; ph.style.display='flex';};
+  img.onload = ()=>{ph.style.display='none'; img.style.display='block';};
+
+  const gallery = document.getElementById('detailGallery');
+  gallery.innerHTML = '';
+  (d.gallery || []).slice(0,8).forEach(item=>{
+    const wrap = document.createElement('div');
+    wrap.className = 'gallery-item';
+    if(item.src){
+      const im = document.createElement('img');
+      im.src = item.src;
+      im.onerror = ()=>{
+        im.replaceWith(makeGalleryPlaceholder(item.caption || '图片占位中'));
+      };
+      wrap.appendChild(im);
+    } else {
+      wrap.appendChild(makeGalleryPlaceholder(item.caption || '图片占位中'));
+    }
+    const cap = document.createElement('div');
+    cap.className = 'gallery-caption';
+    cap.textContent = item.caption || '';
+    wrap.appendChild(cap);
+    gallery.appendChild(wrap);
+  });
+
+  const moments = document.getElementById('detailMoments');
+  moments.innerHTML = '';
+  (d.moments || []).forEach(([time, text])=>{
+    const div = document.createElement('div');
+    div.className = 'moment';
+    div.innerHTML = `<div class="moment-time">${time}</div><div class="sub" style="margin:0">${text}</div>`;
+    moments.appendChild(div);
+  });
+
+  document.getElementById('detailSheet').classList.add('open');
+}
+
+function makeGalleryPlaceholder(text){
+  const div = document.createElement('div');
+  div.className = 'gallery-placeholder';
+  div.textContent = text;
+  return div;
+}
+
+
+function init(){
   bootMatchedConversations();
   initTabs();
   initActions();
@@ -1482,12 +1806,6 @@ function init(){
   renderProfile();
   tickMinutes();
   injectFollowUpPings();
-}
-
-function closeWelcome(){
-  localStorage.setItem('curator_welcome_seen', '1');
-  document.getElementById('welcomeCard').style.display = 'none';
-  document.getElementById('discoverCard').style.display = 'block';
 }
 init();
 </script>
