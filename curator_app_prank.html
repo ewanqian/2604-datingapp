@@ -662,6 +662,19 @@ const characters = [
     archetype:'品牌项目型',
     genericHint:'她很像会在你最需要的时候出现，也会在项目结束时自然消失。',
     storyline:'generic'
+  },
+  {
+    id:'yuki',
+    name:'安由纪', age:26, initials:'AY',
+    role:'后人类视觉研究者 / 化身表演艺术家',
+    tags:['avatar 表演','数字身份','视觉测试'],
+    bio:'她不像那种会把自己一次说清楚的人。更多时候，她会给你看一个片段、一张图、一个深夜的表情、一个朋友镜头里捕到的瞬间。你会慢慢感觉自己在认识她。',
+    upgrade:'潜在提升：私人图像通道 / 被选入视觉测试 / 一种很慢但很轻的靠近',
+    signal:17, status:'私人通道半开',
+    avatar:'assets/characters/08_yuki_ahn.jpg',
+    archetype:'图像亲密型',
+    genericHint:'她不会立刻给你全部，会一张一张慢慢放出来。',
+    storyline:'yuki_main'
   }
 ];
 
@@ -934,8 +947,6 @@ const storylines = {
       }
     }
   },
-
-  ,
   yuki_main:{
     start:'yuki_1',
     nodes:{
